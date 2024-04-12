@@ -11,7 +11,7 @@ locals {
     sa_display_name = "phac-backstage-kcc-sa"
   }
   git_props = {
-    sync_repo    = "git@github.com:FociSolutions/phac-data-science-portal-monorepo.git"
+    sync_repo    = "git@github.com:PHACDataHub/sci-portal.git"
     sync_branch  = "main"
     sync_root_dir = "root-sync" 
   }
