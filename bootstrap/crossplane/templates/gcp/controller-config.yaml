@@ -1,0 +1,8 @@
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: gcp-controller-config
+  annotations:    
+    iam.gke.io/gcp-service-account: ${PHAC_WI_SERVICEACCOUNT_EMAIL}
+spec:
+  serviceAccountName: ${PHAC_WI_SERVICEACCOUNT}

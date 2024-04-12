@@ -1,0 +1,139 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: resource-provisioner
+  title: Resource Provisioner
+  description: Complete the form to request a resource provisioning. Once submitted, a Pull Request will be created for the Platform Engineering Team to complete the request.
+  tags:
+    - provisioner
+spec:
+  owner: PHAC
+  type: service
+  parameters:
+    - title: Resource Selection
+      required:
+        - resourceType
+        - resourceName
+      properties:
+        resourceType:
+          title: Resource Type
+          type: string
+          enum:
+            - Storage Bucket
+            - Epidemiologist R Analytics Environment
+          default: Storage Bucket
+          ui:widget: select
+        resourceName:
+          title: Resource Name
+          type: string
+          default: my-resource
+    - title: Administrative Data
+      required:
+        - billingCode
+        - justificationNote
+      properties:
+        billingCode:
+          title: Billing Code
+          type: string
+        justificationNote:
+          title: Justification Note
+          type: string
+          ui:widget: textarea
+          ui:options:
+            rows: 5
+    - title: Configuration Details
+      dependencies:
+        resourceType:
+          allOf:
+            - if:
+                properties:
+                  resourceType:
+                    const: Storage Bucket
+              then:
+                properties:
+                  retentionPeriod:
+                    title: Retention Period
+                    type: string
+                    enum:
+                      - 1 Month
+                      - 3 Months
+                      - 6 Months
+                      - 1 Year
+                      - Custom (Specify Below)
+                    ui:widget: select
+                    default: 1 Month
+                dependencies:
+                  retentionPeriod:
+                    allOf:
+                      - if:
+                          properties:
+                            retentionPeriod:
+                              const: Custom (Specify Below)
+                        then:
+                          properties:
+                            customRetentionPeriod:
+                              title: Custom Retention Period (in days)
+                              type: number
+                              minimum: 1
+            - if:
+                properties:
+                  resourceType:
+                    const: Epidemiologist R Analytics Environment
+              then:
+                properties:
+                  machineType:
+                    title: Machine Type
+                    type: string
+                    enum:
+                      - E2
+                      - N1
+                      - N2
+                      - N2D Standard
+                      - N2D Highmem
+                      - Tau T2D
+                      - A2
+                    ui:widget: select
+                    default: E2
+
+  steps:
+    - id: create_resource
+      name: Processing Request
+      action: phac:provisioner:create
+      input:
+        resourceType: ${{ parameters.resourceType }}
+        resourceName: ${{ parameters.resourceName }}
+        billingCode: ${{ parameters.billingCode }}
+        justificationNote: ${{ parameters.justificationNote }}
+        retentionPeriod: ${{ parameters.retentionPeriod }}
+        customRetentionPeriod: ${{ parameters.customRetentionPeriod }}
+        machineType: ${{ parameters.machineType }}
+
+    - id: publish
+      name: Submitting Request
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?owner=FociSolutions&repo=phac-data-science-portal-monorepo
+        update: true
+        title: '[Test] ${{parameters.resourceType}}-${{steps.create_resource.output.request_id}}'
+        branchName: request-${{steps.create_resource.output.request_id}}
+        description: |
+          # Request: ${{parameters.resourceType}}-${{steps.create_resource.output.request_id}}
+
+          **Billing Code:** ${{parameters.billingCode if parameters.billingCode}}
+          **Justification:** ${{parameters.justificationNote if parameters.justificationNote}}
+          {% if parameters.resourceType == "Storage Bucket" %}
+          **Retention Period:** ${{parameters.retentionPeriod if parameters.retentionPeriod}}
+
+          {% if parameters.customRetentionPeriod %}
+          **Custom Retention Period:** ${{ parameters.customRetentionPeriod }}
+          {% endif %}
+
+          {% elif parameters.resourceType == "Epidemiologist R Analytics Environment" %}
+          **Machine Type:** ${{parameters.machineType if parameters.machineType}}
+          {% endif %}
+        targetPath: root-sync
+
+  output:
+    links:
+      - url: ${{steps.publish.output.remoteUrl}}
+        title: 'View PR'

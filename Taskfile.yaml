@@ -1,0 +1,5 @@
+version: "3"
+
+includes:
+  backstage: ./taskfiles/backstage.yaml
+  bootstrap: ./taskfiles/bootstrap.yaml

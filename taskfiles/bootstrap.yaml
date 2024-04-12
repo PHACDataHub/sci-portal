@@ -1,0 +1,19 @@
+version: "3"
+
+env: {}
+
+tasks:
+  init:
+    desc: Provisions the GKE cluster infrastructure using Terraform.
+    dir: bootstrap/gke-cluster
+    cmds:
+      - terraform init  
+      - terraform plan 
+      - terraform apply
+
+  crossplane:
+    desc: |
+      Installs Crossplane and configures Terraform provider. Usage: task bootstrap:crossplane -- <path-to-gcp-creds>
+    dir: bootstrap
+    cmds:
+      - sh crossplane_install.sh {{.CLI_ARGS}}
