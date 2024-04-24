@@ -22,39 +22,39 @@ provider "helm" {
 }
 
 provider "google-beta" {
-  project     = var.project_id
-  region      = local.region
-}
-
-
-resource "google_compute_network" "phac_network" {
-  project                 = var.project_id
-  name                    = "phac-network"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "phac_subnet" {
   project = var.project_id
-  name          = "phac-subnet"
-  region        = local.region
-  network       = google_compute_network.phac_network.self_link
-  ip_cidr_range = "10.0.0.0/24"
+  region  = local.region
+}
 
-  secondary_ip_range {
-    range_name    = "gke-01-pods"
-    ip_cidr_range = "10.0.1.0/24"
+provider "google" {
+  project = var.project_id
+  region  = local.region
+}
+
+resource "google_artifact_registry_repository" "ph_backstage_repo" {
+  location      = local.region
+  repository_id = "ph-backstage"
+  description   = "Backstage docker repository"
+  format        = "DOCKER"
+}
+
+resource "google_cloudbuildv2_repository" "data_science_portal_monorepo" {
+  name              = "phac-data-science-portal-monorepo"
+  parent_connection = var.cloudbuildv2_connection
+  remote_uri        = var.cloudbuildv2_connection_remote_uri
+}
+
+resource "google_cloudbuild_trigger" "data_science_portal_monorepo_trigger" {
+  name     = "backstage-image-trigger"
+  location = var.cloudbuildv2_connection_region
+  repository_event_config {
+    repository = google_cloudbuildv2_repository.data_science_portal_monorepo.id
+    push {
+      branch = var.cloudbuildv2_connection_trigger_branch
+    }
   }
 
-  secondary_ip_range {
-    range_name    = "gke-02-services"
-    ip_cidr_range = "10.0.2.0/24"
-  }
-
-  secondary_ip_range {
-    range_name    = "gke-03-extend"
-    ip_cidr_range = "10.0.3.0/24"
-  }
-
+  filename = "cloudbuild.yaml"
 }
 
 module "gke" {
@@ -70,6 +70,7 @@ module "gke" {
   ip_range_pods              = local.gke_props.ip_range_pods
   ip_range_services          = local.gke_props.ip_range_services
   horizontal_pod_autoscaling = true
+  grant_registry_access      = true
   release_channel            = "REGULAR"
   deletion_protection        = false
 }
@@ -96,6 +97,20 @@ resource "google_project_iam_member" "editor_role" {
   member  = "serviceAccount:${google_service_account.phac-backstage-kcc-sa.email}"
 }
 
+resource "google_service_account" "crossplane-sa" {
+  account_id   = local.crossplane_props.sa_account_id
+  display_name = local.crossplane_props.sa_display_name
+  project      = var.project_id
+  description  = "GCP SA bound to Crossplane"
+}
+
+# Allows the GKE Service Account to create gcp projects
+resource "google_project_iam_member" "crossplane_role_binding" {
+  project = var.project_id
+  role    = "roles/resourcemanager.projectCreator"
+  member  = "serviceAccount:${google_service_account.crossplane-sa.email}"
+}
+
 module "config_sync" {
   source = "terraform-google-modules/kubernetes-engine/google//modules/acm"
   depends_on = [
@@ -109,7 +124,7 @@ module "config_sync" {
   location     = module.gke.location
 
   source_format = "unstructured"
-  sync_repo     = local.git_props.sync_repo
+  sync_repo     = var.config_sync_repo
   sync_branch   = local.git_props.sync_branch
-  policy_dir    = local.git_props.sync_root_dir
+  policy_dir    = "root-sync/overlays/${var.config_sync_target_environment}"
 }

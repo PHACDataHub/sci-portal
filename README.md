@@ -1,4 +1,4 @@
-# PHAC Data Science Portal Monorepo
+# Data Science Portal
 
 Welcome to our monorepo housing various services including Backstage, Kubernetes manifests, and more.
 
@@ -44,12 +44,19 @@ Verify the installation by checking the Node.js version:
 node -v
 ```
 
-#### Yarn (Corepack)
+#### Yarn v1 (Classic)
 
-Install Yarn globally using npm (Node Package Manager):
+Backstage uses Yarn v1. It can be installed globally using corepack:
 
 ```bash
 corepack enable
+corepack prepare yarn@1.22.19 --activate
+```
+
+or installed globally:
+
+```
+npm install --global yarn@1.22.19
 ```
 
 Verify the installation by checking the Yarn version:

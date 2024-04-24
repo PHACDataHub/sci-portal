@@ -1,0 +1,39 @@
+steps:
+  # Get github app credentials
+  - name: 'ubuntu'
+    dir: 'backstage'
+    args:
+      - '-c'
+      - |
+        touch github-app-integration-credentials.yaml
+    entrypoint: bash
+  
+  # Install yarn 
+  - name: 'gcr.io/cloud-builders/npm:node-18.12.0'
+    dir: 'backstage'
+    entrypoint: 'yarn'
+    args: ['install']
+
+  # Transpile Backstage
+  - name: 'gcr.io/cloud-builders/npm:node-18.12.0'
+    dir: 'backstage'
+    entrypoint: 'yarn'
+    args: ['tsc']
+
+  # Build Backstage 
+  - name: 'gcr.io/cloud-builders/npm:node-18.12.0'
+    dir: 'backstage'
+    entrypoint: 'yarn'
+    args: ['build:backend']
+
+  # Build Image
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'backstage'
+    args: ['image','build','.','-f','packages/backend/Dockerfile','--tag','northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/ph-backstage/backstage:latest','--tag','northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/ph-backstage/backstage:$SHORT_SHA']
+    env:
+      - 'DOCKER_BUILDKIT=1'
+
+  # Publish Image
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'backstage'
+    args: ['push', '--all-tags','northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/ph-backstage/backstage']

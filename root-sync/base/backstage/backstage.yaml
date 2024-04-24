@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage
+    spec:
+      serviceAccountName: backstage-sa
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
+      volumes:
+        - name: backstage-github-app
+          secret:
+            secretName: backstage-github-app
+      containers:
+        - name: backstage-container
+          ports:
+            - name: http
+              containerPort: 7007
+          envFrom:
+            - secretRef:
+                name: postgres-secrets
+            - configMapRef:
+                name: backstage-config
+            - secretRef:
+                name: github-auth
+            - secretRef:
+                name: google-auth
+            - secretRef:
+                name: backstage-auth-keys
+          volumeMounts:
+            - name: backstage-github-app
+              mountPath: "/app/github-app-integration-credentials.yaml"
+              subPath: github-app-integration-credentials.yaml
+              readOnly: true
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"

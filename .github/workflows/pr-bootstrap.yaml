@@ -1,0 +1,30 @@
+---
+# This workflow is used for Continuous Integration for the bootstrap/ directory.
+
+name: CI for bootstrap/
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "bootstrap/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./bootstrap
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.5"
+          terraform_wrapper: false
+
+      - name: terraform fmt
+        run: terraform fmt -check -recursive

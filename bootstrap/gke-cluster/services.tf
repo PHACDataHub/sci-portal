@@ -34,3 +34,28 @@ resource "google_project_service" "anthos_api" {
 
   disable_dependent_services = true
 }
+
+
+resource "google_project_service" "cloudsql_api" {
+  project = var.project_id
+  service = "sqladmin.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "server_networking" {
+  project = var.project_id
+  service = "servicenetworking.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}

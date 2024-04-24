@@ -2,6 +2,23 @@
 
 This Terraform configuration creates a Google Kubernetes Engine (GKE) autopilot cluster and sets up the required authentication and configuration.
 
+**Steps**:
+
+1. Open the `terraform.tfvars` file and add the following lines, replacing the placeholders with your actual values:
+```
+# Config Sync
+project_id                     = "<your_project_id>"
+config_sync_repo               = "<your_git_repo_SSH_URL>"
+config_sync_target_environment = "test"
+
+# Cloud Build
+cloudbuildv2_connection                = "projects/<your_project_id>/locations/<your_region>/connections/<your_connection_name>"
+cloudbuildv2_connection_region         = "<your_region>"
+cloudbuildv2_connection_remote_uri     = "<your_git_repository_uri>"
+cloudbuildv2_connection_trigger_branch = "<your_trigger_branch>"
+```
+2. Run the `bootstrap:init` task
+
 **Key Components**
 
 * **Providers**

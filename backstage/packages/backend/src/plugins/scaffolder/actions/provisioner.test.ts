@@ -1,10 +1,7 @@
-import {
-  createStorageConfig,
-  createWorkspaceConfig,
-  provisionNewResourceAction,
-} from './provisioner';
+import * as fs from 'fs';
+import * as path from 'path';
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
-import fs from 'fs';
+import { provisionNewResourceAction } from './provisioner';
 
 // Mock the 'fs' module
 jest.mock('fs', () => ({
@@ -21,7 +18,12 @@ jest.mock('uuid', () => ({
 describe('provisioner', () => {
   describe('phac:provisioner:create', () => {
     // Initialize the action and mock context
-    const action = provisionNewResourceAction();
+
+    const configMock = {
+      getString: jest.fn(() => true),
+    } as any;
+
+    const action = provisionNewResourceAction(configMock);
     const mockContext = createMockActionContext();
 
     beforeEach(() => {
@@ -34,12 +36,11 @@ describe('provisioner', () => {
       await action.handler({
         ...mockContext,
         input: {
-          resourceType: 'Storage Bucket',
-          resourceName: 'someResourceName',
-          billingCode: 'billingCode',
+          resourceType: 'GCP Project',
+          resourceName: 'My GCP Project',
+          costCentre: '123456789',
+          section32ManagerEmail: 'emailAddress',
           justificationNote: 'justificationNote',
-          retentionPeriod: 'retentionPeriod',
-          customRetentionPeriod: 2,
         },
       });
 
@@ -48,52 +49,10 @@ describe('provisioner', () => {
         fs.writeFileSync as jest.MockedFunction<typeof fs.writeFileSync>,
       ).toHaveBeenCalledWith(
         expect.stringMatching(
-          /.*\/tmp\/backstage-tmp-test-dir-.+\/workspace\/mocked-uuid.yaml/,
+          path.join(mockContext.workspacePath, 'project.yaml'),
         ),
         expect.any(String),
       );
-    });
-
-    describe('createStorageConfig', () => {
-      const mockBucket = {
-        resourceType: 'Bucket',
-        resourceName: 'test-bucket',
-        billingCode: '123456',
-        justificationNote: 'Test justification',
-        retentionPeriod: '1 Month',
-        customRetentionPeriod: undefined,
-      };
-
-      it('should create storage configuration with default retention period', () => {
-        const requestId = '123';
-        const config = createStorageConfig(mockBucket, requestId);
-        expect(config.spec.retentionPolicy.retentionPeriod).toBe(2592000);
-      });
-
-      it('should create storage configuration with custom retention period', () => {
-        const requestId = '123';
-        const customRetentionBucket = {
-          ...mockBucket,
-          retentionPeriod: 'Custom (Specify Below)',
-          customRetentionPeriod: 5,
-        };
-        const config = createStorageConfig(customRetentionBucket, requestId);
-        expect(config.spec.retentionPolicy.retentionPeriod).toBe(5 * 86400);
-      });
-    });
-
-    describe('createWorkspaceConfig', () => {
-      it('should create workspace configuration', () => {
-        const mockWorkstation = {
-          resourceType: 'Workstation',
-          resourceName: 'test-workstation',
-          billingCode: '654321',
-          justificationNote: 'Test workstation justification',
-          machineType: 'E2',
-        };
-        const workspace = createWorkspaceConfig(mockWorkstation);
-        expect(workspace.metadata.name).toBe(mockWorkstation.resourceName);
-      });
     });
   });
 });

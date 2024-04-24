@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+spec:
+  template:
+    spec:
+      containers:
+        - name: backstage-container
+          image: northamerica-northeast1-docker.pkg.dev/pht-01hsv4d2m0n/ph-backstage/backstage:latest
+        - name: cloud-sql-proxy
+          args:
+            - "--private-ip"
+            - "--structured-logs"
+            - "--port=5432"
+            - "pht-01hsv4d2m0n:northamerica-northeast1:backstage-intance"

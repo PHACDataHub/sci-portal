@@ -30,7 +30,11 @@ import { HomePage } from './components/home/HomePage';
 import { ResourcesPage } from './components/resources/ResourcesPage';
 import { CostInsightsPage } from '@backstage/plugin-cost-insights';
 
-import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
+import {
+  AlertDisplay,
+  OAuthRequestDialog,
+  SignInPage,
+} from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
@@ -40,10 +44,8 @@ import LightIcon from '@material-ui/icons/WbSunny';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { GovTheme } from './theme/govTheme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
-
-// Auth
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
-import { SignInPage } from '@backstage/core-components';
+import { googleAuthApiRef } from '@backstage/core-plugin-api';
 
 const app = createApp({
   components: {
@@ -51,12 +53,17 @@ const app = createApp({
       <SignInPage
         {...props}
         providers={[
-          'guest',
           {
             id: 'github-auth-provider',
             title: 'GitHub',
             message: 'Sign in using GitHub',
             apiRef: githubAuthApiRef,
+          },
+          {
+            id: 'google-auth-provider',
+            title: 'Google',
+            message: 'Sign in using Google',
+            apiRef: googleAuthApiRef,
           },
         ]}
       />

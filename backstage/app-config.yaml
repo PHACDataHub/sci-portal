@@ -32,12 +32,25 @@ backend:
     connection: ':memory:'
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
+  # Configuration for custom plugins
+  plugins:
+    provisioner:
+      repo:
+        owner: ${GITOPS_REPO_OWNER}
+        name: ${GITOPS_REPO_NAME}
+
 integrations:
   github:
+    ### Use a GitHub App for authentication. See https://backstage.io/docs/integrations/github/github-apps.
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
-      token: ${GITHUB_TOKEN}
+      apps:
+        - $include: github-app-integration-credentials.yaml
+
+    ### Example for how to use a Personal Access Token or PAT from GitHub. You can find out how to generate this token,
+    #### and more information about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
+    # - host: github.com
+    #   token: ${GITHUB_TOKEN}
+
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -62,9 +75,23 @@ techdocs:
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
+# See https://backstage.io/docs/auth/ to learn about auth providers
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  environment: development
+  providers:
+    # See https://backstage.io/docs/auth/github/provider
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+        # Authentication will fail without at least one resolver
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+
+    # See https://backstage.io/docs/auth/guest/provider
+    guest: {}
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -72,12 +99,11 @@ scaffolder:
 costInsights:
   engineerCost: 200000
   products:
-    budget:
-      name: Budget
+    projectBudgets:
+      name: Project Budgets
       icon:
-    grouping:
-      name: Grouping
-      icon: storage
+    costCentres:
+      name: Cost Centres
   baseCurrency:
     locale: en-US
     options:
@@ -93,17 +119,24 @@ catalog:
   locations:
     # Backstage entities
     - type: file
-      target: ../../../templates/backstage/entities.yaml
+      target: ../../templates/entities.yaml
 
     # Resource Provisioner template
     - type: file
-      target: ../../../templates/backstage/resource-provisioner.yaml
+      target: ../../templates/resource-provisioner.yaml
+
+      rules:
+        - allow: [Template]
+
+    # GCP Project Provisioner template
+    - type: file
+      target: ../../templates/gcp-project-provisioner.yaml
 
       rules:
         - allow: [Template]
 
     # Backstage organizational data
     - type: file
-      target: ../../../templates/backstage/org.yaml
+      target: ../../templates/org.yaml
       rules:
         - allow: [User, Group]

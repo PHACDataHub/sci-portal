@@ -1,0 +1,129 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: resource-provisioner
+  title: Resource Provisioner
+  description: Complete the form to request a resource provisioning. Once submitted, a Pull Request will be created for the Platform Engineering Team to complete the request.
+  tags:
+    - provisioner
+spec:
+  owner: PHAC
+  type: service
+  parameters:
+    - title: Resource Selection
+      required:
+        - resourceType
+        - resourceName
+      properties:
+        resourceType:
+          title: Resource Type
+          type: string
+          enum:
+            - GCP Project
+          default: GCP Project
+          ui:widget: select
+        resourceName:
+          title: Resource Name
+          type: string
+          default: my-resource
+    - title: Administrative Data
+      required:
+        - costCentre
+        - section32ManagerEmail
+        - justificationNote
+      properties:
+        costCentre:
+          title: Cost Centre
+          type: string
+        section32ManagerEmail:
+          title: Section 32 Manager Email Address
+          type: string
+          format: email
+        justificationNote:
+          title: Justification Note
+          type: string
+          ui:widget: textarea
+          ui:options:
+            rows: 5
+    - title: Configuration Details
+      dependencies:
+        resourceType:
+          allOf:
+            - if:
+                properties:
+                  resourceType:
+                    const: GCP Project
+              then:
+                properties:
+                  parentFolder:
+                    title: Parent Folder
+                    type: string
+                    enum:
+                      - Experimentation
+                      - Noble-Experimentation
+                    default: Experimentation
+                    ui:widget: select
+                  folderName:
+                    title: Folder Name
+                    type: string
+                    default: ph-
+                  projectName:
+                    title: Project Name
+                    type: string
+                    default: phx-project
+                    ui:description: Project names begin with a 3-letter prefix. Use the prefix 'phx' for Experiments, 'phd' for Dev, 'pht' for Test, and 'php' for Prod. Give the project a name for how it is used not who creates it.
+                  displayName:
+                    title: Display Name
+                    type: string
+                    description: The human-readable name of the GCP Project used for display purposes.
+                    default: Project ABC
+
+  steps:
+    - id: create_resource
+      name: Processing Request
+      action: phac:provisioner:create
+      input:
+        projectName: ${{ parameters.projectName }}
+        displayName: ${{ parameters.displayName }}
+        parentFolder: ${{ parameters.parentFolder }}
+        folderName: ${{ parameters.folderName }}
+        resourceType: ${{ parameters.resourceType }}
+        resourceName: ${{ parameters.resourceName }}
+        costCentre: ${{ parameters.costCentre }}
+        section32ManagerEmail: ${{ parameters.section32ManagerEmail }}
+        justificationNote: ${{ parameters.justificationNote }}
+
+    - id: publish
+      name: Submitting Request
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?owner=${{ steps.create_resource.output.repo_owner }}&repo=${{ steps.create_resource.output.repo_name }}
+        update: true
+        title: '[Test] Create ${{parameters.resourceType}}'
+        branchName: request-${{steps.create_resource.output.request_id}}
+        description: |
+          # Create ${{parameters.resourceType}}
+
+          This PR was created using Backstage. The request ID is `${{steps.create_resource.output.request_id}}`.
+
+          <!-- ### Client Name Email address -->
+
+          ### Administrative Details
+
+          **Cost Centre:** ${{parameters.costCentre}}
+          **Justification:** ${{parameters.justificationNote}}
+          **Section 32 Manager Email:** ${{parameters.section32ManagerEmail}}
+
+          ### GCP Project
+
+          **Parent Folder:** ${{parameters.parentFolder}}
+          **Folder Name:** ${{parameters.folderName}}
+          **Project Name:** ${{parameters.projectName}}
+          **Display Name:** ${{parameters.displayName}}
+
+        targetPath: ./DMIA-PHAC/${{parameters.parentFolder}}/${{parameters.folderName}}
+
+  output:
+    links:
+      - url: ${{steps.publish.output.remoteUrl}}
+        title: 'View PR'

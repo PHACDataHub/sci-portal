@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   },
   sectionHeading: {
     color: '#26374A',
-    padding: '0 8px',
+    padding: '18px',
   },
 }));
 
@@ -95,12 +95,12 @@ export const HomePage = () => {
                     />
                   </CardMedia>
                   <CardContent>
-                    Controlled creation and management for cloud-based project
-                    space and analytics workbenches
+                    Request to provision any resource type you need. Once
+                    requested, a Pull Request will be created for review.
                   </CardContent>
                   <CardActions>
                     <LinkButton
-                      color="secondary"
+                      color="primary"
                       to="create/templates/default/resource-provisioner"
                     >
                       View
@@ -110,47 +110,16 @@ export const HomePage = () => {
                 <Card classes={{ root: classes.card }}>
                   <CardMedia>
                     <ItemCardHeader
-                      title="Project Costs"
+                      title="Cost Dashboard"
                       classes={{ root: classes.header }}
                     />
                   </CardMedia>
                   <CardContent>
-                    Monitor and manage costs using a budget
+                    Monitor costs and budgets by viewing your dashboard
+                    overview.
                   </CardContent>
                   <CardActions>
-                    <LinkButton color="secondary" to="">
-                      View
-                    </LinkButton>
-                  </CardActions>
-                </Card>
-                <Card classes={{ root: classes.card }}>
-                  <CardMedia>
-                    <ItemCardHeader
-                      title="Deployment Status"
-                      classes={{ root: classes.header }}
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    Visualize deployment status from Flux
-                  </CardContent>
-                  <CardActions>
-                    <LinkButton color="secondary" to="">
-                      View
-                    </LinkButton>
-                  </CardActions>
-                </Card>
-                <Card classes={{ root: classes.card }}>
-                  <CardMedia>
-                    <ItemCardHeader
-                      title="Budget Dashboard"
-                      classes={{ root: classes.header }}
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    See which projects are near or over budget
-                  </CardContent>
-                  <CardActions>
-                    <LinkButton color="secondary" to="">
+                    <LinkButton color="primary" to="">
                       View
                     </LinkButton>
                   </CardActions>

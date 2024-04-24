@@ -1,3 +1,4 @@
+---
 version: "3"
 
 env: {}
@@ -7,9 +8,15 @@ tasks:
     desc: Provisions the GKE cluster infrastructure using Terraform.
     dir: bootstrap/gke-cluster
     cmds:
-      - terraform init  
-      - terraform plan 
+      - terraform init
+      - terraform plan
       - terraform apply
+
+  destroy:
+    desc: Deletes the GKE cluster infrastructure using Terraform.
+    dir: bootstrap/gke-cluster
+    cmds:
+      - terraform destroy
 
   crossplane:
     desc: |
@@ -17,3 +24,9 @@ tasks:
     dir: bootstrap
     cmds:
       - sh crossplane_install.sh {{.CLI_ARGS}}
+
+  fmt:
+    desc: Formats terraform
+    dir: bootstrap/gke-cluster
+    cmds:
+      - terraform fmt -recursive

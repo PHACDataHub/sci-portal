@@ -11,10 +11,10 @@ export const GovTheme = createUnifiedTheme({
     palette: {
       ...palettes.light,
       primary: {
-        main: '#E0E0E0',
+        main: '#555555',
       },
       secondary: {
-        main: '#555555',
+        main: '#E0E0E0',
       },
       tertiary: {
         main: '#26374A',
@@ -34,7 +34,8 @@ export const GovTheme = createUnifiedTheme({
     },
   }),
   defaultPageTheme: 'home',
-  fontFamily: 'Noto Sans',
+  fontFamily:
+    '"Noto Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif',
   /* below drives the header colors */
   pageTheme: {
     home: genPageTheme({

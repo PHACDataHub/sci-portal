@@ -1,0 +1,63 @@
+---
+# This workflow is used for Continuous Integration for the backstage/ directory.
+
+name: CI for backstage/
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backstage/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name:
+
+    defaults:
+      run:
+        working-directory: ./backstage
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "backstage/yarn.lock"
+
+      - name: Use Yarn v1
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.19 --activate
+
+          # Prevent churn
+          if ! grep -q 'yarn lockfile v1' yarn.lock; then
+            echo "::error file=yarn.lock,line=1,endLine=1,title=Error: Unexpected changes to yarn.lock::We expect the yarn lockfile use v1. To use newer versions of Yarn follow the migration guide at https://backstage.io/docs/tutorials/yarn-migration."
+          fi
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: |
+          # Fetch origin/main used by the "lint" npm script
+          git fetch origin main
+
+          # Create the credentials file that is used by the "build" npm script
+          touch github-app-integration-credentials.yaml
+
+          task backstage:build
+
+      - name: Test
+        run: yarn test

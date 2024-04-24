@@ -1,0 +1,6 @@
+*.env
+
+bootstrap/.env
+bootstrap/crossplane/providers/**/*.yaml
+bootstrap/gke-cluster/*.tfstate*
+bootstrap/gke-cluster/.terraform*

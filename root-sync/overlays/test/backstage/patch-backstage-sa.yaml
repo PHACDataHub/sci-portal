@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    iam.gke.io/gcp-service-account: phac-backstage-sa@pht-01hsv4d2m0nm.gserviceaccount.com
+  namespace: backstage
+  name: backstage-sa

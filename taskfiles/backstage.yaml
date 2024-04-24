@@ -1,29 +1,18 @@
+---
 version: "3"
 
-env:
-  DOCKER_REGISTRY: northamerica-northeast2-docker.pkg.dev/river-sonar-415120/backstage
-  TAG: latest
-
 tasks:
+  build:
+    desc: Build Backstage
+    dir: backstage
+    cmds:
+      - yarn tsc
+      - yarn prettier:check --write
+      - yarn lint
+      - yarn build:all
+
   dev:
-    desc: Start backstage in dev mode
+    desc: Start Backstage in dev mode
     dir: backstage
     cmds:
       - yarn dev
-  
-  build:
-    desc: Builds Backstage using yarn
-    dir: backstage
-    cmds:
-      - yarn build:all
-
-  image:
-    desc: Builds Backstage Docker image
-    dir: backstage
-    cmds:
-      - docker image build . -f packages/backend/Dockerfile --tag $DOCKER_REGISTRY/backstage:$TAG
-
-  publish:
-    desc: Pushes Docker image to registry
-    cmds:
-      - docker push $DOCKER_REGISTRY/backstage:$TAG

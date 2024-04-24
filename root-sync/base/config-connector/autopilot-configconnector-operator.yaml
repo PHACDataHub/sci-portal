@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -28,8 +29,8 @@ metadata:
   namespace: configconnector-operator-system
 spec:
   ports:
-  - name: controller-manager
-    port: 443
+    - name: controller-manager
+      port: 443
   selector:
     cnrm.cloud.google.com/component: configconnector-operator
     cnrm.cloud.google.com/operator-system: "true"
@@ -60,27 +61,27 @@ spec:
         cnrm.cloud.google.com/operator-system: "true"
     spec:
       containers:
-      - args:
-        - --local-repo=/configconnector-operator/autopilot-channels
-        command:
-        - /configconnector-operator/manager
-        image: gcr.io/gke-release/cnrm/operator:2d9421c
-        imagePullPolicy: Always
-        name: manager
-        resources:
-          limits:
-            memory: 1Gi
-          requests:
-            cpu: 100m
-            memory: 512Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - all
-          runAsGroup: 1000
-          runAsNonRoot: true
-          runAsUser: 1000
+        - args:
+            - --local-repo=/configconnector-operator/autopilot-channels
+          command:
+            - /configconnector-operator/manager
+          image: gcr.io/gke-release/cnrm/operator:2d9421c
+          imagePullPolicy: Always
+          name: manager
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
       enableServiceLinks: false
       securityContext:
         seccompProfile:

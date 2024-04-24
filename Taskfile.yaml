@@ -1,5 +1,10 @@
 version: "3"
 
+# Load environment variables from the .env file, or when the ENV environment variable is set, $ENV.env.
+dotenv:
+  - '.env'
+  - '{{.ENV}}.env.'
+
 includes:
   backstage: ./taskfiles/backstage.yaml
   bootstrap: ./taskfiles/bootstrap.yaml

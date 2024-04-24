@@ -2,33 +2,52 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { writeFileSync } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { dump } from 'js-yaml';
-import { Workspace, WorkspaceBuilder } from './workspaceBuilder';
+import { Config } from '@backstage/config';
 
 interface Resource {
   resourceType: string;
   resourceName: string;
-  billingCode: string;
+  costCentre: string;
+  section32ManagerEmail: string;
   justificationNote: string;
 }
 
-interface BucketResource extends Resource {
-  retentionPeriod: string;
-  customRetentionPeriod?: number;
+interface GCPProjectResource extends Resource {
+  parentFolder: string;
+  folderName: string;
+  projectName: string;
+  displayName: string;
 }
 
-interface WorkstationResource extends Resource {
-  machineType: string;
+interface ProvisionerConfig {
+  repo: {
+    owner: string;
+    name: string;
+  };
 }
 
-export const provisionNewResourceAction = () => {
+const getProvisionerConfig = (config: Config): ProvisionerConfig => {
+  return {
+    repo: {
+      owner: config.getString('backend.plugins.provisioner.repo.owner'),
+      name: config.getString('backend.plugins.provisioner.repo.name'),
+    },
+  };
+};
+
+const validateProvisionerConfig = (config: Config) => {
+  getProvisionerConfig(config);
+};
+
+export const provisionNewResourceAction = (config: Config) => {
+  validateProvisionerConfig(config);
+
   return createTemplateAction<{
     resourceType: string;
     resourceName: string;
-    billingCode: string;
+    costCentre: string;
+    section32ManagerEmail: string;
     justificationNote: string;
-    retentionPeriod?: string;
-    customRetentionPeriod?: number;
-    machineType?: string;
   }>({
     id: 'phac:provisioner:create',
     schema: {
@@ -36,7 +55,8 @@ export const provisionNewResourceAction = () => {
         required: [
           'resourceType',
           'resourceName',
-          'billingCode',
+          'costCentre',
+          'section32ManagerEmail',
           'justificationNote',
         ],
         type: 'object',
@@ -51,31 +71,41 @@ export const provisionNewResourceAction = () => {
             title: 'resourceName',
             description: 'The resourceName of the file that will be created',
           },
-          billingCode: {
+          costCentre: {
             type: 'string',
-            title: 'billingCode',
-            description: 'Billing code associated with the resource',
+            title: 'costCentre',
+            description: 'Cost Centre associated with the resource',
+          },
+          section32ManagerEmail: {
+            type: 'string',
+            title: 'section32ManagerEmail',
+            description: 'Section 32 Manager Email Address',
           },
           justificationNote: {
             type: 'string',
             title: 'justificationNote',
             description: 'Request justification note',
           },
-          retentionPeriod: {
+          parentFolder: {
             type: 'string',
-            title: 'retentionPeriod',
-            description: 'Retention Period for the storage bucket',
+            title: 'parentFolder',
+            description: 'The parent folder for the project',
           },
-          customRetentionPeriod: {
-            type: 'number',
-            title: 'customRetentionPeriod',
-            description: 'Custom Retention Period for the storage bucket',
-          },
-          machineType: {
+          folderName: {
             type: 'string',
-            title: 'machineType',
+            title: 'folderName',
+            description: 'The name of the folder',
+          },
+          projectName: {
+            type: 'string',
+            title: 'projectName',
+            description: 'The name of the project that will be created',
+          },
+          displayName: {
+            type: 'string',
+            title: 'displayName',
             description:
-              'The Machine Type for the Epidemiologist R Analytics Environment',
+              'The human-readable display name of the project that will be created',
           },
         },
       },
@@ -83,109 +113,59 @@ export const provisionNewResourceAction = () => {
 
     async handler(ctx) {
       const requestId = generateRequestId();
+      const provisionerConfig = getProvisionerConfig(config);
+
       ctx.output('request_id', requestId);
+      ctx.output('repo_owner', provisionerConfig.repo.owner);
+      ctx.output('repo_name', provisionerConfig.repo.name);
 
       let resourceConfig;
 
       switch (ctx.input.resourceType) {
-        case 'Storage Bucket': {
-          const bucket = ctx.input as BucketResource;
-          resourceConfig = createStorageConfig(bucket, requestId);
-          break;
-        }
-        case 'Epidemiologist R Analytics Environment': {
-          const workstation = ctx.input as WorkstationResource;
-          resourceConfig = createWorkspaceConfig(workstation);
+        case 'GCP Project': {
+          const project = ctx.input as GCPProjectResource;
+          resourceConfig = createProjectConfig(project, requestId);
+
+          const yamlString = dump(resourceConfig);
+          writeFileSync(`${ctx.workspacePath}/project.yaml`, yamlString);
           break;
         }
         default: {
           throw new Error('Unsupported resource type.');
         }
       }
-
-      const yamlString = dump(resourceConfig);
-      writeFileSync(`${ctx.workspacePath}/${requestId}.yaml`, yamlString);
     },
   });
 };
 
 /**
- * Creates storage configuration for a storage bucket resource.
- * @param {BucketResource} bucket - The bucket resource.
+ * Creates project configuration for a GCP project claim.
+ * @param {GCPProjectResource} project - The project.
  * @param {string} requestId - The request ID.
- * @returns {Object} The storage configuration.
+ * @returns {Object} The project configuration.
  */
-export function createStorageConfig(bucket: BucketResource, requestId: string) {
-  const retentionPeriodsInSeconds: { [key: string]: number } = {
-    'Custom (Specify Below)': bucket.customRetentionPeriod! * 86400,
-    '1 Month': 2592000,
-    '3 Months': 5184000,
-    '6 Months': 15552000,
-    '1 Year': 31536000,
-    Default: 86400,
-  };
-
-  const retentionPolicyInSeconds =
-    retentionPeriodsInSeconds[bucket.retentionPeriod] ||
-    retentionPeriodsInSeconds.Default;
-
+export function createProjectConfig(
+  project: GCPProjectResource,
+  requestId: string,
+) {
   return {
-    apiVersion: 'storage.cnrm.cloud.google.com/v1beta1',
-    kind: 'StorageBucket',
+    apiVersion: 'phac-aspc.gc.ca/v1alpha1',
+    kind: 'ProjectClaim',
     metadata: {
-      annotations: {
-        'cnrm.cloud.google.com/project-id': 'river-sonar-415120',
-      },
-      name: `${bucket.resourceName}-${requestId}`,
+      name: `${project.projectName}-${requestId}`,
     },
     spec: {
-      retentionPolicy: {
-        isLocked: false,
-        retentionPeriod: retentionPolicyInSeconds,
+      id: `${requestId}`,
+      compositionSelector: {
+        provider: 'google',
       },
-      uniformBucketLevelAccess: true,
+      parameters: {
+        parentFolder: `${project.parentFolder}`,
+        folderName: `${project.folderName}`,
+        projectName: `${project.projectName}`,
+      },
     },
   };
-}
-
-/**
- * Creates workspace configuration for an Epidemiologist R Analytics Environment resource.
- * @param {WorkstationResource} workstation - The workstation resource.
- * @param {string} requestId - The request ID.
- * @returns {Workspace} The workspace configuration.
- */
-export function createWorkspaceConfig(
-  workstation: WorkstationResource,
-): Workspace {
-  return new WorkspaceBuilder(workstation.resourceName)
-    .setSourceAndModule(
-      'Inline',
-      `# workstation\nresource "google_workstations_workstation" "default" {
-  provider               = google-beta
-  workstation_id         = "${workstation.resourceName}-workstation"
-  workstation_config_id  = "workstation-config"
-  workstation_cluster_id = "phac-workstation-cluster"
-  location               = "us-central1"
-  labels = {
-    "label" = "key"
-  }
-  env = {
-    name = "foo"
-  }
-  annotations = {
-    label-one = "value-one"
-  }
-}`,
-    )
-    .setConnectionSecretNamespaceAndName(
-      'default',
-      `terraform-workspace-${workstation.resourceName}`,
-    )
-    .setMetadataAnnotation(
-      'crossplane.io/external-name',
-      workstation.resourceName,
-    )
-    .build();
 }
 
 /**

@@ -13,6 +13,10 @@ backend:
   # all interfaces, the most permissive setting. The right value depends on your specific deployment.
   listen: ':7007'
 
+  auth:
+    keys:
+      - secret: ${BACKSTAGE_AUTH_KEYS_0}
+
   # config options: https://node-postgres.com/api/client
   database:
     client: pg
@@ -32,7 +36,30 @@ catalog:
   # Overrides the default list locations from app-config.yaml as these contain example data.
   # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details
   # on how to get entities into the catalog.
-  locations: []
+  locations:
+    # Backstage entities
+    - type: file
+      target: /app/entities.yaml
+
+    # Resource Provisioner template
+    - type: file
+      target: /app/resource-provisioner.yaml
+
+      rules:
+        - allow: [Template]
+
+    # GCP Project Provisioner template
+    - type: file
+      target: /app/gcp-project-provisioner.yaml
+
+      rules:
+        - allow: [Template]
+
+    # Backstage organizational data
+    - type: file
+      target: /app/org.yaml
+      rules:
+        - allow: [User, Group]
 
 kubernetes:
   serviceLocatorMethod:
@@ -45,11 +72,6 @@ kubernetes:
       skipMetricsLookup: true
       exposeDashboard: true
 
-integrations:
-  github:
-    - host: github.com
-      token: ${GITHUB_TOKEN}
-
 auth:
   environment: production
   providers:
@@ -57,3 +79,13 @@ auth:
       production:
         clientId: ${AUTH_GITHUB_CLIENT_ID}
         clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+    google:
+      production:
+        clientId: ${AUTH_GOOGLE_CLIENT_ID}
+        clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: emailMatchingUserEntityAnnotation

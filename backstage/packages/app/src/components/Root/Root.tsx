@@ -24,7 +24,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 
-const useSidebarLogoStyles = makeStyles({
+const useStyles = makeStyles({
   root: {
     width: sidebarConfig.drawerWidthOpen,
     height: 3 * sidebarConfig.logoHeight,
@@ -36,11 +36,12 @@ const useSidebarLogoStyles = makeStyles({
   link: {
     width: sidebarConfig.drawerWidthOpen,
     marginLeft: 16,
+    color: 'white',
   },
 });
 
 const SidebarLogo = () => {
-  const classes = useSidebarLogoStyles();
+  const classes = useStyles();
   const { isOpen } = useSidebarOpenState();
 
   return (
@@ -74,7 +75,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem
           icon={MonetizationIcon}
           to="cost-insights"
-          text="Cost Insights"
+          text="Cost Dashboard"
         />
 
         {/* End global nav */}

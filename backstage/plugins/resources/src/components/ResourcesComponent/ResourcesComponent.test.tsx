@@ -6,6 +6,6 @@ import { renderInTestApp } from '@backstage/test-utils';
 describe('ResourcesComponent', () => {
   it('should render', async () => {
     await renderInTestApp(<ResourcesComponent />);
-    expect(screen.getByText('Resources!')).toBeInTheDocument();
+    expect(screen.getByText('Resources')).toBeInTheDocument();
   });
 });
