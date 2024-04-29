@@ -1,5 +1,6 @@
 locals {
   region = "northamerica-northeast1"
+
   gke_props = {
     name              = "phac-backstage"
     zones             = ["northamerica-northeast1-a", "northamerica-northeast1-b", "northamerica-northeast1-c"]
@@ -9,10 +10,24 @@ locals {
   kcc_props = {
     sa_account_id   = "phac-backstage-kcc-sa"
     sa_display_name = "phac-backstage-kcc-sa"
+    folder_roles = [
+      "roles/resourcemanager.projectCreator",
+      "roles/resourcemanager.folderCreator"
+    ]
+    org_roles = [
+      "roles/billing.user"
+    ]
   }
   crossplane_props = {
     sa_account_id   = "crossplane-sa"
     sa_display_name = "crossplane-sa"
+    folder_roles = [
+      "roles/resourcemanager.projectCreator",
+      "roles/resourcemanager.folderCreator"
+    ]
+    org_roles = [
+      "roles/billing.user"
+    ]
   }
   git_props = {
     sync_branch = "main"

@@ -1,5 +1,15 @@
+variable "organization_id" {
+  description = "Unique identifier for your Google Cloud organization."
+  type        = string
+}
+
 variable "project_id" {
-  description = "Unique identifier for your Google Cloud project (find it in the Google Cloud Console)."
+  description = "Unique identifier for your Google Cloud project."
+}
+
+variable "root_folder_id" {
+  description = "Unique identifier for the root folder that templates will be provisioned under."
+  type        = string
 }
 
 variable "config_sync_repo" {

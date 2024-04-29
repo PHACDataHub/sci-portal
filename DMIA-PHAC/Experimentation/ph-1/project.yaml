@@ -1,0 +1,7 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Project
+metadata:
+  name: phx-project1-32d16d37-949e-48f1-9bb2-190de41dbf60
+spec:
+  folder: "839314763459"
+  name: phx-project1

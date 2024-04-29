@@ -1,0 +1,32 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xprojects.data-science-portal.phac-aspc.gc.ca
+spec:
+  defaultCompositionRef:
+    name: comp-project
+  group: data-science-portal.phac-aspc.gc.ca
+  names:
+    kind: xProject
+    plural: xprojects
+  claimNames:
+    kind: Project
+    plural: projects
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              name:
+                type: string
+              folder:
+                type: string
+            required:
+              - name
+              - folder

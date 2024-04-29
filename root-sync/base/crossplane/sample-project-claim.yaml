@@ -1,0 +1,7 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Project
+metadata:
+  name: crossplane-project-name
+spec:
+  name: crossplane-project-name
+  folder: "folder-id"

@@ -124,14 +124,12 @@ catalog:
     # Resource Provisioner template
     - type: file
       target: ../../templates/resource-provisioner.yaml
-
       rules:
         - allow: [Template]
 
     # GCP Project Provisioner template
     - type: file
       target: ../../templates/gcp-project-provisioner.yaml
-
       rules:
         - allow: [Template]
 

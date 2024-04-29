@@ -1,6 +1,54 @@
 # Data Science Portal
 
-Welcome to our monorepo housing various services including Backstage, Kubernetes manifests, and more.
+This repository provides a reference implementation for a self-service portal to deploy and manage GCP projects and infrastructure.
+
+## Table of Contents
+
+- [Developer Guide](#developer-guide)
+  <!-- - [Overview](#overview) -->
+  - [Setup](#setup)
+    - [Bootstrap the Cluster](#bootstrap-the-cluster)
+  - ...
+- [Technical Design](#technical-design)
+  - [Authentication in Backstage](#authentication-in-backstage)
+  - [Integrations](#integrations)
+    - [GitHub](#github)
+  - ...
+
+## Developer Guide
+
+<!-- ### Overview -->
+
+### Setup
+
+#### Bootstrap the Cluster
+
+Before we can use Backstage or the infrastructure templates we need a cluster deployed with Config Sync for GitOps, Crossplane for the control plane, and additional infrastructure to build and run Backstage. This is only required the first time a cluster starts up.
+
+The process to bootstrap the cluster is documented in **[bootstrap/README.md](bootstrap/README.md)**.
+
+## Technical Design
+
+### Authentication in Backstage
+
+* Using the [Google Authentication Provider](https://backstage.io/docs/auth/google/provider) which uses OAuth Credentials.
+* The [Sign-in Identities and Resolvers](https://backstage.io/docs/auth/identity-resolver) docs state that we must explicitly configure the provider to map external identities to user identities in Backstage. This is **not** provided by the Google Authentication provider.
+* Options:
+  * A custom sign-in resolver with domain validation that populates `User` entities in the Catalog
+  * Use the Google Secure LDAP service to get [LDAP Organizational Data](https://backstage.io/docs/integrations/ldap/org/)
+
+
+### Integrations
+
+#### GitHub
+
+We use a GitHub integration to:
+
+* Create PRs from a template
+
+Backstage can be configured to use [GitHub Apps](https://backstage.io/docs/integrations/github/github-apps) for backend authentication.
+
+<!------------------------------------------>
 
 ## Installation
 

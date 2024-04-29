@@ -97,6 +97,24 @@ resource "google_project_iam_member" "editor_role" {
   member  = "serviceAccount:${google_service_account.phac-backstage-kcc-sa.email}"
 }
 
+# Grants the KCC the roles defined in locals to the primary portal folder
+resource "google_folder_iam_member" "kcc_folder_role_bindings" {
+  for_each = toset(local.kcc_props.folder_roles)
+
+  folder = "folders/${var.root_folder_id}"
+  role   = each.value
+  member = "serviceAccount:${google_service_account.phac-backstage-kcc-sa.email}"
+}
+
+# Grants the KCC the roles defined in locals to the organizationr
+resource "google_organization_iam_member" "kcc_org_role_bindings" {
+  for_each = toset(local.kcc_props.org_roles)
+
+  org_id = var.organization_id
+  role   = each.value
+  member = "serviceAccount:${google_service_account.phac-backstage-kcc-sa.email}"
+}
+
 resource "google_service_account" "crossplane-sa" {
   account_id   = local.crossplane_props.sa_account_id
   display_name = local.crossplane_props.sa_display_name
@@ -104,11 +122,22 @@ resource "google_service_account" "crossplane-sa" {
   description  = "GCP SA bound to Crossplane"
 }
 
-# Allows the GKE Service Account to create gcp projects
-resource "google_project_iam_member" "crossplane_role_binding" {
-  project = var.project_id
-  role    = "roles/resourcemanager.projectCreator"
-  member  = "serviceAccount:${google_service_account.crossplane-sa.email}"
+# Grants the Crossplane SA the roles defined in locals to the primary portal folder
+resource "google_folder_iam_member" "crossplane_folder_role_bindings" {
+  for_each = toset(local.crossplane_props.folder_roles)
+
+  folder = "folders/${var.root_folder_id}"
+  role   = each.value
+  member = "serviceAccount:${google_service_account.crossplane-sa.email}"
+}
+
+# Grants the Crossplane SA the roles defined in locals to the organizationr
+resource "google_organization_iam_member" "crossplane_org_role_bindings" {
+  for_each = toset(local.crossplane_props.org_roles)
+
+  org_id = var.organization_id
+  role   = each.value
+  member = "serviceAccount:${google_service_account.crossplane-sa.email}"
 }
 
 module "config_sync" {

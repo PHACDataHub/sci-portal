@@ -1,5 +1,9 @@
+# Google Cloud
+organization_id = ""
+project_id      = "pht-01hsv4d2m0n"
+root_folder_id  = ""
+
 # Config Sync
-project_id                     = "pht-01hsv4d2m0n"
 config_sync_repo               = "git@github.com:FociSolutions/phac-data-science-portal-monorepo.git"
 config_sync_target_environment = "test"
 

@@ -1,0 +1,57 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: comp-project
+  labels:
+    provider: kubernetes
+    guide: self
+spec:
+  compositeTypeRef:
+    apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+    kind: xProject
+  patchSets:
+    - name: metadata
+      patches:
+        - fromFieldPath: metadata.labels
+  resources:
+    - name: gcp-project
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef:
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+              apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+              kind: Project
+              metadata:
+                name: "TO BE PATCHED"
+                namespace: default # placeholder
+                labels:
+                  label-one: "value-one" # placeholder
+                annotations:
+                  cnrm.cloud.google.com/auto-create-network: "false"
+              spec:
+                name: "TO BE PATCHED"
+                folderRef:
+                  external: "TO BE PATCHED"
+                billingAccountRef:
+                  external: "TO BE PATCHED"
+          references:
+            - patchesFrom:
+                apiVersion: v1
+                kind: ConfigMap
+                namespace: default
+                name: backstage-config
+                fieldPath: data.GCP_BILLING_ACCOUNT_ID
+              toFieldPath: spec.billingAccountRef.external
+      patches:
+        - fromFieldPath: "spec.name"
+          toFieldPath: "spec.forProvider.manifest.metadata.name"
+        - fromFieldPath: "spec.name"
+          toFieldPath: "spec.forProvider.manifest.spec.name"
+        - fromFieldPath: "spec.folder"
+          toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
+      readinessChecks:
+        - type: None

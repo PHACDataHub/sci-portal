@@ -44,6 +44,10 @@ if [ ! -f "$credential_file" ]; then
     exit 1
 fi
 
+# Add crossplane helm repository
+helm repo add crossplane-stable https://charts.crossplane.io/stable
+helm repo update
+
 # Install the Crossplane components using helm install
 helm install crossplane \
 crossplane-stable/crossplane \

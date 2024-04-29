@@ -74,7 +74,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         />
         <SidebarItem
           icon={MonetizationIcon}
-          to="cost-insights"
+          to="cost-dashboard"
           text="Cost Dashboard"
         />
 

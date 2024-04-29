@@ -139,31 +139,27 @@ export const provisionNewResourceAction = (config: Config) => {
 };
 
 /**
- * Creates project configuration for a GCP project claim.
- * @param {GCPProjectResource} project - The project.
- * @param {string} requestId - The request ID.
- * @returns {Object} The project configuration.
+ * Creates a Project claim
+ * @returns {Object}
  */
 export function createProjectConfig(
-  project: GCPProjectResource,
+  resource: GCPProjectResource,
   requestId: string,
 ) {
   return {
-    apiVersion: 'phac-aspc.gc.ca/v1alpha1',
-    kind: 'ProjectClaim',
+    apiVersion: 'data-science-portal.phac-aspc.gc.ca/v1alpha1',
+    kind: 'Project',
     metadata: {
-      name: `${project.projectName}-${requestId}`,
+      name: `${resource.projectName}-${requestId}`,
     },
     spec: {
-      id: `${requestId}`,
-      compositionSelector: {
-        provider: 'google',
-      },
-      parameters: {
-        parentFolder: `${project.parentFolder}`,
-        folderName: `${project.folderName}`,
-        projectName: `${project.projectName}`,
-      },
+      // compositionSelector: {
+      //   matchLabels: {
+      //     provider: 'google',
+      //   },
+      // },
+      folder: resource.folderName, // parentFolder
+      name: resource.projectName,
     },
   };
 }

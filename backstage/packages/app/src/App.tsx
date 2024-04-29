@@ -15,6 +15,7 @@ import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
 import {
+  DefaultTechDocsHome,
   TechDocsIndexPage,
   techdocsPlugin,
   TechDocsReaderPage,
@@ -27,8 +28,6 @@ import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
 import { HomePage } from './components/home/HomePage';
-import { ResourcesPage } from './components/resources/ResourcesPage';
-import { CostInsightsPage } from '@backstage/plugin-cost-insights';
 
 import {
   AlertDisplay,
@@ -46,6 +45,7 @@ import { GovTheme } from './theme/govTheme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
+import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
 
 const app = createApp({
   components: {
@@ -112,8 +112,9 @@ const routes = (
     >
       {entityPage}
     </Route>
-    <Route path="/docs" element={<TechDocsIndexPage />} />
-    <Route path="/cost-insights" element={<CostInsightsPage />} />
+    <Route path="/docs" element={<TechDocsIndexPage />}>
+      <DefaultTechDocsHome />
+    </Route>
 
     <Route
       path="/docs/:namespace/:kind/:name/*"
@@ -142,7 +143,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/resources" element={<ResourcesPage />} />
+    <Route path="/cost-dashboard" element={<CostDashboardPage />} />
   </FlatRoutes>
 );
 

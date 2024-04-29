@@ -1,6 +1,6 @@
 ## Terraform Configuration for GKE Autopilot Cluster
 
-This Terraform configuration creates a Google Kubernetes Engine (GKE) autopilot cluster and sets up the required authentication and configuration.
+This Terraform configuration creates a Google Kubernetes Engine (GKE) Autopilot cluster and sets up the required authentication and configuration.
 
 **Steps**:
 
@@ -33,7 +33,7 @@ cloudbuildv2_connection_trigger_branch = "<your_trigger_branch>"
 * **Resources**
     * `google_compute_network`: Creates a network for the GKE cluster.
     * `google_compute_subnetwork`: Creates a subnet within the network with specific IP ranges.
-    * `module.gke`: Creates a GKE autopilot cluster using a public Terraform module (`terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster`).
+    * `module.gke`: Creates a GKE Autopilot cluster using a public Terraform module (`terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster`).
     * `google_service_account`: Creates a GCP service account for cluster access.
     * `google_service_account_iam_member`: Grants the service account Workload Identity access.
     * `google_project_iam_member`: Assigns the service account an editor role in the GCP project.
