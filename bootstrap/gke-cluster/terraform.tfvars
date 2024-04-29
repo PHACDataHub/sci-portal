@@ -1,7 +1,7 @@
 # Google Cloud
 organization_id = "131718718952"
 project_id      = "pht-01hsv4d2m0n"
-root_folder_id  = "364675254682"
+root_folder_id  = "108494461414"    // DMIA-PHAC > SciencePlatform
 
 # Config Sync
 config_sync_repo               = "git@github.com:PHACDataHub/sci-portal.git"
