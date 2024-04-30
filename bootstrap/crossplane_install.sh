@@ -17,32 +17,36 @@ usage() {
     exit 1
 }
 
-# Load ENV vars
-export $(grep -v '^#' .env | xargs -d '\n')
+# Assert the required environment variables are defined
+for var in GCP_PROJECT_ID GCP_REGION KCC_SERVICEACCOUNT KCC_SERVICEACCOUNT_EMAIL; do
+    if [ -z "${!var}" ]; then
+        >&2 echo "Error: The $var environment variable must be defined."
+        exit 1
+    fi
+done
 
-# Generate Crossplane Providers
-
-# GCP
-envsubst < ./crossplane/templates/gcp/controller-config.yaml > ./crossplane/providers/gcp/controller-config.yaml
-envsubst < ./crossplane/templates/gcp/provider.yaml > ./crossplane/providers/gcp/provider.yaml
-envsubst < ./crossplane/templates/gcp/provider-config.yaml > ./crossplane/providers/gcp/config/provider-config.yaml
-
-# Terraform
-envsubst < ./crossplane/templates/terrafrom/deployment-runtime-config.yaml > ./crossplane/providers/terraform/deployment-runtime-config.yaml
-envsubst < ./crossplane/templates/terrafrom/provider.yaml > ./crossplane/providers/terraform/provider.yaml
-envsubst < ./crossplane/templates/terrafrom/provider-config.yaml > ./crossplane/providers/terraform/config/provider-config.yaml
-
-# Check if the credentials file argument is provided
+# Assert the required parameter is provided
 if [ $# -ne 1 ]; then
     usage
 fi
 
-# Check if the file exists
+# Assert the credentials exist
 credential_file=$1
 if [ ! -f "$credential_file" ]; then
-    echo "Error: File not found at $credential_file"
+    >&2 echo "Error: The \"$credential_file\" file does not exist"
     exit 1
 fi
+
+# Fill in GCP templates
+envsubst < ./crossplane/templates/gcp/controller-config.yaml > ./crossplane/providers/gcp/controller-config.yaml
+envsubst < ./crossplane/templates/gcp/provider.yaml > ./crossplane/providers/gcp/provider.yaml
+envsubst < ./crossplane/templates/gcp/provider-config.yaml > ./crossplane/providers/gcp/config/provider-config.yaml
+
+# Fill in Terraform templates
+envsubst < ./crossplane/templates/terrafrom/deployment-runtime-config.yaml > ./crossplane/providers/terraform/deployment-runtime-config.yaml
+envsubst < ./crossplane/templates/terrafrom/provider.yaml > ./crossplane/providers/terraform/provider.yaml
+envsubst < ./crossplane/templates/terrafrom/provider-config.yaml > ./crossplane/providers/terraform/config/provider-config.yaml
+
 
 # Add crossplane helm repository
 helm repo add crossplane-stable https://charts.crossplane.io/stable
@@ -50,14 +54,12 @@ helm repo update
 
 # Install the Crossplane components using helm install
 helm install crossplane \
-crossplane-stable/crossplane \
---namespace crossplane-system \
---create-namespace
-
+  crossplane-stable/crossplane \
+  --namespace crossplane-system \
+  --create-namespace
 
 # Wait for Helm installation to complete
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=crossplane --timeout=300s -n crossplane-system
-
 
 # Create Kubernetes secret with provided GCP credentials
 kubectl create secret generic tf-gcp-creds -n crossplane-system \

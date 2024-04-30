@@ -5,4 +5,4 @@ metadata:
 spec:
   credentials:
     source: InjectedIdentity
-  projectID: ${PHAC_PROJECT_ID}
+  projectID: ${GCP_PROJECT_ID}

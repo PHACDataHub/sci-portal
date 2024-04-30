@@ -2,12 +2,3 @@ apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
   name: tf-controller-config
-  annotations:    
-    iam.gke.io/gcp-service-account: ${PHAC_WI_SERVICEACCOUNT_EMAIL}
-spec:
-  serviceAccountTemplate:
-    metadata:
-      name: ${PHAC_WI_SERVICEACCOUNT}
-      annotations:    
-        iam.gke.io/gcp-service-account: ${PHAC_WI_SERVICEACCOUNT_EMAIL}
-        

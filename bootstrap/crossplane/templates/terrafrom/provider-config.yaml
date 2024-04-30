@@ -18,13 +18,13 @@ spec:
   configuration: |
     provider "google" {
       credentials = "gcp-credential-file.json"
-      project     = "${PHAC_PROJECT_ID}"
+      project     = "${GCP_PROJECT_ID}"
     }
 
     provider "google-beta" {
       credentials = "gcp-credential-file.json"
-      project     = "${PHAC_PROJECT_ID}"
-      region      = "${PHAC_REGION}"
+      project     = "${GCP_PROJECT_ID}"
+      region      = "${GCP_REGION}"
     }
 
     // Modules _must_ use remote state. The provider does not persist state.

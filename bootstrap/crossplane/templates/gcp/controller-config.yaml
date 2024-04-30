@@ -3,6 +3,6 @@ kind: ControllerConfig
 metadata:
   name: gcp-controller-config
   annotations:    
-    iam.gke.io/gcp-service-account: ${PHAC_WI_SERVICEACCOUNT_EMAIL}
+    iam.gke.io/gcp-service-account: ${KCC_SERVICEACCOUNT_EMAIL}
 spec:
-  serviceAccountName: ${PHAC_WI_SERVICEACCOUNT}
+  serviceAccountName: ${KCC_SERVICEACCOUNT}

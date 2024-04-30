@@ -1,4 +1,5 @@
 *.env
+*.nix
 
 bootstrap/.env
 bootstrap/crossplane/providers/**/*.yaml
