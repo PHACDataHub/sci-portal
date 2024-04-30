@@ -32,8 +32,6 @@ spec:
             - configMapRef:
                 name: backstage-config
             - secretRef:
-                name: github-auth
-            - secretRef:
                 name: google-auth
             - secretRef:
                 name: backstage-auth-keys
