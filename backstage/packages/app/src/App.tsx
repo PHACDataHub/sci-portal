@@ -43,7 +43,6 @@ import LightIcon from '@material-ui/icons/WbSunny';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { GovTheme } from './theme/govTheme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
 
@@ -53,12 +52,6 @@ const app = createApp({
       <SignInPage
         {...props}
         providers={[
-          {
-            id: 'github-auth-provider',
-            title: 'GitHub',
-            message: 'Sign in using GitHub',
-            apiRef: githubAuthApiRef,
-          },
           {
             id: 'google-auth-provider',
             title: 'Google',
