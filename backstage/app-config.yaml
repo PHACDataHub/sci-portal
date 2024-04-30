@@ -79,19 +79,15 @@ techdocs:
 auth:
   environment: development
   providers:
-    # See https://backstage.io/docs/auth/github/provider
-    github:
-      development:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
-
-        # Authentication will fail without at least one resolver
-        signIn:
-          resolvers:
-            - resolver: usernameMatchingUserEntityName
-
     # See https://backstage.io/docs/auth/guest/provider
     guest: {}
+    google:
+      development:
+        clientId: ${AUTH_GOOGLE_CLIENT_ID}
+        clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: emailMatchingUserEntityAnnotation
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
