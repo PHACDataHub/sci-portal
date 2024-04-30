@@ -83,12 +83,20 @@ resource "google_service_account" "phac-backstage-kcc-sa" {
 }
 
 # Allows the GKE Service Account to use the GCP Service Account via Workload Identity
-resource "google_service_account_iam_member" "iam_workloadidentity" {
+resource "google_service_account_iam_member" "iam_workloadidentity_kcc" {
   service_account_id = google_service_account.phac-backstage-kcc-sa.name
   role               = "roles/iam.workloadIdentityUser"
 
   # Workload Identity is specified per-project and per-namespace
   member = "serviceAccount:${var.project_id}.svc.id.goog[cnrm-system/cnrm-controller-manager]"
+}
+
+resource "google_service_account_iam_member" "iam_workloadidentity_tf" {
+  service_account_id = google_service_account.phac-backstage-kcc-sa.name
+  role               = "roles/iam.workloadIdentityUser"
+
+  # Workload Identity is specified per-project and per-namespace
+  member = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/phac-backstage-kcc-sa]"
 }
 
 resource "google_project_iam_member" "editor_role" {
