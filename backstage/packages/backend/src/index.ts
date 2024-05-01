@@ -4,6 +4,8 @@ import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-no
 import { coreServices } from '@backstage/backend-plugin-api';
 import { provisionNewResourceAction } from './plugins/scaffolder/actions/provisioner';
 
+import { googleAuthWithCustomSignInResolver } from './plugins/auth/module';
+
 const backend = createBackend();
 
 backend.add(import('@backstage/plugin-app-backend/alpha'));
@@ -15,8 +17,7 @@ backend.add(import('@backstage/plugin-auth-backend'));
 // See https://backstage.io/docs/backend-system/building-backends/migrating#the-auth-plugin
 // backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 // See https://github.com/backstage/backstage/blob/master/docs/auth/guest/provider.md
-backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
-backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
+backend.add(googleAuthWithCustomSignInResolver);
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));

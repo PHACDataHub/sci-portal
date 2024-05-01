@@ -1,3 +1,4 @@
+---
 app:
   # Should be the same as backend.baseUrl when using the `app-backend` plugin.
   baseUrl: http://localhost:7007
@@ -79,6 +80,7 @@ auth:
       production:
         clientId: ${AUTH_GOOGLE_CLIENT_ID}
         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
-        signIn:
-          resolvers:
-            - resolver: emailMatchingUserEntityAnnotation
+
+  # We configure a custom sign-in resolver until we can manage Users and Groups with Secure LDAP.
+  # See https://backstage.io/docs/auth/identity-resolver#sign-in-without-users-in-the-catalog
+  allowedDomains: ${AUTH_GOOGLE_ALLOWED_DOMAINS}

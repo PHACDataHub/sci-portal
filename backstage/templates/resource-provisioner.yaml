@@ -55,18 +55,11 @@ spec:
                     const: GCP Project
               then:
                 properties:
-                  parentFolder:
-                    title: Parent Folder
-                    type: string
-                    enum:
-                      - Experimentation
-                      - Noble-Experimentation
-                    default: Experimentation
-                    ui:widget: select
                   folderName:
                     title: Folder Name
                     type: string
                     default: ph-
+                    ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform
                   projectName:
                     title: Project Name
                     type: string
@@ -85,7 +78,6 @@ spec:
       input:
         projectName: ${{ parameters.projectName }}
         displayName: ${{ parameters.displayName }}
-        parentFolder: ${{ parameters.parentFolder }}
         folderName: ${{ parameters.folderName }}
         resourceType: ${{ parameters.resourceType }}
         resourceName: ${{ parameters.resourceName }}
@@ -116,12 +108,11 @@ spec:
 
           ### GCP Project
 
-          **Parent Folder:** ${{parameters.parentFolder}}
           **Folder Name:** ${{parameters.folderName}}
           **Project Name:** ${{parameters.projectName}}
           **Display Name:** ${{parameters.displayName}}
 
-        targetPath: ./DMIA-PHAC/${{parameters.parentFolder}}/${{parameters.folderName}}
+        targetPath: ./DMIA-PHAC/SciencePlatform/${{parameters.folderName}}
 
   output:
     links:

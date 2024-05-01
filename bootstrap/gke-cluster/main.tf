@@ -1,36 +1,5 @@
 data "google_client_config" "default" {}
 
-provider "kubernetes" {
-  host                   = "https://${module.gke.endpoint}"
-  token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-}
-
-provider "kubectl" {
-  host                   = "https://${module.gke.endpoint}"
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-  token                  = data.google_client_config.default.access_token
-  load_config_file       = false
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = "https://${module.gke.endpoint}"
-    token                  = data.google_client_config.default.access_token
-    cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-  }
-}
-
-provider "google-beta" {
-  project = var.project_id
-  region  = local.region
-}
-
-provider "google" {
-  project = var.project_id
-  region  = local.region
-}
-
 resource "google_artifact_registry_repository" "ph_backstage_repo" {
   location      = local.region
   repository_id = "ph-backstage"
@@ -38,19 +7,19 @@ resource "google_artifact_registry_repository" "ph_backstage_repo" {
   format        = "DOCKER"
 }
 
-resource "google_cloudbuildv2_repository" "data_science_portal_monorepo" {
-  name              = "phac-data-science-portal-monorepo"
-  parent_connection = var.cloudbuildv2_connection
-  remote_uri        = var.cloudbuildv2_connection_remote_uri
+resource "google_cloudbuildv2_repository" "data_science_portal" {
+  name              = var.cloudbuild_repository_name
+  parent_connection = "projects/${var.project_id}/locations/${var.cloudbuild_host_connection_region}/connections/${var.cloudbuild_host_connection_name}"
+  remote_uri        = "https://github.com/${var.cloudbuild_repository_owner}/${var.cloudbuild_repository_name}.git"
 }
 
-resource "google_cloudbuild_trigger" "data_science_portal_monorepo_trigger" {
+resource "google_cloudbuild_trigger" "data_science_portal_trigger" {
   name     = "backstage-image-trigger"
-  location = var.cloudbuildv2_connection_region
+  location = var.cloudbuild_host_connection_region
   repository_event_config {
-    repository = google_cloudbuildv2_repository.data_science_portal_monorepo.id
+    repository = google_cloudbuildv2_repository.data_science_portal.id
     push {
-      branch = var.cloudbuildv2_connection_trigger_branch
+      branch = var.cloudbuild_repository_branch
     }
   }
 
@@ -162,6 +131,6 @@ module "config_sync" {
 
   source_format = "unstructured"
   sync_repo     = var.config_sync_repo
-  sync_branch   = local.git_props.sync_branch
-  policy_dir    = "root-sync/overlays/${var.config_sync_target_environment}"
+  sync_branch   = var.config_sync_branch
+  policy_dir    = "root-sync/overlays/${var.config_sync_kustomize_overlay}"
 }

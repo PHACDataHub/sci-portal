@@ -1,5 +1,4 @@
 ---
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
@@ -7,49 +6,3 @@ metadata:
 spec:
   type: team
   children: []
----
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-user
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: blastdan
-  annotations:
-    google.com/email: dan.mccrady@focisolutions.com
-spec:
-  profile:
-    displayName: Daniel McCrady
-    email: dan.mccrady@focisolutions.com
-    picture: https://lh3.googleusercontent.com/a/ACg8ocKSx39WQ-pRcpB04Cg70r6BTc7bQwFrgFSoeCS8Bt0PuVXL9wY=s96-c-rg-br100
-  memberOf: [Developers]
----
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-user
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: KDezenosky
-spec:
-  memberOf: [Developers]
----
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-user
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: seanpoulter-foci
-spec:
-  memberOf: [Developers]
----
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-user
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: srinises
-spec:
-  memberOf: [Developers]
----
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-user
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: ssubedir
-spec:
-  memberOf: [Developers]

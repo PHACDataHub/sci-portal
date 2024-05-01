@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.10.5/.schema/devbox.schema.json",
+  "packages": [
+    "go-task@3.36.0",
+    "google-cloud-sdk@467.0.0",
+    "k9s@0.32.4",
+    "kubectl@1.29.4",
+    "kubernetes-helm@3.14.4",
+    "shellcheck@0.10.0",
+    "terraform@1.7.5"
+  ],
+  "shell": {
+    "init_hook": []
+  }
+}

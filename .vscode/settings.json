@@ -1,0 +1,22 @@
+{
+    "search.exclude": {
+        "**/.terraform": true,
+        "**/node_modules": true,
+        
+        "backstage/dist-types": true
+    },
+
+    "cSpell.words": [
+        ".tfvars",
+        "artifactregistry",
+        "cloudbuild",
+        "Crossplane",
+        "Devbox",
+        "DMIA",
+        "gcloud",
+        "GitOps",
+        "northamerica-northeast1",
+        "PHAC",
+        "secretmanager"
+    ]
+}

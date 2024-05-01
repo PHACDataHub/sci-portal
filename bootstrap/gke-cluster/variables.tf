@@ -16,22 +16,30 @@ variable "config_sync_repo" {
   description = "The Git repository to connect Config Sync to. It should be an SSH URL like git@github.com:PHACDataHub/sci-portal.git"
 }
 
-variable "config_sync_target_environment" {
+variable "config_sync_branch" {
+  description = "Specific branch in the Git repository that Config Sync monitors for changes."
+}
+
+variable "config_sync_kustomize_overlay" {
   description = "Specifies the environment for the Config Sync instance overlay. The current environment is `test`. This can be extended to support additional environments."
 }
 
-variable "cloudbuildv2_connection" {
-  description = "Full name of the Cloud Build connection (format: projects/<project_id>/locations/<region>/connections/<connection_name>)."
+variable "cloudbuild_host_connection_name" {
+  description = "The Cloud Build Host Connection name. For example, PHACDataHub."
 }
 
-variable "cloudbuildv2_connection_region" {
-  description = "Region where the Cloud Build connection will be located (consider Git repository location for optimal performance)."
+variable "cloudbuild_host_connection_region" {
+  description = "Region where the Cloud Build connection will be located. Consider the Git repository location for optimal performance."
 }
 
-variable "cloudbuildv2_connection_remote_uri" {
-  description = "Web address (URI) of the Git repository to connect to Cloud Build (source code or project files)."
+variable "cloudbuild_repository_owner" {
+  description = "The GitHub repository owner that will be watched for changes."
 }
 
-variable "cloudbuildv2_connection_trigger_branch" {
+variable "cloudbuild_repository_name" {
+  description = "The GitHub repository owner that will be watched for changes."
+}
+
+variable "cloudbuild_repository_branch" {
   description = "Specific branch in the Git repository to be monitored by Cloud Build for changes (triggers build pipeline on commit)."
 }

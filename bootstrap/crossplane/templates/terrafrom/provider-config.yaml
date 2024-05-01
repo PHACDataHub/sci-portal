@@ -6,13 +6,13 @@ spec:
   # This optional configuration block can be used to inject HCL into any workspace that uses this provider config
   configuration: |
     provider "google" {
-      project     = "${PHAC_PROJECT_ID}"
-      region      = "${PHAC_REGION}"
+      project     = "${GCP_PROJECT_ID}"
+      region      = "${GCP_REGION}"
     }
 
     provider "google-beta" {
-      project     = "${PHAC_PROJECT_ID}"
-      region      = "${PHAC_REGION}"
+      project     = "${GCP_PROJECT_ID}"
+      region      = "${GCP_REGION}"
     }
 
     // Modules _must_ use remote state. The provider does not persist state.

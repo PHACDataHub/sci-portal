@@ -18,10 +18,10 @@ tasks:
 
   crossplane:
     desc: |
-      Installs Crossplane and configures Terraform provider. Usage: task bootstrap:crossplane -- <path-to-gcp-creds>
+      Installs Crossplane and configures Terraform provider. Usage: task bootstrap:crossplane
     dir: bootstrap
     cmds:
-      - ./crossplane_install.sh {{.CLI_ARGS}}
+      - ./crossplane_install.sh
 
   fmt:
     desc: Formats terraform

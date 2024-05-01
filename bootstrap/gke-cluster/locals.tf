@@ -29,16 +29,13 @@ locals {
       "roles/billing.user"
     ]
   }
-  git_props = {
-    sync_branch = "main"
-  }
   backstage_props = {
     sa_account_id   = "phac-backstage-sa"
     sa_display_name = "phac-backstage-sa"
     gke_sa_name     = "backstage/backstage-sa"
   }
   cloudsql = {
-    instance_name       = "backstage-intance"
+    instance_name       = "backstage-instance"
     database_version    = "POSTGRES_14"
     database_tier       = "db-f1-micro"
     deletion_protection = false

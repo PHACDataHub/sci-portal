@@ -13,7 +13,6 @@ interface Resource {
 }
 
 interface GCPProjectResource extends Resource {
-  parentFolder: string;
   folderName: string;
   projectName: string;
   displayName: string;
@@ -85,11 +84,6 @@ export const provisionNewResourceAction = (config: Config) => {
             type: 'string',
             title: 'justificationNote',
             description: 'Request justification note',
-          },
-          parentFolder: {
-            type: 'string',
-            title: 'parentFolder',
-            description: 'The parent folder for the project',
           },
           folderName: {
             type: 'string',
