@@ -1,0 +1,7 @@
+# Patch the cert-manager service account so that it has permissions to use Cloud DNS:
+# https://cert-manager.io/docs/configuration/acme/dns01/google/#link-ksa-to-gsa-in-kubernetes
+#"iam.gke.io/gcp-service-account=dns01-solver@$PROJECT_ID.iam.gserviceaccount.com"
+- op: add
+  path: "/metadata/annotations"
+  value:
+    iam.gke.io/gcp-service-account: dns01-solver@pht-01hsv4d2m0n.iam.gserviceaccount.com
