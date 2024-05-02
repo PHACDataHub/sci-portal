@@ -6,3 +6,4 @@ resources:
   - ./config-sync
   - ./backstage
   - ./crossplane
+  - ./cert-manager

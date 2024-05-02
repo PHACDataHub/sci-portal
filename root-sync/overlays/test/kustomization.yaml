@@ -23,3 +23,13 @@ patches:
     target:
       kind: Deployment
       name: backstage
+
+  - path: ./cert-manager/patch-issuer.yaml
+    target:
+      kind: ClusterIssuer
+      name: letsencrypt
+
+  - path: ./cert-manager/patch-sa.yaml
+    target:
+      kind: ServiceAccount
+      name: cert-manager
