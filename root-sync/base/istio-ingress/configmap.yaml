@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  mesh: |-
+    # To enable envoy access logs
+    accessLogFile: /dev/stdout
+kind: ConfigMap
+metadata:
+  name: istio-asm-managed
+  namespace: istio-system
+
