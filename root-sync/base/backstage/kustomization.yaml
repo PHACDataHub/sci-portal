@@ -5,3 +5,4 @@ resources:
   - namespace.yaml
   - service-account.yaml
   - backstage.yaml
+  - virtual-service.yaml
