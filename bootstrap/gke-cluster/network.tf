@@ -14,6 +14,12 @@ resource "google_compute_global_address" "private_ip_address" {
   network       = google_compute_network.phac_network.id
 }
 
+resource "google_compute_address" "backstage_ip" {
+  project = var.project_id
+  name    = "backstage-ip"
+  region  = local.region
+}
+
 resource "google_service_networking_connection" "private_vpc_connection" {
   provider   = google-beta
   depends_on = [google_project_service.server_networking]
