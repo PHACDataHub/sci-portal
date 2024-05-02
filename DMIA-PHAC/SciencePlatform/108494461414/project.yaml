@@ -1,0 +1,7 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Project
+metadata:
+  name: phx-rajan-subedi-5903129b-185f-4cb4-9a7d-07669be3e26f
+spec:
+  folder: '108494461414'
+  name: phx-rajan-subedi
