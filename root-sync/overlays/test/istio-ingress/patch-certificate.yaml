@@ -1,0 +1,7 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mesh-gateway-cert
+spec:
+  dnsNames:
+    - backstage.alpha.phac-aspc.gc.ca

@@ -33,3 +33,18 @@ patches:
     target:
       kind: ServiceAccount
       name: cert-manager
+
+  - path: ./istio-ingress/patch-ingress-svc.yaml
+    target:
+      kind: Service
+      name: istio-ingressgateway
+
+  - path: ./istio-ingress/patch-certificate.yaml
+    target:
+      kind: Certificate
+      name: mesh-gateway-cert
+
+  - path: ./istio-ingress/patch-namespace.yaml
+    target:
+      kind: Namespace
+      name: istio-ingress

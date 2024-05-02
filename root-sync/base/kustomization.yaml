@@ -7,3 +7,4 @@ resources:
   - ./backstage
   - ./crossplane
   - ./cert-manager
+  - ./istio-ingress
