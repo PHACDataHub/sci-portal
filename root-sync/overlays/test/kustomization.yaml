@@ -24,6 +24,11 @@ patches:
       kind: Deployment
       name: backstage
 
+  - path: ./backstage/patch-namespace.yaml
+    target:
+      kind: Namespace
+      name: backstage
+
   - path: ./cert-manager/patch-issuer.yaml
     target:
       kind: ClusterIssuer
