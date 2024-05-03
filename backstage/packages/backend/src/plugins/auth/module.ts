@@ -2,9 +2,7 @@ import {
   coreServices,
   createBackendModule,
 } from '@backstage/backend-plugin-api';
-import {
-  stringifyEntityRef,
-} from '@backstage/catalog-model';
+import { stringifyEntityRef } from '@backstage/catalog-model';
 import { NotFoundError } from '@backstage/errors';
 import { googleAuthenticator } from '@backstage/plugin-auth-backend-module-google-provider';
 import {
