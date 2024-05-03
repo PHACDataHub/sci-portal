@@ -1,7 +1,9 @@
 apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-kind: Project
+kind: ProjectClaim
 metadata:
-  name: crossplane-project-name
+  name: phx-test-project-claim
 spec:
-  name: crossplane-project-name
-  folder: "folder-id"
+  rootFolderId: "108494461414"
+  folderName: phx-my-folder
+  projectName: phx-my-project
+  projectId: phx-01F7DKCVCVDZN1Z5Q4FWANHHCC
