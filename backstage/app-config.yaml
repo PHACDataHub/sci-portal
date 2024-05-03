@@ -62,8 +62,6 @@ techdocs:
 auth:
   environment: development
   providers:
-    # See https://backstage.io/docs/auth/guest/provider
-    guest: {}
     google:
       development:
         clientId: ${AUTH_GOOGLE_CLIENT_ID}
