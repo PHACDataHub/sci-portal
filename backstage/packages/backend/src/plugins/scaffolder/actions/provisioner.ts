@@ -3,6 +3,7 @@ import { writeFileSync } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { dump } from 'js-yaml';
 import { Config } from '@backstage/config';
+import { validateConfig, getConfig } from '../config';
 
 interface Resource {
   costCentre: string;
@@ -15,29 +16,8 @@ interface GCPProjectResource extends Resource {
   projectName: string;
   displayName: string;
 }
-
-interface ProvisionerConfig {
-  repo: {
-    owner: string;
-    name: string;
-  };
-}
-
-const getProvisionerConfig = (config: Config): ProvisionerConfig => {
-  return {
-    repo: {
-      owner: config.getString('backend.plugins.provisioner.repo.owner'),
-      name: config.getString('backend.plugins.provisioner.repo.name'),
-    },
-  };
-};
-
-const validateProvisionerConfig = (config: Config) => {
-  getProvisionerConfig(config);
-};
-
 export const provisionNewResourceAction = (config: Config) => {
-  validateProvisionerConfig(config);
+  validateConfig(config);
 
   return createTemplateAction<{
     costCentre: string;
@@ -87,7 +67,7 @@ export const provisionNewResourceAction = (config: Config) => {
 
     async handler(ctx) {
       const requestId = generateRequestId();
-      const provisionerConfig = getProvisionerConfig(config);
+      const provisionerConfig = getConfig(config);
 
       ctx.output('request_id', requestId);
       ctx.output('resource_type', 'GCP Project');
