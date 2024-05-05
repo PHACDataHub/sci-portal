@@ -42,25 +42,18 @@ catalog:
     - type: file
       target: /app/entities.yaml
 
+    # Backstage organizational data
+    - type: file
+      target: /app/org.yaml
+      rules:
+        - allow: [User, Group]
+
     # Resource Provisioner template
     - type: file
       target: /app/resource-provisioner.yaml
 
       rules:
         - allow: [Template]
-
-    # GCP Project Provisioner template
-    - type: file
-      target: /app/gcp-project-provisioner.yaml
-
-      rules:
-        - allow: [Template]
-
-    # Backstage organizational data
-    - type: file
-      target: /app/org.yaml
-      rules:
-        - allow: [User, Group]
 
 kubernetes:
   serviceLocatorMethod:

@@ -36,8 +36,6 @@ describe('provisioner', () => {
       await action.handler({
         ...mockContext,
         input: {
-          resourceType: 'GCP Project',
-          resourceName: 'My GCP Project',
           costCentre: '123456789',
           section32ManagerEmail: 'emailAddress',
           justificationNote: 'justificationNote',

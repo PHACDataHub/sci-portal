@@ -98,20 +98,14 @@ catalog:
     - type: file
       target: ../../templates/entities.yaml
 
-    # Resource Provisioner template
-    - type: file
-      target: ../../templates/resource-provisioner.yaml
-      rules:
-        - allow: [Template]
-
-    # GCP Project Provisioner template
-    - type: file
-      target: ../../templates/gcp-project-provisioner.yaml
-      rules:
-        - allow: [Template]
-
     # Backstage organizational data
     - type: file
       target: ../../templates/org.yaml
       rules:
         - allow: [User, Group]
+
+    # Resource Provisioner template
+    - type: file
+      target: ../../templates/resource-provisioner.yaml
+      rules:
+        - allow: [Template]

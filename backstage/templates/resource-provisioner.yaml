@@ -1,3 +1,4 @@
+---
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
@@ -8,24 +9,29 @@ metadata:
     - provisioner
 spec:
   owner: PHAC
-  type: service
+  type: Service
   parameters:
-    - title: Resource Selection
+    - title: Project
       required:
-        - resourceType
-        - resourceName
+        - folderName
+        - projectName
+        - displayName
       properties:
-        resourceType:
-          title: Resource Type
+        folderName:
+          title: Folder Name
           type: string
-          enum:
-            - GCP Project
-          default: GCP Project
-          ui:widget: select
-        resourceName:
-          title: Resource Name
+          default: ph-
+          ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform
+        projectName:
+          title: Project Name
           type: string
-          default: my-resource
+          default: phx-project
+          ui:description: Project names begin with a 3-letter prefix. Use the prefix 'phx' for Experiments, 'phd' for Dev, 'pht' for Test, and 'php' for Prod. Give the project a name for how it is used not who creates it.
+        displayName:
+          title: Display Name
+          type: string
+          description: The human-readable name of the GCP Project used for display purposes.
+          default: Project ABC
     - title: Administrative Data
       required:
         - costCentre
@@ -45,31 +51,6 @@ spec:
           ui:widget: textarea
           ui:options:
             rows: 5
-    - title: Configuration Details
-      dependencies:
-        resourceType:
-          allOf:
-            - if:
-                properties:
-                  resourceType:
-                    const: GCP Project
-              then:
-                properties:
-                  folderName:
-                    title: Folder Name
-                    type: string
-                    default: ph-
-                    ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform
-                  projectName:
-                    title: Project Name
-                    type: string
-                    default: phx-project
-                    ui:description: Project names begin with a 3-letter prefix. Use the prefix 'phx' for Experiments, 'phd' for Dev, 'pht' for Test, and 'php' for Prod. Give the project a name for how it is used not who creates it.
-                  displayName:
-                    title: Display Name
-                    type: string
-                    description: The human-readable name of the GCP Project used for display purposes.
-                    default: Project ABC
 
   steps:
     - id: create_resource
@@ -79,8 +60,6 @@ spec:
         projectName: ${{ parameters.projectName }}
         displayName: ${{ parameters.displayName }}
         folderName: ${{ parameters.folderName }}
-        resourceType: ${{ parameters.resourceType }}
-        resourceName: ${{ parameters.resourceName }}
         costCentre: ${{ parameters.costCentre }}
         section32ManagerEmail: ${{ parameters.section32ManagerEmail }}
         justificationNote: ${{ parameters.justificationNote }}
@@ -91,10 +70,10 @@ spec:
       input:
         repoUrl: github.com?owner=${{ steps.create_resource.output.repo_owner }}&repo=${{ steps.create_resource.output.repo_name }}
         update: true
-        title: '[Test] Create ${{parameters.resourceType}}'
+        title: '[Test] Create ${{steps.create_resource.output.resource_type}}'
         branchName: request-${{steps.create_resource.output.request_id}}
         description: |
-          # Create ${{parameters.resourceType}}
+          # Create ${{steps.create_resource.output.resource_type}}
 
           This PR was created using Backstage. The request ID is `${{steps.create_resource.output.request_id}}`.
 
