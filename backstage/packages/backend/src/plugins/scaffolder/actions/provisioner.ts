@@ -5,8 +5,6 @@ import { dump } from 'js-yaml';
 import { Config } from '@backstage/config';
 
 interface Resource {
-  resourceType: string;
-  resourceName: string;
   costCentre: string;
   section32ManagerEmail: string;
   justificationNote: string;
@@ -42,8 +40,6 @@ export const provisionNewResourceAction = (config: Config) => {
   validateProvisionerConfig(config);
 
   return createTemplateAction<{
-    resourceType: string;
-    resourceName: string;
     costCentre: string;
     section32ManagerEmail: string;
     justificationNote: string;
@@ -51,25 +47,9 @@ export const provisionNewResourceAction = (config: Config) => {
     id: 'phac:provisioner:create',
     schema: {
       input: {
-        required: [
-          'resourceType',
-          'resourceName',
-          'costCentre',
-          'section32ManagerEmail',
-          'justificationNote',
-        ],
+        required: ['costCentre', 'section32ManagerEmail', 'justificationNote'],
         type: 'object',
         properties: {
-          resourceType: {
-            type: 'string',
-            title: 'resourceType',
-            description: 'The resourceType of the file',
-          },
-          resourceName: {
-            type: 'string',
-            title: 'resourceName',
-            description: 'The resourceName of the file that will be created',
-          },
           costCentre: {
             type: 'string',
             title: 'costCentre',
@@ -110,24 +90,16 @@ export const provisionNewResourceAction = (config: Config) => {
       const provisionerConfig = getProvisionerConfig(config);
 
       ctx.output('request_id', requestId);
+      ctx.output('resource_type', 'GCP Project');
+
       ctx.output('repo_owner', provisionerConfig.repo.owner);
       ctx.output('repo_name', provisionerConfig.repo.name);
 
-      let resourceConfig;
+      const project = ctx.input as GCPProjectResource;
+      const resourceConfig = createProjectClaim(project, requestId);
 
-      switch (ctx.input.resourceType) {
-        case 'GCP Project': {
-          const project = ctx.input as GCPProjectResource;
-          resourceConfig = createProjectConfig(project, requestId);
-
-          const yamlString = dump(resourceConfig);
-          writeFileSync(`${ctx.workspacePath}/project.yaml`, yamlString);
-          break;
-        }
-        default: {
-          throw new Error('Unsupported resource type.');
-        }
-      }
+      const yamlString = dump(resourceConfig);
+      writeFileSync(`${ctx.workspacePath}/project.yaml`, yamlString);
     },
   });
 };
@@ -136,7 +108,7 @@ export const provisionNewResourceAction = (config: Config) => {
  * Creates a Project claim
  * @returns {Object}
  */
-export function createProjectConfig(
+export function createProjectClaim(
   resource: GCPProjectResource,
   requestId: string,
 ) {
