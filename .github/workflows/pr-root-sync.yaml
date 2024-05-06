@@ -35,8 +35,10 @@ jobs:
 
       - name: Install kubeconform
         run: |
-           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-           brew install kubeconform
+          # Homebrew is preinstalled on ubuntu-latest but not added to the PATH.
+          # See https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md#homebrew-note
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install kubeconform
 
       - name: Check manifests in base/
         working-directory: ./root-sync/base
