@@ -1,7 +1,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: comp-project
+  name: project
   labels:
     provider: kubernetes
     guide: self
@@ -9,12 +9,40 @@ spec:
   compositeTypeRef:
     apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
     kind: xProject
-  patchSets:
-    - name: metadata
-      patches:
-        - fromFieldPath: metadata.labels
   resources:
-    - name: gcp-project
+    - name: FOLDER
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef:
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+              apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+              kind: Folder
+              metadata:
+                name: "TO BE PATCHED"
+              spec:
+                displayName: "TO BE PATCHED"
+                folderRef:
+                  external: "TO BE PATCHED"
+      patches:
+        - fromFieldPath: "spec.folderName"
+          toFieldPath: "spec.forProvider.manifest.metadata.name"
+        - fromFieldPath: "spec.folderName"
+          toFieldPath: "spec.forProvider.manifest.spec.displayName"
+        - fromFieldPath: "spec.rootFolderId"
+          toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
+        - type: ToCompositeFieldPath 
+          fromFieldPath: "status.atProvider.manifest.status.folderId" # pass folderId to status
+          toFieldPath: status.folderId
+
+      readinessChecks:
+        - type: NonEmpty
+          fieldPath: status.atProvider.manifest.status.folderId # check if folder is created
+
+    - name: PROJECT
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -27,13 +55,11 @@ spec:
               kind: Project
               metadata:
                 name: "TO BE PATCHED"
-                namespace: default # placeholder
-                labels:
-                  label-one: "value-one" # placeholder
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
               spec:
                 name: "TO BE PATCHED"
+                resourceID: "TO BE PATCHED"
                 folderRef:
                   external: "TO BE PATCHED"
                 billingAccountRef:
@@ -47,11 +73,16 @@ spec:
                 fieldPath: data.GCP_BILLING_ACCOUNT_ID
               toFieldPath: spec.billingAccountRef.external
       patches:
-        - fromFieldPath: "spec.name"
+        - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.metadata.name"
-        - fromFieldPath: "spec.name"
+        - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.name"
-        - fromFieldPath: "spec.folder"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.spec.resourceID"
+        - type: FromCompositeFieldPath # use folderId from status
+          fromFieldPath: "status.folderId"
           toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
+      
       readinessChecks:
-        - type: None
+        - type: NonEmpty
+          fieldPath: status.atProvider.manifest.status.number  # check if project is created

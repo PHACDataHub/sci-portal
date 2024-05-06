@@ -4,14 +4,14 @@ metadata:
   name: xprojects.data-science-portal.phac-aspc.gc.ca
 spec:
   defaultCompositionRef:
-    name: comp-project
+    name: project
   group: data-science-portal.phac-aspc.gc.ca
   names:
     kind: xProject
     plural: xprojects
   claimNames:
-    kind: Project
-    plural: projects
+    kind: ProjectClaim
+    plural: projectclaims
   versions:
   - name: v1alpha1
     served: true
@@ -23,10 +23,21 @@ spec:
           spec:
             type: object
             properties:
-              name:
+              rootFolderId:
                 type: string
-              folder:
+              folderName:
+                type: string
+              projectName:
+                type: string
+              projectId:
                 type: string
             required:
-              - name
-              - folder
+              - rootFolderId
+              - folderName
+              - projectName
+              - projectId
+          status:
+            type: object
+            properties:
+              folderId:
+                type: string
