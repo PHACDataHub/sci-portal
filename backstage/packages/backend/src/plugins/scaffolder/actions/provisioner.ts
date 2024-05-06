@@ -9,6 +9,7 @@ interface Resource {
   costCentre: string;
   section32ManagerEmail: string;
   justificationNote: string;
+  serviceOwners: string;
 }
 
 interface GCPProjectResource extends Resource {
@@ -23,6 +24,7 @@ export const provisionNewResourceAction = (config: Config) => {
     costCentre: string;
     section32ManagerEmail: string;
     justificationNote: string;
+    serviceOwners: string;
   }>({
     id: 'phac:provisioner:create',
     schema: {
@@ -60,6 +62,12 @@ export const provisionNewResourceAction = (config: Config) => {
             title: 'displayName',
             description:
               'The human-readable display name of the project that will be created',
+          },
+          serviceOwners: {
+            type: 'string',
+            title: 'serviceOwners',
+            description:
+              'The email addresses of users who should own this service separated by comma.',
           },
         },
       },
