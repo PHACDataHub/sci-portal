@@ -3,6 +3,7 @@
   "packages": [
     "go-task@3.36.0",
     "k9s@0.32.4",
+    "kubeconform@0.6.4",
     "kubectl@1.29.4",
     "kubernetes-helm@3.14.4",
     "shellcheck@0.10.0",
