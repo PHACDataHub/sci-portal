@@ -66,8 +66,6 @@ export const provisionNewResourceAction = (config: Config) => {
           serviceOwners: {
             type: 'string',
             title: 'serviceOwners',
-            description:
-              'The email addresses of users who should own this service separated by comma.',
           },
         },
       },
