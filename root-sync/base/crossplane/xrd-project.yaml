@@ -4,7 +4,7 @@ metadata:
   name: xprojects.data-science-portal.phac-aspc.gc.ca
 spec:
   defaultCompositionRef:
-    name: comp-project
+    name: project
   group: data-science-portal.phac-aspc.gc.ca
   names:
     kind: xProject

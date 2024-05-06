@@ -1,7 +1,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: comp-project
+  name: project
   labels:
     provider: kubernetes
     guide: self
@@ -9,10 +9,6 @@ spec:
   compositeTypeRef:
     apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
     kind: xProject
-  patchSets:
-    - name: metadata
-      patches:
-        - fromFieldPath: metadata.labels
   resources:
     - name: FOLDER
       base:
