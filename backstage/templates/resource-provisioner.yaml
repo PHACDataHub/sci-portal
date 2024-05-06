@@ -37,6 +37,7 @@ spec:
         - costCentre
         - section32ManagerEmail
         - justificationNote
+        - serviceOwners
       properties:
         costCentre:
           title: Cost Centre
@@ -51,7 +52,14 @@ spec:
           ui:widget: textarea
           ui:options:
             rows: 5
-
+        serviceOwners:
+          title: Service Owners
+          type: string
+          ui:widget: textarea
+          ui:description: The email addresses of users who should own this service separated by comma.
+          ui:options:
+            rows: 8
+          ui:placeholder: jane.doe@gmail.com, john.doe@gmail.com, steve.smith@gmail.com
   steps:
     - id: create_resource
       name: Processing Request
@@ -63,6 +71,7 @@ spec:
         costCentre: ${{ parameters.costCentre }}
         section32ManagerEmail: ${{ parameters.section32ManagerEmail }}
         justificationNote: ${{ parameters.justificationNote }}
+        serviceOwners: ${{ parameters.serviceOwners }}
 
     - id: publish
       name: Submitting Request
@@ -84,6 +93,7 @@ spec:
           **Cost Centre:** ${{parameters.costCentre}}
           **Justification:** ${{parameters.justificationNote}}
           **Section 32 Manager Email:** ${{parameters.section32ManagerEmail}}
+          **Service Owners:** ${{parameters.serviceOwners}}
 
           ### GCP Project
 

@@ -39,6 +39,8 @@ describe('provisioner', () => {
           costCentre: '123456789',
           section32ManagerEmail: 'emailAddress',
           justificationNote: 'justificationNote',
+          serviceOwners:
+            'jane.doe@gmail.com, john.doe@gmail.com, steve.smith@gmail.com',
         },
       });
 
