@@ -8,7 +8,8 @@
     "shellcheck@0.10.0",
     "terraform@1.7.5",
 
-    "path:./.devbox/flakes/google-cloud-sdk#google-cloud-sdk"
+    "path:./.devbox/flakes/google-cloud-sdk#google-cloud-sdk",
+    "crossplane-cli@1.15.2"
   ],
   "shell": {
     "init_hook": []
