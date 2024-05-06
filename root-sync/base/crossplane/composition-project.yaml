@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
@@ -34,7 +35,7 @@ spec:
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
         - fromFieldPath: "spec.rootFolderId"
           toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
-        - type: ToCompositeFieldPath 
+        - type: ToCompositeFieldPath
           fromFieldPath: "status.atProvider.manifest.status.folderId" # pass folderId to status
           toFieldPath: status.folderId
 
@@ -82,7 +83,7 @@ spec:
         - type: FromCompositeFieldPath # use folderId from status
           fromFieldPath: "status.folderId"
           toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
-      
+
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest.status.number  # check if project is created

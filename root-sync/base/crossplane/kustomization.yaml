@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - kubernetes.yaml
   # - xrd-project.yaml
-  # - composition-project.yaml 
+  # - composition-project.yaml
