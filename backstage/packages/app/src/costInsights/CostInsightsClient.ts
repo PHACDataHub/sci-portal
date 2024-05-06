@@ -33,7 +33,7 @@ import {
   Group,
   MetricData,
   Project,
-} from '@backstage/plugin-cost-insights';
+} from '@backstage-community/plugin-cost-insights';
 import { DateTime } from 'luxon';
 
 export class CostInsightsClient implements CostInsightsApi {
