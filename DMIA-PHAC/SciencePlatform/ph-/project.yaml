@@ -1,0 +1,11 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Project
+metadata:
+  name: phx-project-166bc1d0-5814-4550-8d2c-080a9d78ae20
+spec:
+  owner:
+    - jane.doe@gcp.hc-sc.gc.ca
+    - john.doe@gcp.hc-sc.gc.ca
+    - steve.smith@gcp.hc-sc.gc.ca
+  folder: ph-
+  name: phx-project
