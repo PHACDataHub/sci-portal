@@ -65,6 +65,7 @@ gcloud billing accounts list
 ### Enable the following APIs
 
 - Artifact Registry API (`artifactregistry.googleapis.com`)
+- Cloud Billing Budget API (`billingbudgets.googleapis.com`)
 - Cloud Build API (`cloudbuild.googleapis.com`)
 - Secret Manager API (`secretmanager.googleapis.com`)
 
