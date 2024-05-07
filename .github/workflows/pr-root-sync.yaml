@@ -54,6 +54,7 @@ jobs:
           which kubeconform
           kubeconform -v
         env:
+          GH_TOKEN: ${{ github.token }}
           KUBECONFORM_VERSION: v0.6.4
 
       - name: Check manifests in base/
