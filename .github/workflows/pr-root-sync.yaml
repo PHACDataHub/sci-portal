@@ -27,7 +27,7 @@ jobs:
 
           # Determine the artifact pattern: kubeconform-<os>-<arch>.tar.gz
           case "$(uname -m)" in
-              x86_64) ;;
+              x86_64) ;& # Fallthrough
               amd64) arch=amd64 ;;
               arm64) arch=arm64 ;;
               *)
