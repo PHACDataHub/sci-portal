@@ -1,0 +1,7 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Project
+metadata:
+  name: phx-sean-dev1-a20f35df-91eb-4860-8ce0-aed9ae5b7d07
+spec:
+  folder: ph-sean-dev1
+  name: phx-sean-dev1
