@@ -1,0 +1,10 @@
+- op: add
+  path: /spec/acme/solvers/-
+  value:
+    selector: {}
+    dns01:
+      cloudDNS:
+        project: pht-01hsv4d2m0n
+- op: add
+  path: /spec/acme/email
+  value: vedant.thapa@phac-aspc.gc.ca

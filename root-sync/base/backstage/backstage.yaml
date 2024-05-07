@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  ports:
+  - port: 7007
+    protocol: TCP
+    targetPort: 7007
+  selector:
+    app: backstage
 ---
 apiVersion: apps/v1
 kind: Deployment
