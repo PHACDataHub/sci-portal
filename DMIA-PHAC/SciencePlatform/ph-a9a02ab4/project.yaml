@@ -7,6 +7,8 @@ metadata:
   name: a9a02ab4-folder
 spec:
   displayName: ph-a9a02ab4
+  folderRef:
+    external: "108494461414"
 
 ---
 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
@@ -20,4 +22,4 @@ metadata:
 spec:
   name: Display Name (phx-a9a02ab4)
   folderRef:
-    external: "108494461414"
+    name: "a9a02ab4-folder"
