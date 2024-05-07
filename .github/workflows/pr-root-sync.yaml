@@ -35,10 +35,38 @@ jobs:
 
       - name: Install kubeconform
         run: |
-          # Homebrew is preinstalled on ubuntu-latest but not added to the PATH.
-          # See https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md#homebrew-note
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install kubeconform
+          set -euxo pipefail
+
+          # Determine the artifact pattern: kubeconform-<os>-<arch>.tar.gz
+          case "$(uname -m)" in
+              x86_64) ;;
+              amd64) arch=amd64 ;;
+              arm64) arch=arm64 ;;
+              *)
+                  echo "Unsupported architecture: $(uname -m)" 1>&2
+                  exit 1
+                  ;;
+          esac
+          case "$(uname -s)" in
+              Darwin) os=darwin ;;
+              Linux)  os=linux ;;
+              *)
+                  echo "Unsupported operating system: $(uname -m)" 1>&2
+                  exit 1
+                  ;;
+          esac
+
+          artifact=kubeconform-${os}-${arch}.tar.gz
+          gh release --repo yannh/kubeconform download "$KUBECONFORM_VERSION" --pattern "$artifact"
+          tar -xzf "$artifact"
+          sudo cp kubeconform /usr/local/bin
+          rm kubeconform "$artifact"
+
+          # Check the version
+          which kubeconform
+          kubeconform -v
+        env:
+          KUBECONFORM_VERSION: v0.6.4
 
       - name: Check manifests in base/
         working-directory: ./root-sync/base
