@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.10.5/.schema/devbox.schema.json",
   "packages": [
+    "gh@2.48.0",
     "go-task@3.36.0",
     "k9s@0.32.4",
     "kubeconform@0.6.4",
