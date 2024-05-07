@@ -23,7 +23,7 @@ jobs:
 
       - name: Install kubeconform
         run: |
-          set -euxo pipefail
+          set -exo pipefail
 
           # Determine the artifact pattern: kubeconform-<os>-<arch>.tar.gz
           case "$(uname -m)" in
