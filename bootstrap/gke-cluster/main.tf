@@ -27,8 +27,8 @@ resource "google_cloudbuild_trigger" "data_science_portal_trigger" {
       branch = var.cloudbuild_repository_branch
     }
   }
-
-  filename = "cloudbuild.yaml"
+  included_files = "backstage/**"
+  filename       = "cloudbuild.yaml"
 }
 
 module "gke" {
