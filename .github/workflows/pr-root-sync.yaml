@@ -21,18 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          version: '>= 472.0.0'
-
-      - name: Install nomos
-        run: gcloud components install nomos
-
-      - name: Check Config Connector resources
-        run: nomos vet --clusters "" --no-api-server-check --source-format unstructured
-        # Refer to the docs https://cloud.google.com/anthos-config-management/docs/how-to/nomos-command#vet
-
       - name: Install kubeconform
         run: |
           set -euxo pipefail
@@ -89,3 +77,16 @@ jobs:
             -ignore-missing-schemas \
             -schema-location default \
             -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 472.0.0'
+
+      - name: Install nomos
+        run: gcloud components install nomos
+
+      - name: Check Config Connector resources
+        run: nomos vet --clusters "" --no-api-server-check --source-format unstructured
+        # Refer to the docs https://cloud.google.com/anthos-config-management/docs/how-to/nomos-command#vet
+
