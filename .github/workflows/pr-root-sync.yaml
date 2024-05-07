@@ -21,17 +21,41 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          version: '>= 472.0.0'
+      - name: Install kubeconform
+        run: |
+          set -exo pipefail
 
-      - name: Install nomos
-        run: gcloud components install nomos
+          # Determine the artifact pattern: kubeconform-<os>-<arch>.tar.gz
+          case "$(uname -m)" in
+              x86_64) ;& # Fallthrough
+              amd64) arch=amd64 ;;
+              arm64) arch=arm64 ;;
+              *)
+                  echo "Unsupported architecture: $(uname -m)" 1>&2
+                  exit 1
+                  ;;
+          esac
+          case "$(uname -s)" in
+              Darwin) os=darwin ;;
+              Linux)  os=linux ;;
+              *)
+                  echo "Unsupported operating system: $(uname -m)" 1>&2
+                  exit 1
+                  ;;
+          esac
 
-      - name: Check Config Connector resources
-        run: nomos vet --clusters "" --no-api-server-check --source-format unstructured
-        # Refer to the docs https://cloud.google.com/anthos-config-management/docs/how-to/nomos-command#vet
+          artifact=kubeconform-${os}-${arch}.tar.gz
+          gh release --repo yannh/kubeconform download "$KUBECONFORM_VERSION" --pattern "$artifact"
+          tar -xzf "$artifact"
+          sudo cp kubeconform /usr/local/bin
+          rm kubeconform "$artifact"
+
+          # Check the version
+          which kubeconform
+          kubeconform -v
+        env:
+          GH_TOKEN: ${{ github.token }}
+          KUBECONFORM_VERSION: v0.6.4
 
       - name: Check manifests in base/
         working-directory: ./root-sync/base
@@ -54,3 +78,16 @@ jobs:
             -ignore-missing-schemas \
             -schema-location default \
             -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 472.0.0'
+
+      - name: Install nomos
+        run: gcloud components install nomos
+
+      - name: Check Config Connector resources
+        run: nomos vet --clusters "" --no-api-server-check --source-format unstructured
+        # Refer to the docs https://cloud.google.com/anthos-config-management/docs/how-to/nomos-command#vet
+
