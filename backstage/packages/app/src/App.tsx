@@ -62,6 +62,13 @@ const app = createApp({
       />
     ),
   },
+  featureFlags: [
+    {
+      pluginId: '', // Blank for an app-level feature flag.
+      name: 'template-developer',
+      description: 'Enables additional features for Template development.',
+    },
+  ],
   themes: [
     {
       id: 'gov-theme',

@@ -60,6 +60,15 @@ spec:
           ui:options:
             rows: 8
           ui:placeholder: jane.doe@gmail.com, john.doe@gmail.com, steve.smith@gmail.com
+    - title: Pull Request
+      backstage:featureFlag: template-developer
+      properties:
+        closePullRequest:
+          title: Close Pull Request?
+          type: boolean
+          default: true
+          ui:widget: radio
+          ui:description: Add the `[Test] ` prefix to close the pull request.
   steps:
     - id: create_resource
       name: Processing Request
@@ -78,8 +87,7 @@ spec:
       action: publish:github:pull-request
       input:
         repoUrl: github.com?owner=${{ steps.create_resource.output.repo_owner }}&repo=${{ steps.create_resource.output.repo_name }}
-        update: true
-        title: '[Test] Create ${{steps.create_resource.output.resource_type}}'
+        title: ${{ "[Test] " if parameters.closePullRequest else '' }}Create ${{steps.create_resource.output.resource_type}}
         branchName: request-${{steps.create_resource.output.request_id}}
         description: |
           # Create ${{steps.create_resource.output.resource_type}}
