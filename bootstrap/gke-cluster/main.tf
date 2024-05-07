@@ -28,7 +28,7 @@ resource "google_cloudbuild_trigger" "data_science_portal_trigger" {
     }
   }
   included_files = "backstage/**"
-  filename = "cloudbuild.yaml"
+  filename       = "cloudbuild.yaml"
 }
 
 module "gke" {
