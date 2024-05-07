@@ -36,8 +36,3 @@ spec:
               - folderName
               - projectName
               - projectId
-          status:
-            type: object
-            properties:
-              folderId:
-                type: string

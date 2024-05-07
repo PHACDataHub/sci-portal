@@ -2,6 +2,8 @@ apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
   name: project
+  annotations:
+    crossplane.io/composition-schema-aware-validation-mode: strict
   labels:
     provider: kubernetes
     guide: self
@@ -23,6 +25,7 @@ spec:
               kind: Folder
               metadata:
                 name: "TO BE PATCHED"
+                namespace: default
               spec:
                 displayName: "TO BE PATCHED"
                 folderRef:
@@ -34,13 +37,10 @@ spec:
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
         - fromFieldPath: "spec.rootFolderId"
           toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
-        - type: ToCompositeFieldPath 
-          fromFieldPath: "status.atProvider.manifest.status.folderId" # pass folderId to status
-          toFieldPath: status.folderId
 
       readinessChecks:
         - type: NonEmpty
-          fieldPath: status.atProvider.manifest.status.folderId # check if folder is created
+          fieldPath: status.atProvider.manifest
 
     - name: PROJECT
       base:
@@ -55,34 +55,47 @@ spec:
               kind: Project
               metadata:
                 name: "TO BE PATCHED"
+                namespace: default
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
               spec:
                 name: "TO BE PATCHED"
-                resourceID: "TO BE PATCHED"
+                # resourceID: "TO BE PATCHED" -- xulid is too long
                 folderRef:
                   external: "TO BE PATCHED"
                 billingAccountRef:
                   external: "TO BE PATCHED"
           references:
+            - dependsOn:
+                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+                kind: Folder
+                name: "TO BE PATCHED"
+                namespace: default
+            - patchesFrom:
+                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+                kind: Folder
+                name: "TO BE PATCHED"
+                namespace: default
+                fieldPath: "status.folderId"
+              toFieldPath: "spec.folderRef.external"
             - patchesFrom:
                 apiVersion: v1
                 kind: ConfigMap
-                namespace: default
+                namespace: backstage
                 name: backstage-config
                 fieldPath: data.GCP_BILLING_ACCOUNT_ID
               toFieldPath: spec.billingAccountRef.external
       patches:
-        - fromFieldPath: "spec.projectId"
+        - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.metadata.name"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.name"
-        - fromFieldPath: "spec.projectId"
-          toFieldPath: "spec.forProvider.manifest.spec.resourceID"
-        - type: FromCompositeFieldPath # use folderId from status
-          fromFieldPath: "status.folderId"
-          toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
-      
+        # - fromFieldPath: "spec.projectId" -- xulid is too long
+        #   toFieldPath: "spec.forProvider.manifest.spec.resourceID"
+        - fromFieldPath: "spec.folderName"
+          toFieldPath: "spec.references[0].dependsOn.name"
+        - fromFieldPath: "spec.folderName"
+          toFieldPath: "spec.references[1].patchesFrom.name"
       readinessChecks:
         - type: NonEmpty
-          fieldPath: status.atProvider.manifest.status.number  # check if project is created
+          fieldPath: status.atProvider.manifest
