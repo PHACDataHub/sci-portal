@@ -28,6 +28,7 @@ resource "google_cloudbuild_trigger" "data_science_portal_trigger" {
     }
   }
   included_files = "backstage/**"
+  include_build_logs = "INCLUDE_BUILD_LOGS_WITH_STATUS"
   filename       = "cloudbuild.yaml"
 }
 
