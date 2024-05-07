@@ -1,4 +1,3 @@
----
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
@@ -14,31 +13,31 @@ spec:
     kind: ProjectClaim
     plural: projectclaims
   versions:
-    - name: v1alpha1
-      served: true
-      referenceable: true
-      schema:
-        openAPIV3Schema:
-          type: object
-          properties:
-            spec:
-              type: object
-              properties:
-                rootFolderId:
-                  type: string
-                folderName:
-                  type: string
-                projectName:
-                  type: string
-                projectId:
-                  type: string
-              required:
-                - rootFolderId
-                - folderName
-                - projectName
-                - projectId
-            status:
-              type: object
-              properties:
-                folderId:
-                  type: string
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              rootFolderId:
+                type: string
+              folderName:
+                type: string
+              projectName:
+                type: string
+              projectId:
+                type: string
+            required:
+              - rootFolderId
+              - folderName
+              - projectName
+              - projectId
+          status:
+            type: object
+            properties:
+              folderId:
+                type: string

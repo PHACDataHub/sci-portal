@@ -1,4 +1,3 @@
----
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
@@ -7,7 +6,6 @@ spec:
   package: xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.13.0
   runtimeConfigRef:
     name: provider-kubernetes
-
 ---
 apiVersion: kubernetes.crossplane.io/v1alpha1
 kind: ProviderConfig
@@ -16,7 +14,6 @@ metadata:
 spec:
   credentials:
     source: InjectedIdentity
-
 ---
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
@@ -26,7 +23,6 @@ spec:
   serviceAccountTemplate:
     metadata:
       name: provider-kubernetes
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
