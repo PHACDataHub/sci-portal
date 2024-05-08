@@ -39,6 +39,11 @@ spec:
             - Experimentation
             - Testing
             - Production
+        displayName:
+          title: Display Name
+          type: string
+          description: The human-readable name of the GCP Project used for display purposes.
+          default: Project ABC
         folderName:
           title: Folder Name
           type: string
@@ -49,11 +54,6 @@ spec:
           type: string
           default: phx-project
           ui:description: Project names begin with a 3-letter prefix. Use the prefix 'phx' for Experiments, 'phd' for Dev, 'pht' for Test, and 'php' for Prod. Give the project a name for how it is used not who creates it.
-        displayName:
-          title: Display Name
-          type: string
-          description: The human-readable name of the GCP Project used for display purposes.
-          default: Project ABC
     - title: Administrative Data
       required:
         - costCentre
