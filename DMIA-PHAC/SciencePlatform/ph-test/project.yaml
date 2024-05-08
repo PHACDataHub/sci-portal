@@ -1,0 +1,29 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-test-9cb55fcb-cdda-4a97-bbb3-0ad14a4dbde5
+spec:
+  rootFolderId: 108494461414
+  folderName: ph-test
+  projectName: phx-test
+  # projectId: 
+
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Resource
+metadata:
+  name: project
+  title: Project
+  description: A GCP Project with a budget and budget alerts.
+spec:
+  type: project
+  owner: group:phx-test-owners
+
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Group
+metadata:
+  name: phx-test-owners
+  title: Owners of phx-test
+spec:
+  members: []
