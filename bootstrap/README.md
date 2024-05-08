@@ -31,7 +31,7 @@ devbox shell
 
 The GitHub user needs to be an admin in order to create the Cloud Build Connection which will create a new Google Cloud Build GitHub App.
 
-The GCP user needs the `folders.getIamPolicy` permission, and to be able to grant `folderCreator` and `projectCreator` permissions to Service Accounts. The one-time Billing export to Big Query requires additional permissions to manage the billing accounts.
+The GCP user needs the `folders.getIamPolicy` to access IAM policies at the folder level, the capability to assign `folderCreator` and `projectCreator` permissions to Service Accounts within folders, and organization-level privileges to allocate roles such as `billing.user` and `billing.costsManager`. The one-time Billing export to Big Query requires additional permissions to manage the billing accounts.
 
 ### GitHub
 
