@@ -116,7 +116,7 @@ spec:
                 namespace: default
               spec:
                 billingAccountRef:
-                  external: "BILLING_ACCOUNT_ID_FOR_BILLING_RESOURCES"
+                  external: "TO BE PATCHED"
                 displayName: "TO BE PATCHED"
                 budgetFilter:
                   # projects:[] # Need to bind projectId
