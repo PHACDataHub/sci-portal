@@ -119,12 +119,8 @@ spec:
                   external: "BILLING_ACCOUNT_ID_FOR_BILLING_RESOURCES"
                 displayName: "TO BE PATCHED"
                 budgetFilter:
-                  # Need to bind projectId
-                  labels:
-                    label-one:
-                      values:
-                      - "value-one"
-                  calendarPeriod: "MONTH"
+                  # projects:[] # Need to bind projectId
+                  calendarPeriod: "YEAR"
                 amount:
                   specifiedAmount:
                     currencyCode: "CAD"
