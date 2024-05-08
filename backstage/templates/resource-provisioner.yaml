@@ -15,11 +15,21 @@ spec:
         - projectName
         - displayName
       properties:
+        department:
+          title: Department
+          type: string
+          default: ph
+          enum:
+            - ph
+            - hc
+          enumNames:
+            - PHAC
+            - Health Canada
         folderName:
           title: Folder Name
           type: string
           default: ph-
-          ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform
+          ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform.
         projectName:
           title: Project Name
           type: string
