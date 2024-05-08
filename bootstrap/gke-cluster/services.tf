@@ -59,3 +59,27 @@ resource "google_project_service" "server_networking" {
 
   disable_dependent_services = true
 }
+
+resource "google_project_service" "serviceusage_api" {
+  project = var.project_id
+  service = "serviceusage.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "cloudbilling_api" {
+  project = var.project_id
+  service = "cloudbilling.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
