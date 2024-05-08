@@ -2,7 +2,7 @@ import { createBackend } from '@backstage/backend-defaults';
 import { createBackendModule } from '@backstage/backend-plugin-api';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
 import { coreServices } from '@backstage/backend-plugin-api';
-import { provisionNewResourceAction } from './plugins/scaffolder/actions/provisioner';
+import { createProvisionTemplateAction } from './plugins/scaffolder/actions/provisioner';
 
 import { googleAuthWithCustomSignInResolver } from './plugins/auth/module';
 
@@ -45,7 +45,7 @@ const scaffolderModuleCustomExtensions = createBackendModule({
         config: coreServices.rootConfig,
       },
       async init({ scaffolder, config }) {
-        scaffolder.addActions(provisionNewResourceAction(config));
+        scaffolder.addActions(createProvisionTemplateAction(config));
       },
     });
   },
