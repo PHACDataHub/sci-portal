@@ -119,23 +119,29 @@ spec:
                   external: "BILLING_ACCOUNT_ID_FOR_BILLING_RESOURCES"
                 displayName: "TO BE PATCHED"
                 budgetFilter:
-                  # need to bind projectId
+                  # Need to bind projectId
                   labels:
                     label-one:
                       values:
                       - "value-one"
                   calendarPeriod: "MONTH"
-                amount: # Placeholder values
+                amount:
                   specifiedAmount:
                     currencyCode: "CAD"
-                    units: 9000000
+                    units: 9000000 # Place Holder
                     nanos: 0
-                thresholdRules: # Placeholder values
-                - thresholdPercent: 0.5
+                thresholdRules:
+                - thresholdPercent: 0.25
                   spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 0.9
+                - thresholdPercent: 0.50
                   spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 1.0
+                - thresholdPercent: 0.75
+                  spendBasis: "CURRENT_SPEND"
+                - thresholdPercent: 0.90
+                  spendBasis: "CURRENT_SPEND"
+                - thresholdPercent: 0.95
+                  spendBasis: "CURRENT_SPEND"
+                - thresholdPercent: 1.00
                   spendBasis: "CURRENT_SPEND"
           references:
             - dependsOn:
