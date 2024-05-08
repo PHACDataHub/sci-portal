@@ -1,41 +1,82 @@
-import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
-import { writeFileSync } from 'fs';
+import * as path from 'path';
+import nunjucks from 'nunjucks';
 import { v4 as uuidv4 } from 'uuid';
-import { dump } from 'js-yaml';
 import { Config } from '@backstage/config';
-import { validateConfig, getConfig } from '../config';
+import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
+import { InputError } from '@backstage/errors';
 
-interface Resource {
-  costCentre: string;
-  section32ManagerEmail: string;
-  justificationNote: string;
-  serviceOwners: string;
-  totalBudget: number;
-  notifyList: string;
+const templateDir = path.join(__dirname, '../../../../../../templates');
+const rootFolderId = '108494461414';
+
+interface ProvisionerConfig {
+  repo: {
+    owner: string;
+    name: string;
+  };
 }
 
-interface GCPProjectResource extends Resource {
-  folderName: string;
-  projectName: string;
-  displayName: string;
-}
-export const provisionNewResourceAction = (config: Config) => {
+const getConfig = (config: Config): ProvisionerConfig => {
+  return {
+    repo: {
+      owner: config.getString('backend.plugins.provisioner.repo.owner'),
+      name: config.getString('backend.plugins.provisioner.repo.name'),
+    },
+  };
+};
+
+const validateConfig = (config: Config) => {
+  getConfig(config);
+};
+
+export const createProvisionTemplateAction = (config: Config) => {
   validateConfig(config);
 
   return createTemplateAction<{
+    parameters: {
+      department: 'hc' | 'ph';
+      environment: 'x' | 't' | 'p';
+      vanityName: string;
+    };
     costCentre: string;
     section32ManagerEmail: string;
-    justificationNote: string;
+    justification: string;
     serviceOwners?: string;
     totalBudget: number;
     notifyList?: string;
   }>({
-    id: 'phac:provisioner:create',
+    id: 'data-science-portal:template:get-context',
     schema: {
       input: {
-        required: ['costCentre', 'section32ManagerEmail', 'justificationNote'],
+        required: [
+          'parameters',
+          'costCentre',
+          'section32ManagerEmail',
+          'justification',
+        ],
         type: 'object',
         properties: {
+          parameters: {
+            type: 'object',
+            properties: {
+              department: {
+                title: 'Department',
+                description: 'The department ID.',
+                enum: ['hc', 'ph'],
+              },
+              environment: {
+                title: 'Environment',
+                description: 'The environment ID. Use "x" for Experimentation, "t" for "Noble-Experimentation, and "p" for production.',
+                enum: ['x', 't', 'p'],
+              },
+              vanityName: {
+                title: 'Vanity Name',
+                description: 'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
+                type: 'string',
+                minLength: 1,
+                maxLength: 26,
+              },
+            },
+          },
           costCentre: {
             type: 'string',
             title: 'costCentre',
@@ -46,26 +87,10 @@ export const provisionNewResourceAction = (config: Config) => {
             title: 'section32ManagerEmail',
             description: 'Section 32 Manager Email Address',
           },
-          justificationNote: {
+          justification: {
             type: 'string',
-            title: 'justificationNote',
+            title: 'justification',
             description: 'Request justification note',
-          },
-          folderName: {
-            type: 'string',
-            title: 'folderName',
-            description: 'The name of the folder',
-          },
-          projectName: {
-            type: 'string',
-            title: 'projectName',
-            description: 'The name of the project that will be created',
-          },
-          displayName: {
-            type: 'string',
-            title: 'displayName',
-            description:
-              'The human-readable display name of the project that will be created',
           },
           serviceOwners: {
             type: 'string',
@@ -84,8 +109,44 @@ export const provisionNewResourceAction = (config: Config) => {
     },
 
     async handler(ctx) {
-      const requestId = generateRequestId();
+      if (!ctx?.templateInfo?.entity) {
+        throw new InputError('Invalid templateInfo provided in the request');
+      }
+
+      const requestId = uuidv4();
+
       const provisionerConfig = getConfig(config);
+      ctx.output('repo_owner', provisionerConfig.repo.owner);
+      ctx.output('repo_name', provisionerConfig.repo.name);
+      ctx.output('branch', `request-${requestId}`);
+
+      const template = ctx.templateInfo.entity.metadata.name;
+      ctx.output('template', template);
+
+      const folderName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
+      ctx.output('folderName', folderName);
+
+      const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
+
+      // Render the Pull Request description template
+      nunjucks.configure(templateDir);
+      const context = {
+        templateName: ctx.templateInfo.entity.metadata.title,
+        requestId,
+        rootFolderId,
+        folderName,
+        projectName,
+        costCentre: ctx.input.costCentre,
+        justification: ctx.input.justification,
+        section32ManagerEmail: ctx.input.section32ManagerEmail,
+        serviceOwners: ctx.input.serviceOwners,
+      };
+      ctx.output(
+        'pr_description',
+        nunjucks.render(path.join(template, 'description.md.njk'), context),
+      );
+
+      // Populate the template values for the Pull Request changes
       if (ctx.input.notifyList) {
         const notifyListArray = ctx.input.notifyList
           .trim()
@@ -94,7 +155,6 @@ export const provisionNewResourceAction = (config: Config) => {
 
         ctx.output('notify_list', notifyListArray);
       }
-
       if (ctx.input.serviceOwners) {
         const serviceOwnersArray = ctx.input.serviceOwners
           .trim()
@@ -103,52 +163,12 @@ export const provisionNewResourceAction = (config: Config) => {
 
         ctx.output('service_owners', serviceOwnersArray);
       }
-
-      ctx.output('request_id', requestId);
-      ctx.output('resource_type', 'GCP Project');
-
-      ctx.output('repo_owner', provisionerConfig.repo.owner);
-      ctx.output('repo_name', provisionerConfig.repo.name);
-
-      const project = ctx.input as GCPProjectResource;
-      const resourceConfig = createProjectClaim(project, requestId);
-
-      const yamlString = dump(resourceConfig);
-      writeFileSync(`${ctx.workspacePath}/project.yaml`, yamlString);
+      ctx.output('template_values', {
+        requestId,
+        rootFolderId,
+        folderName,
+        projectName,
+      });
     },
   });
 };
-
-/**
- * Creates a Project claim
- * @returns {Object}
- */
-export function createProjectClaim(
-  resource: GCPProjectResource,
-  requestId: string,
-) {
-  return {
-    apiVersion: 'data-science-portal.phac-aspc.gc.ca/v1alpha1',
-    kind: 'Project',
-    metadata: {
-      name: `${resource.projectName}-${requestId}`,
-    },
-    spec: {
-      // compositionSelector: {
-      //   matchLabels: {
-      //     provider: 'google',
-      //   },
-      // },
-      folder: resource.folderName, // parentFolder
-      name: resource.projectName,
-    },
-  };
-}
-
-/**
- * Generates a request ID using UUID.
- * @returns {string} The generated request ID.
- */
-export function generateRequestId(): string {
-  return uuidv4();
-}

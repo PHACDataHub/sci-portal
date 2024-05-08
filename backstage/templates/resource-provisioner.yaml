@@ -2,41 +2,53 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: resource-provisioner
-  title: Resource Provisioner
-  description: Complete the form to request a resource provisioning. Once submitted, a Pull Request will be created for the Platform Engineering Team to complete the request.
-  tags:
-    - provisioner
+  name: project-create
+  title: Project Template
+  description: Create a GCP Project with a budget and budget alerts. The Platform Team will review your request before the Project is created.
 spec:
-  owner: PHAC
-  type: Service
+  owner: platform-team
+  type: project
   parameters:
     - title: Project
       required:
-        - folderName
-        - projectName
-        - displayName
+        - department
+        - environment
+        - vanityName
       properties:
-        folderName:
-          title: Folder Name
+        department:
+          title: Department
+          description: The department ID.
           type: string
-          default: ph-
-          ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform
-        projectName:
-          title: Project Name
+          default: ph
+          enum:
+            - ph
+            - hc
+          enumNames:
+            - PHAC
+            - Health Canada
+        environment:
+          title: Environment
+          description: The environment ID. Use `x` for Experimentation, `t` for Noble-Experimentation, and `p` for Production.
           type: string
-          default: phx-project
-          ui:description: Project names begin with a 3-letter prefix. Use the prefix 'phx' for Experiments, 'phd' for Dev, 'pht' for Test, and 'php' for Prod. Give the project a name for how it is used not who creates it.
-        displayName:
-          title: Display Name
+          default: x
+          enum:
+            - x
+            - t
+            - p
+          enumNames:
+            - Experimentation
+            - Noble-Experimentation
+            - Production
+        vanityName:
+          title: Vanity Name
+          description: The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
           type: string
-          description: The human-readable name of the GCP Project used for display purposes.
-          default: Project ABC
-    - title: Administrative Data
+          maxLength: 26
+    - title: Administration
       required:
         - costCentre
         - section32ManagerEmail
-        - justificationNote
+        - justification
       properties:
         costCentre:
           title: Cost Centre
@@ -45,35 +57,36 @@ spec:
           title: Section 32 Manager Email Address
           type: string
           format: email
-        justificationNote:
-          title: Justification Note
+        justification:
+          title: Justification
           type: string
           ui:widget: textarea
+          ui:description: Provide a brief explanation of what the project will be used for.
           ui:options:
-            rows: 5
+            rows: 2
         serviceOwners:
           title: Service Owners
           type: string
           ui:widget: textarea
           ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.
           ui:options:
-            rows: 8
+            rows: 2
           ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
-    - title: Billing Details
+    - title: Billing
       required:
         - totalBudget
       properties:
         totalBudget:
           title: Total Budget Amount (CAD)
           type: number
-          minimum: 0,
+          minimum: 0
         notifyList:
           title: Notify List
           type: string
           ui:widget: textarea
           ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
           ui:options:
-            rows: 8
+            rows: 2
           ui:placeholder: jane.doe@phac-aspc.gc.ca, john.doe@phac-aspc.gc.ca, steve.smith@phac-aspc.gc.ca
     - title: Pull Request
       backstage:featureFlag: template-developer
@@ -84,47 +97,35 @@ spec:
           default: true
           ui:widget: radio
           ui:description: Add the `[Test] ` prefix to close the pull request.
+
   steps:
-    - id: create_resource
-      name: Processing Request
-      action: phac:provisioner:create
+    - id: ctx
+      name: Get Context
+      action: data-science-portal:template:get-context
       input:
-        projectName: ${{ parameters.projectName }}
-        displayName: ${{ parameters.displayName }}
-        folderName: ${{ parameters.folderName }}
-        costCentre: ${{ parameters.costCentre }}
-        section32ManagerEmail: ${{ parameters.section32ManagerEmail }}
-        justificationNote: ${{ parameters.justificationNote }}
-        serviceOwners: ${{ parameters.serviceOwners }}
+        parameters: ${{parameters}}
+        # TODO
+        costCentre: ${{parameters.costCentre}}
+        section32ManagerEmail: ${{parameters.section32ManagerEmail}}
+        justification: ${{parameters.justification}}
+        serviceOwners: ${{parameters.serviceOwners}}
+
+    - id: prepare-pull-request
+      name: Prepare Pull Request
+      action: fetch:template
+      input:
+        url: ./${{steps.ctx.output.template}}/changes
+        values: ${{steps.ctx.output.template_values}}
 
     - id: publish
-      name: Submitting Request
+      name: Submit Pull Request
       action: publish:github:pull-request
       input:
-        repoUrl: github.com?owner=${{ steps.create_resource.output.repo_owner }}&repo=${{ steps.create_resource.output.repo_name }}
-        title: ${{ "[Test] " if parameters.closePullRequest else '' }}Create ${{steps.create_resource.output.resource_type}}
-        branchName: request-${{steps.create_resource.output.request_id}}
-        description: |
-          # Create ${{steps.create_resource.output.resource_type}}
-
-          This PR was created using Backstage. The request ID is `${{steps.create_resource.output.request_id}}`.
-
-          <!-- ### Client Name Email address -->
-
-          ### Administrative Details
-
-          **Cost Centre:** ${{parameters.costCentre}}
-          **Justification:** ${{parameters.justificationNote}}
-          **Section 32 Manager Email:** ${{parameters.section32ManagerEmail}}
-          **Service Owners:** ${{parameters.serviceOwners}}
-
-          ### GCP Project
-
-          **Folder Name:** ${{parameters.folderName}}
-          **Project Name:** ${{parameters.projectName}}
-          **Display Name:** ${{parameters.displayName}}
-
-        targetPath: ./DMIA-PHAC/SciencePlatform/${{parameters.folderName}}
+        repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
+        branchName: ${{steps.ctx.output.branch}}
+        title: ${{"[Test] " if parameters.closePullRequest else ''}}Create ${{steps.ctx.output.template}}
+        description: ${{steps.ctx.output.pr_description}}
+        targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.folderName}}
 
   output:
     links:
