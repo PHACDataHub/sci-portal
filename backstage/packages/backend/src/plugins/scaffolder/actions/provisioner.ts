@@ -1,10 +1,29 @@
 import * as path from 'path';
 import nunjucks from 'nunjucks';
 import { v4 as uuidv4 } from 'uuid';
-import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
-import { validateConfig, getConfig } from '../config';
+import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
+
+interface ProvisionerConfig {
+  repo: {
+    owner: string;
+    name: string;
+  };
+}
+
+const getConfig = (config: Config): ProvisionerConfig => {
+  return {
+    repo: {
+      owner: config.getString('backend.plugins.provisioner.repo.owner'),
+      name: config.getString('backend.plugins.provisioner.repo.name'),
+    },
+  };
+};
+
+const validateConfig = (config: Config) => {
+  getConfig(config);
+};
 
 export const provisionNewResourceAction = (config: Config) => {
   validateConfig(config);
@@ -133,14 +152,12 @@ export const provisionNewResourceAction = (config: Config) => {
 
         ctx.output('service_owners', serviceOwnersArray);
       }
-      ctx.output(
-        'template_values', {
-          requestId,
-          rootFolderId,
-          folderName,
-          projectName,
-        }
-      )
+      ctx.output('template_values', {
+        requestId,
+        rootFolderId,
+        folderName,
+        projectName,
+      });
     },
   });
 };
