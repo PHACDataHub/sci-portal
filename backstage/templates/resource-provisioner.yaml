@@ -11,6 +11,8 @@ spec:
   parameters:
     - title: Project
       required:
+        - department
+        - environment
         - folderName
         - projectName
         - displayName
@@ -25,6 +27,18 @@ spec:
           enumNames:
             - PHAC
             - Health Canada
+        environment:
+          title: Environment
+          type: string
+          default: x
+          enum:
+            - x
+            - t
+            - p
+          enumNames:
+            - Experimentation
+            - Testing
+            - Production
         folderName:
           title: Folder Name
           type: string
