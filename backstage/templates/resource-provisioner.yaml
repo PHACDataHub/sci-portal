@@ -37,7 +37,6 @@ spec:
         - costCentre
         - section32ManagerEmail
         - justificationNote
-        - serviceOwners
       properties:
         costCentre:
           title: Cost Centre
@@ -56,10 +55,26 @@ spec:
           title: Service Owners
           type: string
           ui:widget: textarea
-          ui:description: The email addresses of users who should own this service separated by comma.
+          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.
           ui:options:
             rows: 8
-          ui:placeholder: jane.doe@gmail.com, john.doe@gmail.com, steve.smith@gmail.com
+          ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
+    - title: Billing Details
+      required:
+        - totalBudget
+      properties:
+        totalBudget:
+          title: Total Budget Amount (CAD)
+          type: number
+          default: $
+        notifyList:
+          title: Notify List
+          type: string
+          ui:widget: textarea
+          ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
+          ui:options:
+            rows: 8
+          ui:placeholder: jane.doe@phac-aspc.gc.ca, john.doe@phac-aspc.gc.ca, steve.smith@phac-aspc.gc.ca
     - title: Pull Request
       backstage:featureFlag: template-developer
       properties:
