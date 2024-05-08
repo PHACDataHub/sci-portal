@@ -22,6 +22,9 @@ locals {
   crossplane_props = {
     sa_account_id   = "crossplane-sa"
     sa_display_name = "crossplane-sa"
+    project_roles = [
+      "roles/storage.admin"
+    ]
     folder_roles = [
       "roles/resourcemanager.projectCreator",
       "roles/resourcemanager.folderCreator"

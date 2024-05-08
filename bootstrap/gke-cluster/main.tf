@@ -106,6 +106,15 @@ resource "google_service_account" "crossplane-sa" {
 }
 
 # Grants the Crossplane SA the roles defined in locals to the primary portal folder
+resource "google_project_iam_member" "crossplane_folder_role_bindings" {
+  for_each = toset(local.crossplane_props.project_roles)
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.crossplane-sa.email}"
+}
+
+# Grants the Crossplane SA the roles defined in locals to the primary portal folder
 resource "google_folder_iam_member" "crossplane_folder_role_bindings" {
   for_each = toset(local.crossplane_props.folder_roles)
 
