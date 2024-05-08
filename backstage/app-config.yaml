@@ -71,6 +71,9 @@ auth:
   # See https://backstage.io/docs/auth/identity-resolver#sign-in-without-users-in-the-catalog
   allowedDomains: ${AUTH_GOOGLE_ALLOWED_DOMAINS}
 
+# Sign in without a pop-up. See https://backstage.io/docs/auth/#sign-in-configuration.
+enableExperimentalRedirectFlow: true
+
 costInsights:
   engineerCost: 200000
   products:
