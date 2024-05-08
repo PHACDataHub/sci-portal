@@ -1,0 +1,7 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Project
+metadata:
+  name: hct-sean-dev1-a60fe0f6-c34e-4297-80ce-189db6cef7d8
+spec:
+  folder: hc-sean-dev1
+  name: hct-sean-dev1
