@@ -125,7 +125,6 @@ spec:
                   specifiedAmount:
                     currencyCode: "CAD"
                     units: 3000 # Place Holder
-                    nanos: 0
                 thresholdRules:
                 - thresholdPercent: 0.25
                   spendBasis: "CURRENT_SPEND"
@@ -166,11 +165,11 @@ spec:
             - type: string
               string:
                 type: Format
-                fmt: "bqbudget-%s"
+                fmt: "budget-%s"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
           transforms:
             - type: string
               string:
                 type: Format
-                fmt: "bqbudget-%s"
+                fmt: "budget-%s"
