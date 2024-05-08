@@ -3,35 +3,42 @@ import {
   mockServices,
 } from '@backstage/backend-test-utils';
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
-import { createProvisionTemplateAction } from './provisioner';
+import { createProvisionTemplateAction, parseEmailInput } from './provisioner';
 
 jest.mock('uuid', () => ({
   v4: jest.fn(() => '<uuid>'),
 }));
 
-const createContext = (options: {
-  workspacePath: string;
-}) => ({
+const createContext = ({ workspacePath }: { workspacePath: string }) => ({
   ...createMockActionContext({
     input: {
       parameters: {
         department: 'ph' as const,
         environment: 'x' as const,
         vanityName: 'test-42',
+        owners: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
+
+        costCentre: 'ABC123456789',
+        section32ManagerEmail: 'alice.grady@gcp.hc-sc.gc.ca',
+        justification:
+          'This project will be used for testing our custom action.',
+        budgetAmount: 10_000,
+        budgetAlertEmailRecipients:
+          'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
+
+        additionalProperty: 'foo',
       },
-      costCentre: 'ABC123456789',
-      section32ManagerEmail: 'emailAddress',
-      justification: 'justification',
-      serviceOwners:
-        'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
-      totalBudget: 10_000,
-      notifyList: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
     },
     templateInfo: {
-      entity: { metadata: { name: 'project-create' } },
+      entity: {
+        metadata: {
+          name: 'project-create',
+          title: 'Project Template',
+        },
+      },
       entityRef: '',
     },
-    workspacePath: options.workspacePath,
+    workspacePath,
   }),
 });
 
@@ -117,30 +124,6 @@ describe('provisioner', () => {
       expect(call).toEqual([name, 'ph-test-42']);
     });
 
-    it('should set the owners of the created Catalog entity in the output', async () => {
-      const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
-      await action.handler(ctx);
-
-      const name = 'service_owners';
-      const call = (ctx.output as jest.Mock).mock.calls.find(
-        args => args[0] === name,
-      );
-      expect(call).toEqual([name, ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca']]);
-    });
-
-    it('should set the budget alert notification recipients in the output', async () => {
-      const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
-      await action.handler(ctx);
-
-      const name = 'notify_list';
-      const call = (ctx.output as jest.Mock).mock.calls.find(
-        args => args[0] === name,
-      );
-      expect(call).toEqual([name, ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca', 'steve.smith@gcp.hc-sc.gc.ca']]);
-    });
-
     it('should set the pull request description in the output', async () => {
       const action = createProvisionTemplateAction(config);
       const ctx = createContext({ workspacePath });
@@ -151,7 +134,7 @@ describe('provisioner', () => {
         args => args[0] === name,
       );
       expect(call[1]).toMatchInlineSnapshot(`
-        "# Create 
+        "# Create Project from Template
 
         This PR was created using Backstage. The request ID is \`&lt;uuid&gt;\`.
 
@@ -165,8 +148,8 @@ describe('provisioner', () => {
         ### Administrative Details
 
         **Cost Centre:** ABC123456789
-        **Justification:** justification
-        **Section 32 Manager Email:** emailAddress
+        **Justification:** This project will be used for testing our custom action.
+        **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
         **Service Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
         "
       `);
@@ -184,12 +167,99 @@ describe('provisioner', () => {
       expect(call).toEqual([
         name,
         {
+          templateTitle: 'Project Template',
           requestId: '<uuid>',
+
           rootFolderId: '108494461414',
           folderName: 'ph-test-42',
           projectName: 'phx-test-42',
+          budgetAlertEmailRecipients: [
+            'jane.doe@gcp.hc-sc.gc.ca',
+            'john.doe@gcp.hc-sc.gc.ca',
+            'steve.smith@gcp.hc-sc.gc.ca',
+          ],
+
+          owners: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
+
+          // The rest of ctx.input:
+          department: 'ph',
+          environment: 'x',
+          vanityName: 'test-42',
+
+          costCentre: 'ABC123456789',
+          section32ManagerEmail: 'alice.grady@gcp.hc-sc.gc.ca',
+          justification:
+            'This project will be used for testing our custom action.',
+
+          budgetAmount: 10000,
+
+          // An additional property that is not in the input schema is included in the output.
+          additionalProperty: 'foo',
         },
       ]);
     });
+  });
+});
+
+describe('parseEmailInput', () => {
+  test('Given undefined it should return an empty array', () => {
+    const actual = parseEmailInput();
+    const expected: string[] = [];
+
+    expect(actual).toEqual(expected);
+  });
+
+  test('Given an empty string it should return an empty array', () => {
+    const actual = parseEmailInput('');
+    const expected: string[] = [];
+
+    expect(actual).toEqual(expected);
+  });
+
+  test('Given an email address it should an array the email address', () => {
+    const actual = parseEmailInput('jane.doe@gcp.hc-sc.gc.ca');
+    const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should ignore leading whitespace', () => {
+    const actual = parseEmailInput('  jane.doe@gcp.hc-sc.gc.ca');
+    const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should ignore leading commas', () => {
+    const actual = parseEmailInput(',jane.doe@gcp.hc-sc.gc.ca');
+    const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should ignore trailing whitespace', () => {
+    const actual = parseEmailInput('jane.doe@gcp.hc-sc.gc.ca    ');
+    const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should ignore trailing commas', () => {
+    const actual = parseEmailInput('jane.doe@gcp.hc-sc.gc.ca, ');
+    const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle multiple addresses', () => {
+    const actual = parseEmailInput(
+      '  , jane.doe@gcp.hc-sc.gc.ca ,  , john.doe@gcp.hc-sc.gc.ca ,   ',
+    );
+    const expected: string[] = [
+      'jane.doe@gcp.hc-sc.gc.ca',
+      'john.doe@gcp.hc-sc.gc.ca',
+    ];
+
+    expect(actual).toEqual(expected);
   });
 });
