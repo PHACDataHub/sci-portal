@@ -2,7 +2,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: project
+  name: project-create
   title: Project Template
   description: Create a GCP Project with a budget and budget alerts.
 spec:
@@ -96,27 +96,35 @@ spec:
           default: true
           ui:widget: radio
           ui:description: Add the `[Test] ` prefix to close the pull request.
+
   steps:
-    - id: create_resource
-      name: Processing Request
-      action: phac:provisioner:create
+    - id: ctx
+      name: Get Context
+      action: data-science-portal:template:get-context
       input:
-        parameters: ${{ parameters }}
+        parameters: ${{parameters}}
         # TODO
-        costCentre: ${{ parameters.costCentre }}
-        section32ManagerEmail: ${{ parameters.section32ManagerEmail }}
-        justification: ${{ parameters.justification }}
-        serviceOwners: ${{ parameters.serviceOwners }}
+        costCentre: ${{parameters.costCentre}}
+        section32ManagerEmail: ${{parameters.section32ManagerEmail}}
+        justification: ${{parameters.justification}}
+        serviceOwners: ${{parameters.serviceOwners}}
+
+    - id: prepare-pull-request
+      name: Prepare Pull Request
+      action: fetch:template
+      input:
+        url: ./${{steps.ctx.output.template}}/changes
+        values: ${{steps.ctx.output.template_values}}
 
     - id: publish
-      name: Submitting Request
+      name: Submit Pull Request
       action: publish:github:pull-request
       input:
-        repoUrl: github.com?owner=${{ steps.create_resource.output.repo_owner }}&repo=${{ steps.create_resource.output.repo_name }}
-        branchName: request-${{steps.create_resource.output.request_id}}
-        title: ${{ "[Test] " if parameters.closePullRequest else '' }}Create ${{steps.create_resource.output.resource_type}}
-        description: ${{steps.create_resource.output.pr_description}}
-        targetPath: ./DMIA-PHAC/SciencePlatform/${{parameters.folderName}}
+        repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
+        branchName: request-${{steps.ctx.output.request_id}}
+        title: ${{"[Test] " if parameters.closePullRequest else ''}}Create ${{steps.ctx.output.template}}
+        description: ${{steps.ctx.output.pr_description}}
+        targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.folderName}}
 
   output:
     links:

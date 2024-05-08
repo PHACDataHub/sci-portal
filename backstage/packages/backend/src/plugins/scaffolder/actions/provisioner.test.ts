@@ -16,7 +16,7 @@ jest.mock('uuid', () => ({
 }));
 
 describe('provisioner', () => {
-  describe('phac:provisioner:create', () => {
+  describe('data-science-portal:template:get-context', () => {
     // Initialize the action and mock context
 
     const configMock = {
