@@ -92,7 +92,16 @@ export const provisionNewResourceAction = (config: Config) => {
           .split(/,\s*/)
           .filter(str => str.length);
 
-        ctx.output('notify_list_array', notifyListArray);
+        ctx.output('notify_list', notifyListArray);
+      }
+
+      if (ctx.input.serviceOwners) {
+        const serviceOwnersArray = ctx.input.serviceOwners
+          .trim()
+          .split(/,\s*/)
+          .filter(str => str.length);
+
+        ctx.output('service_owners', serviceOwnersArray);
       }
 
       ctx.output('request_id', requestId);
