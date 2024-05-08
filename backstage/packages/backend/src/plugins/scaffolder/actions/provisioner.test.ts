@@ -23,8 +23,9 @@ const createContext = (options: {
       section32ManagerEmail: 'emailAddress',
       justification: 'justification',
       serviceOwners:
-        'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
+        'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
       totalBudget: 10_000,
+      notifyList: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
     },
     templateInfo: {
       entity: { metadata: { name: 'project-create' } },
@@ -128,6 +129,30 @@ describe('provisioner', () => {
       expect(call).toEqual([name, 'phx-test-42']);
     });
 
+    it('should set the owners of the created Catalog entity in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'service_owners';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca']]);
+    });
+
+    it('should set the budget alert notification recipients in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'notify_list';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca', 'steve.smith@gcp.hc-sc.gc.ca']]);
+    });
+
     it('should set the pull request description in the output', async () => {
       const action = createProvisionTemplateAction(config);
       const ctx = createContext({ workspacePath });
@@ -154,7 +179,7 @@ describe('provisioner', () => {
         **Cost Centre:** ABC123456789
         **Justification:** justification
         **Section 32 Manager Email:** emailAddress
-        **Service Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
+        **Service Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
         "
       `);
     });
