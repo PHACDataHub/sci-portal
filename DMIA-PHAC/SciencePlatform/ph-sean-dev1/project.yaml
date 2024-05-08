@@ -1,0 +1,9 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: {{projectName}}-{{requestId}}
+spec:
+  rootFolderId: {{rootFolderId}}
+  folderName: {{folderName}}
+  projectName: {{projectName}}
+  
