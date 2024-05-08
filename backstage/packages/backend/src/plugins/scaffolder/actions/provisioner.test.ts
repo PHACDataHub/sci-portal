@@ -1,10 +1,38 @@
-import { mockServices } from '@backstage/backend-test-utils';
+import {
+  createMockDirectory,
+  mockServices,
+} from '@backstage/backend-test-utils';
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
-import { provisionNewResourceAction } from './provisioner';
+import { createProvisionTemplateAction } from './provisioner';
 
 jest.mock('uuid', () => ({
   v4: jest.fn(() => '<uuid>'),
 }));
+
+const createContext = (options: {
+  workspacePath: string;
+}) => ({
+  ...createMockActionContext({
+    input: {
+      parameters: {
+        department: 'ph' as const,
+        environment: 'x' as const,
+        vanityName: 'test-42',
+      },
+      costCentre: 'ABC123456789',
+      section32ManagerEmail: 'emailAddress',
+      justification: 'justification',
+      serviceOwners:
+        'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
+      totalBudget: 10_000,
+    },
+    templateInfo: {
+      entity: { metadata: { name: 'project-create' } },
+      entityRef: '',
+    },
+    workspacePath: options.workspacePath,
+  }),
+});
 
 describe('provisioner', () => {
   describe('data-science-portal:template:get-context', () => {
@@ -22,63 +50,94 @@ describe('provisioner', () => {
         },
       },
     });
-    const action = provisionNewResourceAction(config);
-    const mockContext = createMockActionContext({
-      templateInfo: {
-        entity: { metadata: { name: 'project-create' } },
-        entityRef: '',
-      },
-    });
+    const workspacePath = createMockDirectory().resolve('workspace');
 
     beforeEach(() => {
-      // Reset mock function calls before each test
       jest.clearAllMocks();
     });
 
-    it('run the action', async () => {
-      await action.handler({
-        ...mockContext,
-        input: {
-          parameters: {
-            department: 'ph',
-            environment: 'x',
-            vanityName: 'test-42',
-          },
-          costCentre: 'ABC123456789',
-          section32ManagerEmail: 'emailAddress',
-          justification: 'justification',
-          serviceOwners:
-            'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
-          totalBudget: 10000,
-        },
-      });
+    it('should set the template name in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
 
-      expect(mockContext.output).toHaveBeenCalledWith('request_id', '<uuid>');
-      expect(mockContext.output).toHaveBeenCalledWith(
-        'repo_owner',
-        '<repo-owner>',
+      const name = 'template';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
       );
-      expect(mockContext.output).toHaveBeenCalledWith(
-        'repo_name',
-        '<repo-name>',
-      );
-      expect(mockContext.output).toHaveBeenCalledWith(
-        'template',
-        'project-create',
-      );
-      expect(mockContext.output).toHaveBeenCalledWith(
-        'folderName',
-        'ph-test-42',
-      );
-      expect(mockContext.output).toHaveBeenCalledWith(
-        'projectName',
-        'phx-test-42',
-      );
+      expect(call).toEqual([name, 'project-create']);
+    });
 
-      const actual = (mockContext.output as jest.Mock).mock.calls.find(
-        call => call[0] === 'pr_description',
-      )[1];
-      expect(actual).toMatchInlineSnapshot(`
+    it('should set the GitOps repo owner in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'repo_owner';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, '<repo-owner>']);
+    });
+
+    it('should set the GitOps repo name in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'repo_name';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, '<repo-name>']);
+    });
+
+    it('should set the GitOps branch name in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'branch';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, 'request-<uuid>']);
+    });
+
+    it('should set the GCP Folder name in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'folderName';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, 'ph-test-42']);
+    });
+
+    it('should set the GCP Project name in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'projectName';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, 'phx-test-42']);
+    });
+
+    it('should set the pull request description in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'pr_description';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call[1]).toMatchInlineSnapshot(`
         "# Create 
 
         This PR was created using Backstage. The request ID is \`&lt;uuid&gt;\`.
@@ -98,13 +157,26 @@ describe('provisioner', () => {
         **Service Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
         "
       `);
+    });
 
-      expect(mockContext.output).toHaveBeenCalledWith('template_values', {
-        requestId: '<uuid>',
-        rootFolderId: '108494461414',
-        folderName: 'ph-test-42',
-        projectName: 'phx-test-42',
-      });
+    it('should set the pull request content template values in the output', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({ workspacePath });
+      await action.handler(ctx);
+
+      const name = 'template_values';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([
+        name,
+        {
+          requestId: '<uuid>',
+          rootFolderId: '108494461414',
+          folderName: 'ph-test-42',
+          projectName: 'phx-test-42',
+        },
+      ]);
     });
   });
 });

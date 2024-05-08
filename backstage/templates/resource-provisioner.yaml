@@ -121,7 +121,7 @@ spec:
       action: publish:github:pull-request
       input:
         repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
-        branchName: request-${{steps.ctx.output.request_id}}
+        branchName: ${{steps.ctx.output.branch}}
         title: ${{"[Test] " if parameters.closePullRequest else ''}}Create ${{steps.ctx.output.template}}
         description: ${{steps.ctx.output.pr_description}}
         targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.folderName}}

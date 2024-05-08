@@ -5,6 +5,9 @@ import { Config } from '@backstage/config';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
 
+const templateDir = path.join(__dirname, '../../../../../../templates');
+const rootFolderId = '108494461414';
+
 interface ProvisionerConfig {
   repo: {
     owner: string;
@@ -25,7 +28,7 @@ const validateConfig = (config: Config) => {
   getConfig(config);
 };
 
-export const provisionNewResourceAction = (config: Config) => {
+export const createProvisionTemplateAction = (config: Config) => {
   validateConfig(config);
 
   return createTemplateAction<{
@@ -101,11 +104,11 @@ export const provisionNewResourceAction = (config: Config) => {
       }
 
       const requestId = uuidv4();
-      ctx.output('request_id', requestId);
 
       const provisionerConfig = getConfig(config);
       ctx.output('repo_owner', provisionerConfig.repo.owner);
       ctx.output('repo_name', provisionerConfig.repo.name);
+      ctx.output('branch', `request-${requestId}`);
 
       const template = ctx.templateInfo.entity.metadata.name;
       ctx.output('template', template);
@@ -117,8 +120,7 @@ export const provisionNewResourceAction = (config: Config) => {
       ctx.output('projectName', projectName);
 
       // Render the Pull Request description template
-      nunjucks.configure(path.join(__dirname, '../../../../../../templates'));
-      const rootFolderId = '108494461414';
+      nunjucks.configure(templateDir);
       const context = {
         templateName: ctx.templateInfo.entity.metadata.title,
         requestId,
