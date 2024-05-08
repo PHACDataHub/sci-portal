@@ -58,9 +58,19 @@ export const createProvisionTemplateAction = (config: Config) => {
           parameters: {
             type: 'object',
             properties: {
-              department: { enum: ['hc', 'ph'] },
-              environment: { enum: ['x', 't', 'p'] },
+              department: {
+                title: 'Department',
+                description: 'The department ID',
+                enum: ['hc', 'ph'],
+              },
+              environment: {
+                title: 'Environment',
+                description: 'The environment ID. Use "x" for Experimentation, "t" for "Noble-Experimentation, and "p" for production.',
+                enum: ['x', 't', 'p'],
+              },
               vanityName: {
+                title: 'Vanity Name',
+                description: 'The resource display name. The name must less than 27 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
                 type: 'string',
                 minLength: 1,
                 maxLength: 27,
