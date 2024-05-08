@@ -15,7 +15,8 @@ locals {
       "roles/resourcemanager.folderCreator"
     ]
     org_roles = [
-      "roles/billing.user"
+      "roles/billing.user",
+      "roles/billing.costsManager"
     ]
   }
   crossplane_props = {
@@ -26,7 +27,8 @@ locals {
       "roles/resourcemanager.folderCreator"
     ]
     org_roles = [
-      "roles/billing.user"
+      "roles/billing.user",
+      "roles/billing.costsManager"
     ]
   }
   backstage_props = {
