@@ -124,7 +124,7 @@ spec:
                 amount:
                   specifiedAmount:
                     currencyCode: "CAD"
-                    units: 9000000 # Place Holder
+                    units: 3000 # Place Holder
                     nanos: 0
                 thresholdRules:
                 - thresholdPercent: 0.25
