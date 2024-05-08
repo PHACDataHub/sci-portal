@@ -16,14 +16,3 @@ metadata:
 spec:
   type: root
   children: []
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-  name: project
-  title: Project
-  description: A GCP Project with a budget and budget alerts.
-spec:
-  type: project
-  owner: platform-team

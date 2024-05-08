@@ -4,7 +4,7 @@ kind: Template
 metadata:
   name: project-create
   title: Project Template
-  description: Create a GCP Project with a budget and budget alerts.
+  description: Create a GCP Project with a budget and budget alerts. The Platform Team will review your request before the Project is created.
 spec:
   owner: platform-team
   type: project
@@ -17,7 +17,7 @@ spec:
       properties:
         department:
           title: Department
-          description: The department ID
+          description: The department ID.
           type: string
           default: ph
           enum:
@@ -41,10 +41,9 @@ spec:
             - Production
         vanityName:
           title: Vanity Name
-          description: The resource display name. The name must less than 27 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
+          description: The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
           type: string
-          default:
-          maxLength: 27
+          maxLength: 26
     - title: Administration
       required:
         - costCentre
@@ -73,21 +72,21 @@ spec:
           ui:options:
             rows: 2
           ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
-    - title: Billing Details
+    - title: Billing
       required:
         - totalBudget
       properties:
         totalBudget:
           title: Total Budget Amount (CAD)
           type: number
-          minimum: 0,
+          minimum: 0
         notifyList:
           title: Notify List
           type: string
           ui:widget: textarea
           ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
           ui:options:
-            rows: 8
+            rows: 2
           ui:placeholder: jane.doe@phac-aspc.gc.ca, john.doe@phac-aspc.gc.ca, steve.smith@phac-aspc.gc.ca
     - title: Pull Request
       backstage:featureFlag: template-developer

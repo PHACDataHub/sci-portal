@@ -60,7 +60,7 @@ export const createProvisionTemplateAction = (config: Config) => {
             properties: {
               department: {
                 title: 'Department',
-                description: 'The department ID',
+                description: 'The department ID.',
                 enum: ['hc', 'ph'],
               },
               environment: {
@@ -70,10 +70,10 @@ export const createProvisionTemplateAction = (config: Config) => {
               },
               vanityName: {
                 title: 'Vanity Name',
-                description: 'The resource display name. The name must less than 27 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
+                description: 'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
                 type: 'string',
                 minLength: 1,
-                maxLength: 27,
+                maxLength: 26,
               },
             },
           },
@@ -127,7 +127,6 @@ export const createProvisionTemplateAction = (config: Config) => {
       ctx.output('folderName', folderName);
 
       const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
-      ctx.output('projectName', projectName);
 
       // Render the Pull Request description template
       nunjucks.configure(templateDir);

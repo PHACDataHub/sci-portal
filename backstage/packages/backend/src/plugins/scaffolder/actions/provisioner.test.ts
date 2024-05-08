@@ -117,18 +117,6 @@ describe('provisioner', () => {
       expect(call).toEqual([name, 'ph-test-42']);
     });
 
-    it('should set the GCP Project name in the output', async () => {
-      const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
-      await action.handler(ctx);
-
-      const name = 'projectName';
-      const call = (ctx.output as jest.Mock).mock.calls.find(
-        args => args[0] === name,
-      );
-      expect(call).toEqual([name, 'phx-test-42']);
-    });
-
     it('should set the owners of the created Catalog entity in the output', async () => {
       const action = createProvisionTemplateAction(config);
       const ctx = createContext({ workspacePath });
