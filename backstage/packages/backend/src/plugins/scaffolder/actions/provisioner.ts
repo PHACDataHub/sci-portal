@@ -5,24 +5,15 @@ import { dump } from 'js-yaml';
 import { Config } from '@backstage/config';
 import { validateConfig, getConfig } from '../config';
 
-interface Resource {
-  costCentre: string;
-  section32ManagerEmail: string;
-  justificationNote: string;
-  serviceOwners: string;
-  totalBudget: number;
-  notifyList: string;
-}
-
-interface GCPProjectResource extends Resource {
-  folderName: string;
-  projectName: string;
-  displayName: string;
-}
 export const provisionNewResourceAction = (config: Config) => {
   validateConfig(config);
 
   return createTemplateAction<{
+    parameters: {
+      department: 'hc' | 'ph';
+      environment: 'x' | 't' | 'p';
+      vanityName: string;
+    };
     costCentre: string;
     section32ManagerEmail: string;
     justificationNote: string;
@@ -33,9 +24,26 @@ export const provisionNewResourceAction = (config: Config) => {
     id: 'phac:provisioner:create',
     schema: {
       input: {
-        required: ['costCentre', 'section32ManagerEmail', 'justificationNote'],
+        required: [
+          'parameters',
+          'costCentre',
+          'section32ManagerEmail',
+          'justificationNote',
+        ],
         type: 'object',
         properties: {
+          parameters: {
+            type: 'object',
+            properties: {
+              department: { enum: ['hc', 'ph'] },
+              environment: { enum: ['x', 't', 'p'] },
+              vanityName: {
+                type: 'string',
+                minLength: 1,
+                maxLength: 27,
+              },
+            },
+          },
           costCentre: {
             type: 'string',
             title: 'costCentre',
@@ -50,22 +58,6 @@ export const provisionNewResourceAction = (config: Config) => {
             type: 'string',
             title: 'justificationNote',
             description: 'Request justification note',
-          },
-          folderName: {
-            type: 'string',
-            title: 'folderName',
-            description: 'The name of the folder',
-          },
-          projectName: {
-            type: 'string',
-            title: 'projectName',
-            description: 'The name of the project that will be created',
-          },
-          displayName: {
-            type: 'string',
-            title: 'displayName',
-            description:
-              'The human-readable display name of the project that will be created',
           },
           serviceOwners: {
             type: 'string',
@@ -84,7 +76,7 @@ export const provisionNewResourceAction = (config: Config) => {
     },
 
     async handler(ctx) {
-      const requestId = generateRequestId();
+      const requestId = uuidv4();
       const provisionerConfig = getConfig(config);
       if (ctx.input.notifyList) {
         const notifyListArray = ctx.input.notifyList
@@ -110,28 +102,28 @@ export const provisionNewResourceAction = (config: Config) => {
       ctx.output('repo_owner', provisionerConfig.repo.owner);
       ctx.output('repo_name', provisionerConfig.repo.name);
 
-      const project = ctx.input as GCPProjectResource;
-      const resourceConfig = createProjectClaim(project, requestId);
+      const folderName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
+      ctx.output('folderName', folderName);
 
-      const yamlString = dump(resourceConfig);
+      const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
+      ctx.output('projectName', projectName);
+
+      const yamlString = dump(createProjectClaim(requestId, folderName, projectName));
       writeFileSync(`${ctx.workspacePath}/project.yaml`, yamlString);
     },
   });
 };
 
-/**
- * Creates a Project claim
- * @returns {Object}
- */
 export function createProjectClaim(
-  resource: GCPProjectResource,
   requestId: string,
+  folderName: string,
+  projectName: string
 ) {
   return {
     apiVersion: 'data-science-portal.phac-aspc.gc.ca/v1alpha1',
     kind: 'Project',
     metadata: {
-      name: `${resource.projectName}-${requestId}`,
+      name: `${projectName}-${requestId}`,
     },
     spec: {
       // compositionSelector: {
@@ -139,16 +131,8 @@ export function createProjectClaim(
       //     provider: 'google',
       //   },
       // },
-      folder: resource.folderName, // parentFolder
-      name: resource.projectName,
+      folder: folderName,
+      name: projectName,
     },
   };
-}
-
-/**
- * Generates a request ID using UUID.
- * @returns {string} The generated request ID.
- */
-export function generateRequestId(): string {
-  return uuidv4();
 }
