@@ -26,5 +26,11 @@ jobs:
           terraform_version: "1.7.5"
           terraform_wrapper: false
 
-      - name: terraform fmt
+      - name: Check format
         run: terraform fmt -check -recursive
+
+      - name: Validate
+        working-directory: ./bootstrap/gke-cluster
+        run: |
+          terraform init -backend=false
+          terraform validate
