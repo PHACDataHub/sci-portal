@@ -113,7 +113,7 @@ const routes = (
           filters={
             <>
               <DefaultFilters
-                initialKind="Service"
+                initialKind="Resource"
                 initiallySelectedFilter="owned"
                 ownerPickerMode="all"
               />
