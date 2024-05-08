@@ -1,9 +1,12 @@
-import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { writeFileSync } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
+import * as path from 'path';
 import { dump } from 'js-yaml';
+import nunjucks from 'nunjucks';
+import { v4 as uuidv4 } from 'uuid';
+import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
 import { validateConfig, getConfig } from '../config';
+import { InputError } from '@backstage/errors';
 
 export const provisionNewResourceAction = (config: Config) => {
   validateConfig(config);
@@ -16,7 +19,7 @@ export const provisionNewResourceAction = (config: Config) => {
     };
     costCentre: string;
     section32ManagerEmail: string;
-    justificationNote: string;
+    justification: string;
     serviceOwners?: string;
     totalBudget: number;
     notifyList?: string;
@@ -28,7 +31,7 @@ export const provisionNewResourceAction = (config: Config) => {
           'parameters',
           'costCentre',
           'section32ManagerEmail',
-          'justificationNote',
+          'justification',
         ],
         type: 'object',
         properties: {
@@ -54,9 +57,9 @@ export const provisionNewResourceAction = (config: Config) => {
             title: 'section32ManagerEmail',
             description: 'Section 32 Manager Email Address',
           },
-          justificationNote: {
+          justification: {
             type: 'string',
-            title: 'justificationNote',
+            title: 'justification',
             description: 'Request justification note',
           },
           serviceOwners: {
@@ -76,6 +79,10 @@ export const provisionNewResourceAction = (config: Config) => {
     },
 
     async handler(ctx) {
+      if (!ctx?.templateInfo?.entity) {
+        throw new InputError('Invalid templateInfo provided in the request');
+      }
+
       const requestId = uuidv4();
       const provisionerConfig = getConfig(config);
       if (ctx.input.notifyList) {
@@ -108,7 +115,24 @@ export const provisionNewResourceAction = (config: Config) => {
       const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
       ctx.output('projectName', projectName);
 
-      const yamlString = dump(createProjectClaim(requestId, folderName, projectName));
+      const template = ctx.templateInfo.entity.metadata.name;
+      const context = {
+        templateName: ctx.templateInfo.entity.metadata.title,
+        requestId,
+        folderName,
+        projectName,
+        costCentre: ctx.input.costCentre,
+        justification: ctx.input.justification,
+        section32ManagerEmail: ctx.input.section32ManagerEmail,
+        serviceOwners: ctx.input.serviceOwners,
+      }
+      nunjucks.configure(path.join(__dirname, '../../../../../../templates'));
+      const pullRequestDescription = nunjucks.render(path.join(template, 'pr.njk'), context);
+      ctx.output('pr_description', pullRequestDescription);
+
+      const yamlString = dump(
+        createProjectClaim(requestId, folderName, projectName),
+      );
       writeFileSync(`${ctx.workspacePath}/project.yaml`, yamlString);
     },
   });
@@ -117,7 +141,7 @@ export const provisionNewResourceAction = (config: Config) => {
 export function createProjectClaim(
   requestId: string,
   folderName: string,
-  projectName: string
+  projectName: string,
 ) {
   return {
     apiVersion: 'data-science-portal.phac-aspc.gc.ca/v1alpha1',

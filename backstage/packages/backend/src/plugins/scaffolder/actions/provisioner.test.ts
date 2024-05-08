@@ -38,9 +38,9 @@ describe('provisioner', () => {
         input: {
           costCentre: '123456789',
           section32ManagerEmail: 'emailAddress',
-          justificationNote: 'justificationNote',
+          justification: 'justification',
           serviceOwners:
-            'jane.doe@gmail.com, john.doe@gmail.com, steve.smith@gmail.com',
+            'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
           totalBudget: 10000,
         },
       });

@@ -43,11 +43,11 @@ spec:
           description: The resource display name. The name must less than 27 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
           default:
           maxLength: 27
-    - title: Administrative Data
+    - title: Administration
       required:
         - costCentre
         - section32ManagerEmail
-        - justificationNote
+        - justification
       properties:
         costCentre:
           title: Cost Centre
@@ -56,19 +56,20 @@ spec:
           title: Section 32 Manager Email Address
           type: string
           format: email
-        justificationNote:
-          title: Justification Note
+        justification:
+          title: Justification
           type: string
           ui:widget: textarea
+          ui:description: Provide a brief explanation of what the project will be used for.
           ui:options:
-            rows: 5
+            rows: 2
         serviceOwners:
           title: Service Owners
           type: string
           ui:widget: textarea
           ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.
           ui:options:
-            rows: 8
+            rows: 2
           ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
     - title: Billing Details
       required:
@@ -104,7 +105,7 @@ spec:
         # TODO
         costCentre: ${{ parameters.costCentre }}
         section32ManagerEmail: ${{ parameters.section32ManagerEmail }}
-        justificationNote: ${{ parameters.justificationNote }}
+        justification: ${{ parameters.justification }}
         serviceOwners: ${{ parameters.serviceOwners }}
 
     - id: publish
@@ -112,27 +113,9 @@ spec:
       action: publish:github:pull-request
       input:
         repoUrl: github.com?owner=${{ steps.create_resource.output.repo_owner }}&repo=${{ steps.create_resource.output.repo_name }}
-        title: ${{ "[Test] " if parameters.closePullRequest else '' }}Create ${{steps.create_resource.output.resource_type}}
         branchName: request-${{steps.create_resource.output.request_id}}
-        description: |
-          # Create ${{steps.create_resource.output.resource_type}}
-
-          This PR was created using Backstage. The request ID is `${{steps.create_resource.output.request_id}}`.
-
-          <!-- ### Client Name Email address -->
-
-          ### GCP Project
-
-          **Folder Name:** ${{ctx.create_resource.output.folderName}}
-          **Project Name:** ${{ctx.create_resource.output.projectName}}
-
-          ### Administrative Details
-
-          **Cost Centre:** ${{parameters.costCentre}}
-          **Justification:** ${{parameters.justificationNote}}
-          **Section 32 Manager Email:** ${{parameters.section32ManagerEmail}}
-          **Service Owners:** ${{parameters.serviceOwners}}
-
+        title: ${{ "[Test] " if parameters.closePullRequest else '' }}Create ${{steps.create_resource.output.resource_type}}
+        description: ${{steps.create_resource.output.pr_description}}
         targetPath: ./DMIA-PHAC/SciencePlatform/${{parameters.folderName}}
 
   output:
