@@ -13,9 +13,9 @@ spec:
       required:
         - department
         - environment
+        - vanityName
         - folderName
         - projectName
-        - displayName
       properties:
         department:
           title: Department
@@ -39,16 +39,12 @@ spec:
             - Experimentation
             - Testing
             - Production
-        displayName:
-          title: Display Name
+        vanityName:
+          title: Vanity Name
           type: string
-          description: The human-readable name of the GCP Project used for display purposes.
-          default: Project ABC
-        folderName:
-          title: Folder Name
-          type: string
-          default: ph-
-          ui:description: This will create a folder in HC-DMIA > DMIA-PHAC > SciencePlatform.
+          description: The resource display name. The name must less than 27 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
+          default:
+          maxLength: 27
         projectName:
           title: Project Name
           type: string
