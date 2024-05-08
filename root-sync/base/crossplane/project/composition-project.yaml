@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
@@ -124,20 +125,20 @@ spec:
                 amount:
                   specifiedAmount:
                     currencyCode: "CAD"
-                    units: 3000 # Place Holder
+                    units: 3000  # Placeholder
                 thresholdRules:
-                - thresholdPercent: 0.25
-                  spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 0.50
-                  spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 0.75
-                  spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 0.90
-                  spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 0.95
-                  spendBasis: "CURRENT_SPEND"
-                - thresholdPercent: 1.00
-                  spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 0.25
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 0.50
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 0.75
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 0.90
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 0.95
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.00
+                    spendBasis: "CURRENT_SPEND"
           references:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
