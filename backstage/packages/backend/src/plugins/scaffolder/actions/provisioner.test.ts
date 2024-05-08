@@ -41,6 +41,7 @@ describe('provisioner', () => {
           justificationNote: 'justificationNote',
           serviceOwners:
             'jane.doe@gmail.com, john.doe@gmail.com, steve.smith@gmail.com',
+          totalBudget: 10000,
         },
       });
 

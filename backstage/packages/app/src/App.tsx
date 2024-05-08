@@ -45,6 +45,7 @@ import { GovTheme } from './theme/govTheme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
+import { DefaultFilters } from '@backstage/plugin-catalog-react';
 
 const app = createApp({
   components: {
@@ -105,7 +106,22 @@ const routes = (
     <Route path="/" element={<HomepageCompositionRoot />}>
       <HomePage />
     </Route>
-    <Route path="/catalog" element={<CatalogIndexPage />} />
+    <Route
+      path="/catalog"
+      element={
+        <CatalogIndexPage
+          filters={
+            <>
+              <DefaultFilters
+                initialKind="Resource"
+                initiallySelectedFilter="owned"
+                ownerPickerMode="all"
+              />
+            </>
+          }
+        />
+      }
+    />
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}
