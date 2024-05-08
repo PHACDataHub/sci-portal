@@ -41,12 +41,8 @@ catalog:
     # Backstage entities
     - type: file
       target: /app/entities.yaml
-
-    # Backstage organizational data
-    - type: file
-      target: /app/org.yaml
       rules:
-        - allow: [User, Group]
+        - allow: [System, User, Group]
 
     # Resource Provisioner template
     - type: file
