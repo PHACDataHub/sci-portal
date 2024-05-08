@@ -59,32 +59,32 @@ spec:
           format: email
         justification:
           title: Justification
+          ui:description: Provide a brief explanation of what the project will be used for.
           type: string
           ui:widget: textarea
-          ui:description: Provide a brief explanation of what the project will be used for.
           ui:options:
             rows: 2
-        serviceOwners:
-          title: Service Owners
+        owners:
+          title: Owners
+          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.
           type: string
           ui:widget: textarea
-          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.
           ui:options:
             rows: 2
           ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
     - title: Billing
       required:
-        - totalBudget
+        - budgetAmount
       properties:
-        totalBudget:
-          title: Total Budget Amount (CAD)
+        budgetAmount:
+          title: Annual Budget Amount (CAD)
           type: number
           minimum: 0
-        notifyList:
-          title: Notify List
+        budgetAlertEmailRecipients:
+          title: Budget Alert Email Recipients
+          ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
           type: string
           ui:widget: textarea
-          ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
           ui:options:
             rows: 2
           ui:placeholder: jane.doe@phac-aspc.gc.ca, john.doe@phac-aspc.gc.ca, steve.smith@phac-aspc.gc.ca
@@ -93,22 +93,18 @@ spec:
       properties:
         closePullRequest:
           title: Close Pull Request?
+          ui:description: Add the `[Test] ` prefix to close the pull request.
           type: boolean
           default: true
           ui:widget: radio
-          ui:description: Add the `[Test] ` prefix to close the pull request.
 
   steps:
     - id: ctx
       name: Get Context
       action: data-science-portal:template:get-context
       input:
+        # Pass the parameters as an input to include all user inputs.
         parameters: ${{parameters}}
-        # TODO
-        costCentre: ${{parameters.costCentre}}
-        section32ManagerEmail: ${{parameters.section32ManagerEmail}}
-        justification: ${{parameters.justification}}
-        serviceOwners: ${{parameters.serviceOwners}}
 
     - id: prepare-pull-request
       name: Prepare Pull Request
@@ -130,4 +126,4 @@ spec:
   output:
     links:
       - url: ${{steps.publish.output.remoteUrl}}
-        title: 'View PR'
+        title: 'View Pull Request'

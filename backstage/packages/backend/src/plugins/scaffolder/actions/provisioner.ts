@@ -2,8 +2,9 @@ import * as path from 'path';
 import nunjucks from 'nunjucks';
 import { v4 as uuidv4 } from 'uuid';
 import { Config } from '@backstage/config';
-import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
+import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
+import { JsonObject } from '@backstage/types';
 
 const templateDir = path.join(__dirname, '../../../../../../templates');
 const rootFolderId = '108494461414';
@@ -28,36 +29,62 @@ const validateConfig = (config: Config) => {
   getConfig(config);
 };
 
+export const parseEmailInput = (str?: string): string[] => {
+  if (str) {
+    return str
+      .trim()
+      .split(/\s*,\s*/)
+      .filter(str => str.length);
+  }
+  return [];
+};
+
+interface TemplateParameters extends JsonObject {
+  // Project
+  department: 'hc' | 'ph';
+  environment: 'x' | 't' | 'p';
+  vanityName: string;
+  owners?: string;
+
+  // Administration
+  costCentre: string;
+  section32ManagerEmail: string;
+  justification: string;
+
+  // Budget
+  budgetAmount: number;
+  budgetAlertEmailRecipients?: string;
+}
+
 export const createProvisionTemplateAction = (config: Config) => {
   validateConfig(config);
 
-  return createTemplateAction<{
-    parameters: {
-      department: 'hc' | 'ph';
-      environment: 'x' | 't' | 'p';
-      vanityName: string;
-    };
-    costCentre: string;
-    section32ManagerEmail: string;
-    justification: string;
-    serviceOwners?: string;
-    totalBudget: number;
-    notifyList?: string;
-  }>({
+  return createTemplateAction<{ parameters: TemplateParameters }>({
     id: 'data-science-portal:template:get-context',
     schema: {
       input: {
-        required: [
-          'parameters',
-          'costCentre',
-          'section32ManagerEmail',
-          'justification',
-        ],
+        required: ['parameters'],
         type: 'object',
         properties: {
           parameters: {
             type: 'object',
+            required: [
+              // Project
+              'department',
+              'environment',
+              'vanityName',
+              'owners',
+
+              // Administration
+              'costCentre',
+              'section32ManagerEmail',
+              'justification',
+
+              // Budget
+              'budgetAmount',
+            ],
             properties: {
+              // Project
               department: {
                 title: 'Department',
                 description: 'The department ID.',
@@ -65,49 +92,59 @@ export const createProvisionTemplateAction = (config: Config) => {
               },
               environment: {
                 title: 'Environment',
-                description: 'The environment ID. Use "x" for Experimentation, "t" for "Noble-Experimentation, and "p" for production.',
+                description:
+                  'The environment ID. Use "x" for Experimentation, "t" for "Noble-Experimentation, and "p" for production.',
                 enum: ['x', 't', 'p'],
               },
               vanityName: {
                 title: 'Vanity Name',
-                description: 'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
+                description:
+                  'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
                 type: 'string',
                 minLength: 1,
                 maxLength: 26,
               },
+              owners: {
+                title: 'Owners',
+                description:
+                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.',
+                type: 'string',
+              },
+
+              // Administration
+              costCentre: {
+                title: 'costCentre',
+                description: 'The Cost Centre associated with the resource.',
+                type: 'string',
+              },
+              section32ManagerEmail: {
+                title: 'section32ManagerEmail',
+                description: `The Section 32 Manager's email address`,
+                type: 'string',
+              },
+              justification: {
+                title: 'Justification',
+                description:
+                  'Provide a brief explanation of what the project will be used for.',
+                type: 'string',
+              },
+
+              // Budget
+              budgetAmount: {
+                title: 'Annual Budget Amount (CAD)',
+                type: 'number',
+              },
+              budgetAlertEmailRecipients: {
+                title: 'Budget Alert Email Recipients',
+                description:
+                  'The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.',
+                type: 'string',
+              },
             },
-          },
-          costCentre: {
-            type: 'string',
-            title: 'costCentre',
-            description: 'Cost Centre associated with the resource',
-          },
-          section32ManagerEmail: {
-            type: 'string',
-            title: 'section32ManagerEmail',
-            description: 'Section 32 Manager Email Address',
-          },
-          justification: {
-            type: 'string',
-            title: 'justification',
-            description: 'Request justification note',
-          },
-          serviceOwners: {
-            type: 'string',
-            title: 'serviceOwners',
-          },
-          totalBudget: {
-            type: 'number',
-            title: 'totalBudget',
-          },
-          notifyList: {
-            type: 'string',
-            title: 'notifyList',
           },
         },
       },
     },
-
     async handler(ctx) {
       if (!ctx?.templateInfo?.entity) {
         throw new InputError('Invalid templateInfo provided in the request');
@@ -130,45 +167,33 @@ export const createProvisionTemplateAction = (config: Config) => {
 
       // Render the Pull Request description template
       nunjucks.configure(templateDir);
-      const context = {
-        templateName: ctx.templateInfo.entity.metadata.title,
+      const templateContext = {
+        ...ctx.input.parameters,
+
+        // Metadata
+        templateTitle: ctx.templateInfo.entity.metadata.title,
         requestId,
+
+        // Project and Budget
         rootFolderId,
         folderName,
         projectName,
-        costCentre: ctx.input.costCentre,
-        justification: ctx.input.justification,
-        section32ManagerEmail: ctx.input.section32ManagerEmail,
-        serviceOwners: ctx.input.serviceOwners,
+        budgetAlertEmailRecipients: parseEmailInput(
+          ctx.input.parameters.budgetAlertEmailRecipients,
+        ),
+
+        // Backstage Catalog Entity
+        owners: parseEmailInput(ctx.input.parameters.owners),
       };
-      ctx.output(
-        'pr_description',
-        nunjucks.render(path.join(template, 'description.md.njk'), context),
+
+      const pullRequestDescription = nunjucks.render(
+        path.join(template, 'description.md.njk'),
+        templateContext,
       );
+      ctx.output('pr_description', pullRequestDescription);
 
       // Populate the template values for the Pull Request changes
-      if (ctx.input.notifyList) {
-        const notifyListArray = ctx.input.notifyList
-          .trim()
-          .split(/,\s*/)
-          .filter(str => str.length);
-
-        ctx.output('notify_list', notifyListArray);
-      }
-      if (ctx.input.serviceOwners) {
-        const serviceOwnersArray = ctx.input.serviceOwners
-          .trim()
-          .split(/,\s*/)
-          .filter(str => str.length);
-
-        ctx.output('service_owners', serviceOwnersArray);
-      }
-      ctx.output('template_values', {
-        requestId,
-        rootFolderId,
-        folderName,
-        projectName,
-      });
+      ctx.output('template_values', templateContext);
     },
   });
 };
