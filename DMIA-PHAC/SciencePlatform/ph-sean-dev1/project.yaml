@@ -4,7 +4,7 @@ kind: ProjectClaim
 metadata:
   name: phx-sean-dev1-4b828d93-0732-4778-8071-0a1472fa2230
 spec:
-  rootFolderId: 108494461414
+  rootFolderId: '108494461414'
   folderName: ph-sean-dev1
   projectName: phx-sean-dev1
-  # projectId: 
+  # projectId:
