@@ -1,0 +1,8 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Group
+metadata:
+  name: phx-Test Owners
+  title: phx-Test Owners
+spec:
+  members: jane.doe@phac-aspc.gc.ca,test@phac-aspc.gc.ca,lucy@phac-aspc.gc.ca

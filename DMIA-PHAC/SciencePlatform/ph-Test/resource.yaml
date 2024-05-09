@@ -1,0 +1,11 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: Resource
+metadata:
+  name: phx-Test Owners
+  title: phx-Test Owners
+  name: phx-Test
+  title: phx-Test
+  description: A GCP Project with a budget and budget alerts.
+spec:
+  owner: group:phx-Test Owners
