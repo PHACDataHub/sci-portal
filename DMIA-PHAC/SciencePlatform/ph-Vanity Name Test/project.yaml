@@ -1,0 +1,9 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-Vanity Name Test-a63d0eaa-7a0e-4428-85ae-2301dd693e5a
+spec:
+  rootFolderId: 108494461414
+  folderName: ph-Vanity Name Test
+  projectName: phx-Vanity Name Test
+  # projectId: 
