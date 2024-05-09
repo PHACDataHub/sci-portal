@@ -1,0 +1,9 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-Kendra Test-8bfdf205-3ad7-48fb-a465-5073b9e79267
+spec:
+  rootFolderId: 108494461414
+  folderName: ph-Kendra Test
+  projectName: phx-Kendra Test
+  # projectId: 
