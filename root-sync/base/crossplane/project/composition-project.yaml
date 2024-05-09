@@ -120,7 +120,8 @@ spec:
                   external: "TO BE PATCHED"
                 displayName: "TO BE PATCHED"
                 budgetFilter:
-                  # projects:[] # Need to bind projectId
+                  projects:
+                    - name: "TO BE PATCHED"
                   calendarPeriod: "YEAR"
                 amount:
                   specifiedAmount:
@@ -152,11 +153,6 @@ spec:
                 name: backstage-config
                 fieldPath: data.GCP_BILLING_ACCOUNT_ID
               toFieldPath: spec.billingAccountRef.external
-              transforms:
-                - type: string
-                  string:
-                    type: Format
-                    fmt: "billingAccounts/%s"
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.references[0].dependsOn.name"
@@ -174,3 +170,5 @@ spec:
               string:
                 type: Format
                 fmt: "budget-%s"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
