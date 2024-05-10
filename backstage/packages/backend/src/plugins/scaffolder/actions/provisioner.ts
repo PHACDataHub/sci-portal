@@ -65,6 +65,18 @@ export const parseEmailInput = (str?: string): string[] => {
   return Array.from(set);
 };
 
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat('en-CA', {
+    style: 'currency',
+    currency: 'CAD',
+    maximumFractionDigits: 0,
+  }).format(value);
+
+const dataClassificationTitle = {
+  UCLL: 'Unclassified',
+  PBMM: 'Protected B',
+};
+
 interface TemplateParameters extends JsonObject {
   // Project
   department: 'hc' | 'ph';
@@ -183,6 +195,15 @@ export const createProvisionTemplateAction = (config: Config) => {
       if (!ctx?.templateInfo?.entity) {
         throw new InputError('Invalid templateInfo provided in the request');
       }
+      if (!(ctx.input.parameters.dataClassification in dataClassificationTitle)) {
+        throw new InputError(
+          `Invalid dataClassification provided in the request: ${JSON.stringify(
+            ctx.input.parameters.dataClassification,
+            null,
+            2,
+          )}`,
+        );
+      }
 
       const requestId = uuidv4();
 
@@ -221,12 +242,14 @@ export const createProvisionTemplateAction = (config: Config) => {
         projectName,
         projectId,
 
+        // Information Management and Security
+        dataClassificationTitle:
+          dataClassificationTitle[ctx.input.parameters.dataClassification],
+
         // Budget
-        formattedBudgetAmount: new Intl.NumberFormat('en-CA', {
-          style: 'currency',
-          currency: 'CAD',
-          maximumFractionDigits: 0,
-        }).format(ctx.input.parameters.budgetAmount),
+        formattedBudgetAmount: formatCurrency(
+          ctx.input.parameters.budgetAmount,
+        ),
         budgetAlertEmailRecipients: parseEmailInput(
           ctx.input.parameters.budgetAlertEmailRecipients,
         ),

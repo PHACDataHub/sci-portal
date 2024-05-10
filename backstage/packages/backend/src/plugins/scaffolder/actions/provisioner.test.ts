@@ -149,7 +149,7 @@ describe('provisioner', () => {
         **Folder Name:** ph-test-42
         **Project Name:** ph-test-42
         **Project ID:** ph-test-42
-        **Data Classification:** UCLL
+        **Data Classification:** Unclassified
 
         ### Administrative Details
 
@@ -186,6 +186,9 @@ describe('provisioner', () => {
           folderName: 'ph-test-42',
           projectName: 'ph-test-42',
           projectId: 'ph-test-42',
+
+          // Information Management and Security
+          dataClassificationTitle: 'Unclassified',
 
           // Budget
           formattedBudgetAmount: '$2,000',
