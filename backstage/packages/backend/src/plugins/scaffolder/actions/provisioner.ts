@@ -215,11 +215,18 @@ export const createProvisionTemplateAction = (config: Config) => {
         // Metadata
         requestId,
 
-        // Project and Budget
+        // Project
         rootFolderId,
         folderName,
         projectName,
         projectId,
+
+        // Budget
+        formattedBudgetAmount: new Intl.NumberFormat('en-CA', {
+          style: 'currency',
+          currency: 'CAD',
+          maximumFractionDigits: 0,
+        }).format(ctx.input.parameters.budgetAmount),
         budgetAlertEmailRecipients: parseEmailInput(
           ctx.input.parameters.budgetAlertEmailRecipients,
         ),

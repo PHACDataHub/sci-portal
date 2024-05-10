@@ -161,7 +161,7 @@ describe('provisioner', () => {
 
         ### Billing Details
 
-        **Budget Amount:** 2000
+        **Annual Budget Amount (CAD):** $2,000
         **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca"
       `);
     });
@@ -178,18 +178,24 @@ describe('provisioner', () => {
       expect(call).toEqual([
         name,
         {
+          // Metadata
           requestId: '<uuid>',
 
+          // Project
           rootFolderId: '108494461414',
           folderName: 'ph-test-42',
           projectName: 'ph-test-42',
           projectId: 'ph-test-42',
+
+          // Budget
+          formattedBudgetAmount: '$2,000',
           budgetAlertEmailRecipients: [
             'jane.doe@gcp.hc-sc.gc.ca',
             'john.doe@gcp.hc-sc.gc.ca',
             'steve.smith@gcp.hc-sc.gc.ca',
           ],
 
+          // Backstage Catalog Entity
           owners: [
             {
               email: 'jane.doe@gcp.hc-sc.gc.ca',
@@ -200,7 +206,6 @@ describe('provisioner', () => {
               name: 'john.doe',
             },
           ],
-
           editors: [
             {
               email: 'samantha.jones@gcp.hc-sc.gc.ca',
