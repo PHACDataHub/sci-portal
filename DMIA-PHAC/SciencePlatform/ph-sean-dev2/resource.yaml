@@ -1,0 +1,9 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: php-sean-dev2
+  title: php-sean-dev2
+  description: A GCP Project with a budget and budget alerts.
+spec:
+  owner: group:php-sean-dev2 Owners

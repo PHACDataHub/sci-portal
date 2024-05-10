@@ -1,0 +1,12 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: php-sean-dev2 Owners
+  title: php-sean-dev2 Owners
+spec:
+  members:
+  - kendra.dezenosky
+  - rajan.subedi
+  - sean.poulter
+  
