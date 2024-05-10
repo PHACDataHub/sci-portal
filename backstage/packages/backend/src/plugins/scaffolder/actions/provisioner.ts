@@ -197,7 +197,6 @@ export const createProvisionTemplateAction = (config: Config) => {
         ...ctx.input.parameters,
 
         // Metadata
-        templateTitle: ctx.templateInfo.entity.metadata.title,
         requestId,
 
         // Project and Budget
@@ -213,10 +212,18 @@ export const createProvisionTemplateAction = (config: Config) => {
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
       };
 
+      const templateTitle =
+        ctx.templateInfo.entity.metadata.title ||
+        ctx.templateInfo.entity.metadata.name;
+      const pullRequestTitle = `Create ${templateTitle.replace(
+        / Template$/i,
+        '',
+      )} from Template`;
       const pullRequestDescription = env.render(
         path.join(template, 'description.md.njk'),
         templateContext,
       );
+      ctx.output('pr_title', pullRequestTitle);
       ctx.output('pr_description', pullRequestDescription);
 
       // Populate the template values for the Pull Request changes

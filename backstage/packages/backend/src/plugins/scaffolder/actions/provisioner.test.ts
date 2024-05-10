@@ -134,9 +134,7 @@ describe('provisioner', () => {
         args => args[0] === name,
       );
       expect(call[1]).toMatchInlineSnapshot(`
-        "# Create Project from Template
-
-        This PR was created using Backstage. The request ID is \`&lt;uuid&gt;\`.
+        "This PR was created using Backstage. The request ID is \`&lt;uuid&gt;\`.
 
         <!-- ### Client Name Email address -->
 
@@ -168,7 +166,6 @@ describe('provisioner', () => {
       expect(call).toEqual([
         name,
         {
-          templateTitle: 'Project Template',
           requestId: '<uuid>',
 
           rootFolderId: '108494461414',
