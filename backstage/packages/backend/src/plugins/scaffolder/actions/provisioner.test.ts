@@ -162,7 +162,7 @@ describe('provisioner', () => {
         ### Billing Details
 
         **Budget Amount:** 2000
-        **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca,john.doe@gcp.hc-sc.gc.ca,steve.smith@gcp.hc-sc.gc.ca"
+        **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca"
       `);
     });
 
@@ -226,7 +226,7 @@ describe('provisioner', () => {
           justification:
             'This project will be used for testing our custom action.',
 
-          budgetAmount: 2000,
+          budgetAmount: 2_000,
 
           // An additional property that is not in the input schema is included in the output.
           additionalProperty: 'foo',
