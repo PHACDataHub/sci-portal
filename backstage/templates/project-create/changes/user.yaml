@@ -1,4 +1,4 @@
-{%- for owner in values.owners -%}
+{% for owner in values.owners -%}
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -9,4 +9,4 @@ spec:
     email: ${{owner.email}}
     displayName: ${{owner.name}}
 
-{%- endfor -%}
+{% endfor -%}
