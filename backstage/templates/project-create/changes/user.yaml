@@ -1,0 +1,12 @@
+{% for owner in values.owners -%}
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ${{owner.name}}
+spec:
+  profile:
+    email: ${{owner.email}}
+    displayName: ${{owner.name}}
+
+{% endfor -%}

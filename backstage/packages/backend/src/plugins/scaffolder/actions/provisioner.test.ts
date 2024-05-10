@@ -181,7 +181,16 @@ describe('provisioner', () => {
             'steve.smith@gcp.hc-sc.gc.ca',
           ],
 
-          owners: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
+          owners: [
+            {
+              email: 'jane.doe@gcp.hc-sc.gc.ca',
+              name: 'jane.doe',
+            },
+            {
+              email: 'john.doe@gcp.hc-sc.gc.ca',
+              name: 'john.doe',
+            },
+          ],
 
           // The rest of ctx.input:
           department: 'ph',
