@@ -176,7 +176,14 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
 
       // Render the Pull Request description template
-      nunjucks.configure(templateDir);
+      const env = nunjucks.configure(templateDir);
+
+      // Add the map() filter from jinja into Nunjucks.
+      // https://jinja.palletsprojects.com/en/3.1.x/templates/#jinja-filters.map
+      env.addFilter('map', (array: any, attribute: string) => {
+        return array.map((item: any) => item[attribute]);
+      });
+
       const templateContext = {
         ...ctx.input.parameters,
 
@@ -196,7 +203,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
       };
 
-      const pullRequestDescription = nunjucks.render(
+      const pullRequestDescription = env.render(
         path.join(template, 'description.md.njk'),
         templateContext,
       );
