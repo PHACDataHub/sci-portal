@@ -29,14 +29,22 @@ const validateConfig = (config: Config) => {
   getConfig(config);
 };
 
+/**
+ * Returns an array of unique email addresses, ignoring whitespace and extra commas.
+ */
 export const parseEmailInput = (str?: string): string[] => {
-  if (str) {
-    return str
-      .trim()
-      .split(/\s*,\s*/)
-      .filter(str => str.length);
+  if (!str) {
+    return [];
   }
-  return [];
+
+  const set = new Set<string>();
+  for (const substring of str.trim().split(/\s*,\s*/)) {
+    if (!substring || set.has(substring)) {
+      continue;
+    }
+    set.add(substring);
+  }
+  return Array.from(set);
 };
 
 interface TemplateParameters extends JsonObject {

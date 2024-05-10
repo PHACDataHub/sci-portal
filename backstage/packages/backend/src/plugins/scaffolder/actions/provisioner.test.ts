@@ -262,4 +262,13 @@ describe('parseEmailInput', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  it('should return an array of unique entries', () => {
+    const actual = parseEmailInput(
+      '  , jane.doe@gcp.hc-sc.gc.ca ,  , jane.doe@gcp.hc-sc.gc.ca ,   ',
+    );
+    const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
+
+    expect(actual).toEqual(expected);
+  });
 });
