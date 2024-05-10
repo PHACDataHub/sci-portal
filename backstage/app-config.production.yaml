@@ -33,6 +33,12 @@ backend:
       #   ca: # if you have a CA file and want to verify it you can uncomment this section
       #     $file: <file-path>/ca/server.crt
 
+
+  plugins:
+    provisioner:
+      # Dockerfile copies all content from the 'templates' directory to the '/app' directory
+      templates: "/app"
+
 catalog:
   # Overrides the default list locations from app-config.yaml as these contain example data.
   # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details

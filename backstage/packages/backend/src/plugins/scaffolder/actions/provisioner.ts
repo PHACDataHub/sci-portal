@@ -6,7 +6,6 @@ import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { JsonObject } from '@backstage/types';
 
-const templateDir = path.join(__dirname, '../../../../../../templates');
 const rootFolderId = '108494461414';
 
 interface ProvisionerConfig {
@@ -14,6 +13,7 @@ interface ProvisionerConfig {
     owner: string;
     name: string;
   };
+  templates: string;
 }
 
 interface User extends JsonObject {
@@ -27,11 +27,17 @@ const toUser = (ownerEmail: string): User => ({
 });
 
 const getConfig = (config: Config): ProvisionerConfig => {
+  const templates = path.join(
+    __dirname,
+    config.getString('backend.plugins.provisioner.templates'),
+  );
+
   return {
     repo: {
       owner: config.getString('backend.plugins.provisioner.repo.owner'),
       name: config.getString('backend.plugins.provisioner.repo.name'),
     },
+    templates,
   };
 };
 
@@ -185,7 +191,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectId = projectName;
 
       // Render the Pull Request description template
-      const env = nunjucks.configure(templateDir);
+      const env = nunjucks.configure(provisionerConfig.templates);
 
       // Add the map() filter from jinja into Nunjucks.
       // https://jinja.palletsprojects.com/en/3.1.x/templates/#jinja-filters.map
