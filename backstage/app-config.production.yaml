@@ -37,7 +37,7 @@ backend:
   plugins:
     provisioner:
       # Dockerfile copies all content from the 'templates' directory to the '/app' directory
-      templates: "/app"
+      templatesDir: "/app"
 
 catalog:
   # Overrides the default list locations from app-config.yaml as these contain example data.
