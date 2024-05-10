@@ -1,0 +1,9 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: phx-test
+  title: phx-test
+  description: A GCP Project with a budget and budget alerts.
+spec:
+  owner: group:phx-test Owners
