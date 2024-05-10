@@ -1,0 +1,15 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: phx-test-group
+  title: phx-test Group
+spec:
+  members:
+  - jane.doe
+  - john.doe
+  - steve.smith
+  - jane.doe
+  - john.doe
+  - steve.smith
+  
