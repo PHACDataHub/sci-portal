@@ -144,6 +144,7 @@ describe('provisioner', () => {
 
         **Folder Name:** ph-test-42
         **Project Name:** phx-test-42
+        **Project ID:** phx-test-42
 
         ### Administrative Details
 
@@ -173,6 +174,7 @@ describe('provisioner', () => {
           rootFolderId: '108494461414',
           folderName: 'ph-test-42',
           projectName: 'phx-test-42',
+          projectId: 'phx-test-42',
           budgetAlertEmailRecipients: [
             'jane.doe@gcp.hc-sc.gc.ca',
             'john.doe@gcp.hc-sc.gc.ca',

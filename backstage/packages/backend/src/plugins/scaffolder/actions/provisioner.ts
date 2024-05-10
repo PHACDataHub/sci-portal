@@ -164,6 +164,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       ctx.output('folderName', folderName);
 
       const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
+      const projectId = projectName;
 
       // Render the Pull Request description template
       nunjucks.configure(templateDir);
@@ -178,6 +179,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         rootFolderId,
         folderName,
         projectName,
+        projectId,
         budgetAlertEmailRecipients: parseEmailInput(
           ctx.input.parameters.budgetAlertEmailRecipients,
         ),

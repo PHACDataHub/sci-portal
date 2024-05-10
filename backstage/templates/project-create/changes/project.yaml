@@ -7,4 +7,4 @@ spec:
   rootFolderId: '${{values.rootFolderId}}'
   folderName: ${{values.folderName}}
   projectName: ${{values.projectName}}
-  # projectId: ${{values.projectId}}
+  projectId: ${{values.projectId}}
