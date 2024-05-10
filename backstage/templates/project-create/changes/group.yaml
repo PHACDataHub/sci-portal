@@ -9,4 +9,3 @@ spec:
   {% for owner in values.owners %}
     - ${{owner.name}}
   {% endfor %}
-

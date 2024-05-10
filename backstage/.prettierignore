@@ -2,3 +2,7 @@ dist
 dist-types
 coverage
 .vscode
+
+# The Nunjucks templates for the Pull Requests use Nunjucks syntax, not YAML.
+# We can't rename the file using the `fetch:template` action so it is invalid YAML.
+templates/*/changes/*.yaml
