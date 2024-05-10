@@ -178,9 +178,9 @@ export const createProvisionTemplateAction = (config: Config) => {
 
       const requestId = uuidv4();
 
-      const provisionerConfig = getConfig(config);
-      ctx.output('repo_owner', provisionerConfig.repo.owner);
-      ctx.output('repo_name', provisionerConfig.repo.name);
+      const { repo, templateDir } = getConfig(config);
+      ctx.output('repo_owner', repo.owner);
+      ctx.output('repo_name', repo.name);
       ctx.output('branch', `request-${requestId}`);
 
       const template = ctx.templateInfo.entity.metadata.name;
@@ -193,7 +193,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectId = projectName;
 
       // Render the Pull Request description template
-      const env = nunjucks.configure(provisionerConfig.templateDir);
+      const env = nunjucks.configure(templateDir);
 
       // Add the map() filter from jinja into Nunjucks.
       // https://jinja.palletsprojects.com/en/3.1.x/templates/#jinja-filters.map
