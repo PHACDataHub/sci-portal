@@ -3,11 +3,32 @@ import {
   mockServices,
 } from '@backstage/backend-test-utils';
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
-import { createProvisionTemplateAction, parseEmailInput } from './provisioner';
+import {
+  createProvisionTemplateAction,
+  getConfig,
+  parseEmailInput,
+} from './provisioner';
 
 jest.mock('uuid', () => ({
   v4: jest.fn(() => '<uuid>'),
 }));
+
+const config = mockServices.rootConfig({
+  data: {
+    backend: {
+      plugins: {
+        provisioner: {
+          repo: {
+            owner: '<repo-owner>',
+            name: '<repo-name>',
+          },
+          templateDir: '../../../../../../templates',
+        },
+      },
+    },
+  },
+});
+const workspacePath = createMockDirectory().resolve('workspace');
 
 const createContext = ({ workspacePath }: { workspacePath: string }) => ({
   ...createMockActionContext({
@@ -44,22 +65,6 @@ const createContext = ({ workspacePath }: { workspacePath: string }) => ({
 
 describe('provisioner', () => {
   describe('data-science-portal:template:get-context', () => {
-    const config = mockServices.rootConfig({
-      data: {
-        backend: {
-          plugins: {
-            provisioner: {
-              repo: {
-                owner: '<repo-owner>',
-                name: '<repo-name>',
-              },
-            },
-          },
-        },
-      },
-    });
-    const workspacePath = createMockDirectory().resolve('workspace');
-
     beforeEach(() => {
       jest.clearAllMocks();
     });
@@ -278,5 +283,31 @@ describe('parseEmailInput', () => {
     const expected: string[] = ['jane.doe@gcp.hc-sc.gc.ca'];
 
     expect(actual).toEqual(expected);
+  });
+});
+
+describe('getConfig', () => {
+  describe('templateDir', () => {
+    it('should handle an absolute path', () => {
+      const rootConfig = mockServices.rootConfig({
+        data: {
+          backend: {
+            plugins: {
+              provisioner: {
+                repo: {
+                  owner: '<repo-owner>',
+                  name: '<repo-name>',
+                },
+                templateDir: '/app/templates',
+              },
+            },
+          },
+        },
+      });
+      const actual = getConfig(rootConfig).templateDir;
+      const expected = '/app/templates';
+
+      expect(actual).toBe(expected);
+    });
   });
 });

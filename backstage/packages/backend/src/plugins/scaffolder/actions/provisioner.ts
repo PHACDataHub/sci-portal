@@ -6,7 +6,6 @@ import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { JsonObject } from '@backstage/types';
 
-const templateDir = path.join(__dirname, '../../../../../../templates');
 const rootFolderId = '108494461414';
 
 interface ProvisionerConfig {
@@ -14,7 +13,29 @@ interface ProvisionerConfig {
     owner: string;
     name: string;
   };
+  templateDir: string;
 }
+
+export const getConfig = (config: Config): ProvisionerConfig => {
+  const rawTemplateDir = config.getString(
+    'backend.plugins.provisioner.templateDir',
+  );
+  const templateDir = path.isAbsolute(rawTemplateDir)
+    ? rawTemplateDir
+    : path.join(__dirname, rawTemplateDir);
+
+  return {
+    repo: {
+      owner: config.getString('backend.plugins.provisioner.repo.owner'),
+      name: config.getString('backend.plugins.provisioner.repo.name'),
+    },
+    templateDir,
+  };
+};
+
+const validateConfig = (config: Config) => {
+  getConfig(config);
+};
 
 interface User extends JsonObject {
   name: string;
@@ -25,19 +46,6 @@ const toUser = (ownerEmail: string): User => ({
   email: ownerEmail,
   name: ownerEmail.split('@')[0],
 });
-
-const getConfig = (config: Config): ProvisionerConfig => {
-  return {
-    repo: {
-      owner: config.getString('backend.plugins.provisioner.repo.owner'),
-      name: config.getString('backend.plugins.provisioner.repo.name'),
-    },
-  };
-};
-
-const validateConfig = (config: Config) => {
-  getConfig(config);
-};
 
 /**
  * Returns an array of unique email addresses, ignoring whitespace and extra commas.
@@ -170,9 +178,9 @@ export const createProvisionTemplateAction = (config: Config) => {
 
       const requestId = uuidv4();
 
-      const provisionerConfig = getConfig(config);
-      ctx.output('repo_owner', provisionerConfig.repo.owner);
-      ctx.output('repo_name', provisionerConfig.repo.name);
+      const { repo, templateDir } = getConfig(config);
+      ctx.output('repo_owner', repo.owner);
+      ctx.output('repo_name', repo.name);
       ctx.output('branch', `request-${requestId}`);
 
       const template = ctx.templateInfo.entity.metadata.name;
