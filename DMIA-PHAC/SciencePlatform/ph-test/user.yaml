@@ -1,0 +1,37 @@
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jane.doe
+spec:
+  profile:
+    email: jane.doe@gcp.hc-sc.gc.ca
+    displayName: jane.doe
+
+
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: john.doe
+spec:
+  profile:
+    email: john.doe@gcp.hc-sc.gc.ca
+    displayName: john.doe
+
+
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: steve.smith
+spec:
+  profile:
+    email: steve.smith@gcp.hc-sc.gc.ca
+    displayName: steve.smith
+
+
+
