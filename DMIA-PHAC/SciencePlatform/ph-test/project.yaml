@@ -1,0 +1,10 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-test-93313421-6854-44ce-a77c-026e8b246fd2
+spec:
+  rootFolderId: '108494461414'
+  folderName: ph-test
+  projectName: phx-test
+  # projectId: 
