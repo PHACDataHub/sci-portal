@@ -1,0 +1,8 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ${{values.projectName}} Owners
+  title: ${{values.projectName}} Owners
+spec:
+  members: ${{values.owners}}
