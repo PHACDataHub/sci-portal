@@ -16,17 +16,7 @@ interface ProvisionerConfig {
   templateDir: string;
 }
 
-interface User extends JsonObject {
-  name: string;
-  email: string;
-}
-
-const toUser = (ownerEmail: string): User => ({
-  email: ownerEmail,
-  name: ownerEmail.split('@')[0],
-});
-
-const getConfig = (config: Config): ProvisionerConfig => {
+export const getConfig = (config: Config): ProvisionerConfig => {
   const templateDir = path.join(
     __dirname,
     config.getString('backend.plugins.provisioner.templateDir'),
@@ -44,6 +34,16 @@ const getConfig = (config: Config): ProvisionerConfig => {
 const validateConfig = (config: Config) => {
   getConfig(config);
 };
+
+interface User extends JsonObject {
+  name: string;
+  email: string;
+}
+
+const toUser = (ownerEmail: string): User => ({
+  email: ownerEmail,
+  name: ownerEmail.split('@')[0],
+});
 
 /**
  * Returns an array of unique email addresses, ignoring whitespace and extra commas.
