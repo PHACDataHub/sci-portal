@@ -7,6 +7,7 @@ This PR was created using Backstage. The request ID is `{{requestId}}`.
 **Folder Name:** {{folderName}}
 **Project Name:** {{projectName}}
 **Project ID:** {{projectId}}
+**Data Classification:** {{dataClassification}}
 
 ### Administrative Details
 
@@ -14,3 +15,9 @@ This PR was created using Backstage. The request ID is `{{requestId}}`.
 **Justification:** {{justification}}
 **Section 32 Manager Email:** {{section32ManagerEmail}}
 **Service Owners:** {{owners | map('email') | join(', ')}}
+**Editors:** {{editors | map('email') | join(', ')}}
+
+### Billing Details
+
+**Budget Amount:** {{budgetAmount}}
+**Budget Alert Email Recipients:** {{budgetAlertEmailRecipients}}

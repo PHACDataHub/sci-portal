@@ -35,7 +35,7 @@ const createContext = ({ workspacePath }: { workspacePath: string }) => ({
     input: {
       parameters: {
         department: 'ph' as const,
-        environment: 'x' as const,
+        dataClassification: 'UCLL' as const,
         vanityName: 'test-42',
         owners: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
 
@@ -196,7 +196,7 @@ describe('provisioner', () => {
 
           // The rest of ctx.input:
           department: 'ph',
-          environment: 'x',
+          dataClassification: 'UCLL',
           vanityName: 'test-42',
 
           costCentre: 'ABC123456789',
