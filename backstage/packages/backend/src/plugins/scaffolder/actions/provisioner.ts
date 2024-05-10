@@ -16,6 +16,16 @@ interface ProvisionerConfig {
   };
 }
 
+interface User extends JsonObject {
+  name: string;
+  email: string;
+}
+
+const toUser = (ownerEmail: string): User => ({
+  email: ownerEmail,
+  name: ownerEmail.split('@')[0],
+});
+
 const getConfig = (config: Config): ProvisionerConfig => {
   return {
     repo: {
@@ -183,7 +193,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         ),
 
         // Backstage Catalog Entity
-        owners: parseEmailInput(ctx.input.parameters.owners),
+        owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
       };
 
       const pullRequestDescription = nunjucks.render(
