@@ -6,6 +6,6 @@ metadata:
   title: ${{values.projectName}} Owners
 spec:
   members:
-  {% for owner in values.owners %}
+  {% for owner in values.owners -%}
     - ${{owner.name}}
-  {% endfor %}
+  {% endfor -%}
