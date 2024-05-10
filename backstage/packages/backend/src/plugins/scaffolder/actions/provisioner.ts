@@ -17,10 +17,12 @@ interface ProvisionerConfig {
 }
 
 export const getConfig = (config: Config): ProvisionerConfig => {
-  const templateDir = path.join(
-    __dirname,
-    config.getString('backend.plugins.provisioner.templateDir'),
+  const rawTemplateDir = config.getString(
+    'backend.plugins.provisioner.templateDir',
   );
+  const templateDir = path.isAbsolute(rawTemplateDir)
+    ? rawTemplateDir
+    : path.join(__dirname, rawTemplateDir);
 
   return {
     repo: {

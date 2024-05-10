@@ -298,14 +298,14 @@ describe('getConfig', () => {
                   owner: '<repo-owner>',
                   name: '<repo-name>',
                 },
-                templateDir: '/app',
+                templateDir: '/app/templates',
               },
             },
           },
         },
       });
       const actual = getConfig(rootConfig).templateDir;
-      const expected = '/app';
+      const expected = '/app/templates';
 
       expect(actual).toBe(expected);
     });
