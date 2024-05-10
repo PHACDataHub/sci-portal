@@ -1,0 +1,9 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ph-test
+  title: ph-test
+  description: A GCP Project with a budget and budget alerts.
+spec:
+  owner: group:ph-test-owners

@@ -1,0 +1,23 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ph-test-owners
+  title: ph-test Owners
+spec:
+  members:
+  - own1
+  - own2
+  - own3
+  - own4
+  ---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ph-test-editors
+  title: ph-test Editors
+spec:
+  members:
+  - edit1
+  - edit2
+  

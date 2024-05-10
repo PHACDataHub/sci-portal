@@ -1,0 +1,60 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: own1
+spec:
+  profile:
+    email: own1@gcp.hc-sc.gc.ca
+    displayName: own1
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: own2
+spec:
+  profile:
+    email: own2@gcp.hc-sc.gc.ca
+    displayName: own2
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: own3
+spec:
+  profile:
+    email: own3@gcp.hc-sc.gc.ca
+    displayName: own3
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: own4
+spec:
+  profile:
+    email: own4@gcp.hc-sc.gc.ca
+    displayName: own4
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: edit1
+spec:
+  profile:
+    email: edit1@gcp.hc-sc.gc.ca
+    displayName: edit1
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: edit2
+spec:
+  profile:
+    email: edit2@gcp.hc-sc.gc.ca
+    displayName: edit2
+
