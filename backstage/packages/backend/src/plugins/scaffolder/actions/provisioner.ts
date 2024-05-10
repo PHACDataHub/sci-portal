@@ -13,7 +13,7 @@ interface ProvisionerConfig {
     owner: string;
     name: string;
   };
-  templatesDir: string;
+  templateDir: string;
 }
 
 interface User extends JsonObject {
@@ -27,9 +27,9 @@ const toUser = (ownerEmail: string): User => ({
 });
 
 const getConfig = (config: Config): ProvisionerConfig => {
-  const templatesDir = path.join(
+  const templateDir = path.join(
     __dirname,
-    config.getString('backend.plugins.provisioner.templatesDir'),
+    config.getString('backend.plugins.provisioner.templateDir'),
   );
 
   return {
@@ -37,7 +37,7 @@ const getConfig = (config: Config): ProvisionerConfig => {
       owner: config.getString('backend.plugins.provisioner.repo.owner'),
       name: config.getString('backend.plugins.provisioner.repo.name'),
     },
-    templatesDir,
+    templateDir,
   };
 };
 
@@ -191,7 +191,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectId = projectName;
 
       // Render the Pull Request description template
-      const env = nunjucks.configure(provisionerConfig.templatesDir);
+      const env = nunjucks.configure(provisionerConfig.templateDir);
 
       // Add the map() filter from jinja into Nunjucks.
       // https://jinja.palletsprojects.com/en/3.1.x/templates/#jinja-filters.map

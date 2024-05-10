@@ -39,7 +39,7 @@ backend:
       repo:
         owner: ${GITOPS_REPO_OWNER}
         name: ${GITOPS_REPO_NAME}
-      templatesDir: "../../../../../../templates"
+      templateDir: "../../../../../../templates"
 
 integrations:
   github:
