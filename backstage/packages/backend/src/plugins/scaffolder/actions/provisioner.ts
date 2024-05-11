@@ -193,7 +193,9 @@ export const createProvisionTemplateAction = (config: Config) => {
       if (!ctx?.templateInfo?.entity) {
         throw new InputError('Invalid templateInfo provided in the request');
       }
-      if (!(ctx.input.parameters.dataClassification in dataClassificationTitle)) {
+      if (
+        !(ctx.input.parameters.dataClassification in dataClassificationTitle)
+      ) {
         throw new InputError(
           `Invalid dataClassification provided in the request: ${JSON.stringify(
             ctx.input.parameters.dataClassification,
@@ -260,7 +262,12 @@ export const createProvisionTemplateAction = (config: Config) => {
       const templateTitle =
         ctx.templateInfo.entity.metadata.title ||
         ctx.templateInfo.entity.metadata.name;
-      const pullRequestTitle = `Create ${templateTitle.replace(
+      const pullRequestTitlePrefix =
+        ctx.input.parameters.pullRequestAction ==
+        'Publish and Close Pull Request'
+          ? '[Test] '
+          : '';
+      const pullRequestTitle = `${pullRequestTitlePrefix}Create ${templateTitle.replace(
         / Template$/i,
         '',
       )} from Template`;
