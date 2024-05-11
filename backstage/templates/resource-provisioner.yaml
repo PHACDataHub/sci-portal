@@ -138,7 +138,7 @@ spec:
       input:
         repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
         branchName: ${{steps.ctx.output.branch}}
-        title: ${{'[Test] ' if parameters.pullRequestAction == 'Publish and Close Pull Request' else ''}}Create ${{steps.ctx.output.template}}
+        title: ${{steps.ctx.output.pr_title}}
         description: ${{steps.ctx.output.pr_description}}
         targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.projectName}}
 
