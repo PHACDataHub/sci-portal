@@ -1,3 +1,6 @@
+/**
+ * This custom action will show the contents of ctx.workspacePath as a unified diff.
+ */
 import {
   createTemplateAction,
   executeShellCommand,

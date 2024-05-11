@@ -144,5 +144,5 @@ spec:
 
   output:
     links:
-      - url: ${{steps.publish.output.remoteUrl}}
+      - url: ${{steps.publish-pull-request.output.remoteUrl}}
         title: 'View Pull Request'
