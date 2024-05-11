@@ -1,0 +1,10 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: php-sean-dev1-5471e7cd-1ee9-4bd9-ab50-423be6e06453
+spec:
+  rootFolderId: '108494461414'
+  folderName: ph-sean-dev1
+  projectName: php-sean-dev1
+  projectId: php-sean-dev1
