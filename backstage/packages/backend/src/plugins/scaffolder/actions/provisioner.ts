@@ -112,8 +112,6 @@ export const createProvisionTemplateAction = (config: Config) => {
               'department',
               'dataClassification',
               'vanityName',
-              'owners',
-              'editors',
 
               // Administration
               'costCentre',
