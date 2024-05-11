@@ -28,9 +28,8 @@ const config = mockServices.rootConfig({
     },
   },
 });
-const workspacePath = createMockDirectory().resolve('workspace');
 
-const createContext = ({ workspacePath }: { workspacePath: string }) => ({
+const createContext = (options: { workspacePath: string }) => ({
   ...createMockActionContext({
     input: {
       parameters: {
@@ -60,12 +59,14 @@ const createContext = ({ workspacePath }: { workspacePath: string }) => ({
       },
       entityRef: '',
     },
-    workspacePath,
+    workspacePath: options.workspacePath,
   }),
 });
 
 describe('provisioner', () => {
   describe('data-science-portal:template:get-context', () => {
+    const workspacePath = createMockDirectory().resolve('workspace');
+
     beforeEach(() => {
       jest.clearAllMocks();
     });
