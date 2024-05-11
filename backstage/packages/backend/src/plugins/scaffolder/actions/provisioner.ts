@@ -65,12 +65,25 @@ export const parseEmailInput = (str?: string): string[] => {
   return Array.from(set);
 };
 
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat('en-CA', {
+    style: 'currency',
+    currency: 'CAD',
+    maximumFractionDigits: 0,
+  }).format(value);
+
+const dataClassificationTitle = {
+  UCLL: 'Unclassified',
+  PBMM: 'Protected B',
+};
+
 interface TemplateParameters extends JsonObject {
   // Project
   department: 'hc' | 'ph';
-  environment: 'x' | 't' | 'p';
+  dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
   owners?: string;
+  editors?: string;
 
   // Administration
   costCentre: string;
@@ -97,9 +110,10 @@ export const createProvisionTemplateAction = (config: Config) => {
             required: [
               // Project
               'department',
-              'environment',
+              'dataClassification',
               'vanityName',
               'owners',
+              'editors',
 
               // Administration
               'costCentre',
@@ -116,16 +130,16 @@ export const createProvisionTemplateAction = (config: Config) => {
                 description: 'The department ID.',
                 enum: ['hc', 'ph'],
               },
-              environment: {
-                title: 'Environment',
+              dataClassification: {
+                title: 'Data Classification',
                 description:
-                  'The environment ID. Use "x" for Experimentation, "t" for "Noble-Experimentation, and "p" for production.',
-                enum: ['x', 't', 'p'],
+                  'The level of security for the project information and assets.',
+                enum: ['UCLL', 'PBMM'],
               },
               vanityName: {
                 title: 'Vanity Name',
                 description:
-                  'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department><environment>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
+                  'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
                 type: 'string',
                 minLength: 1,
                 maxLength: 26,
@@ -134,6 +148,12 @@ export const createProvisionTemplateAction = (config: Config) => {
                 title: 'Owners',
                 description:
                   'The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.',
+                type: 'string',
+              },
+              editors: {
+                title: 'Editors',
+                description:
+                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by comma.',
                 type: 'string',
               },
 
@@ -175,6 +195,15 @@ export const createProvisionTemplateAction = (config: Config) => {
       if (!ctx?.templateInfo?.entity) {
         throw new InputError('Invalid templateInfo provided in the request');
       }
+      if (!(ctx.input.parameters.dataClassification in dataClassificationTitle)) {
+        throw new InputError(
+          `Invalid dataClassification provided in the request: ${JSON.stringify(
+            ctx.input.parameters.dataClassification,
+            null,
+            2,
+          )}`,
+        );
+      }
 
       const requestId = uuidv4();
 
@@ -189,7 +218,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       const folderName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
       ctx.output('folderName', folderName);
 
-      const projectName = `${ctx.input.parameters.department}${ctx.input.parameters.environment}-${ctx.input.parameters.vanityName}`;
+      const projectName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
       const projectId = projectName;
 
       // Render the Pull Request description template
@@ -207,17 +236,27 @@ export const createProvisionTemplateAction = (config: Config) => {
         // Metadata
         requestId,
 
-        // Project and Budget
+        // Project
         rootFolderId,
         folderName,
         projectName,
         projectId,
+
+        // Information Management and Security
+        dataClassificationTitle:
+          dataClassificationTitle[ctx.input.parameters.dataClassification],
+
+        // Budget
+        formattedBudgetAmount: formatCurrency(
+          ctx.input.parameters.budgetAmount,
+        ),
         budgetAlertEmailRecipients: parseEmailInput(
           ctx.input.parameters.budgetAlertEmailRecipients,
         ),
 
         // Backstage Catalog Entity
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
+        editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
       };
 
       const templateTitle =

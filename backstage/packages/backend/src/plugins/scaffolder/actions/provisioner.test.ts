@@ -35,15 +35,16 @@ const createContext = ({ workspacePath }: { workspacePath: string }) => ({
     input: {
       parameters: {
         department: 'ph' as const,
-        environment: 'x' as const,
+        dataClassification: 'UCLL' as const,
         vanityName: 'test-42',
         owners: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
-
+        editors:
+          'samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
         costCentre: 'ABC123456789',
         section32ManagerEmail: 'alice.grady@gcp.hc-sc.gc.ca',
         justification:
           'This project will be used for testing our custom action.',
-        budgetAmount: 10_000,
+        budgetAmount: 2_000,
         budgetAlertEmailRecipients:
           'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
 
@@ -146,8 +147,9 @@ describe('provisioner', () => {
         ### GCP Project
 
         **Folder Name:** ph-test-42
-        **Project Name:** phx-test-42
-        **Project ID:** phx-test-42
+        **Project Name:** ph-test-42
+        **Project ID:** ph-test-42
+        **Data Classification:** Unclassified
 
         ### Administrative Details
 
@@ -155,6 +157,12 @@ describe('provisioner', () => {
         **Justification:** This project will be used for testing our custom action.
         **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
         **Service Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
+        **Editors:** samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca
+
+        ### Budget
+
+        **Annual Budget Amount (CAD):** $2,000
+        **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
         "
       `);
     });
@@ -171,18 +179,27 @@ describe('provisioner', () => {
       expect(call).toEqual([
         name,
         {
+          // Metadata
           requestId: '<uuid>',
 
+          // Project
           rootFolderId: '108494461414',
           folderName: 'ph-test-42',
-          projectName: 'phx-test-42',
-          projectId: 'phx-test-42',
+          projectName: 'ph-test-42',
+          projectId: 'ph-test-42',
+
+          // Information Management and Security
+          dataClassificationTitle: 'Unclassified',
+
+          // Budget
+          formattedBudgetAmount: '$2,000',
           budgetAlertEmailRecipients: [
             'jane.doe@gcp.hc-sc.gc.ca',
             'john.doe@gcp.hc-sc.gc.ca',
             'steve.smith@gcp.hc-sc.gc.ca',
           ],
 
+          // Backstage Catalog Entity
           owners: [
             {
               email: 'jane.doe@gcp.hc-sc.gc.ca',
@@ -193,10 +210,24 @@ describe('provisioner', () => {
               name: 'john.doe',
             },
           ],
+          editors: [
+            {
+              email: 'samantha.jones@gcp.hc-sc.gc.ca',
+              name: 'samantha.jones',
+            },
+            {
+              email: 'alex.mcdonald@gcp.hc-sc.gc.ca',
+              name: 'alex.mcdonald',
+            },
+            {
+              email: 'john.campbell@gcp.hc-sc.gc.ca',
+              name: 'john.campbell',
+            },
+          ],
 
           // The rest of ctx.input:
           department: 'ph',
-          environment: 'x',
+          dataClassification: 'UCLL',
           vanityName: 'test-42',
 
           costCentre: 'ABC123456789',
@@ -204,7 +235,7 @@ describe('provisioner', () => {
           justification:
             'This project will be used for testing our custom action.',
 
-          budgetAmount: 10000,
+          budgetAmount: 2_000,
 
           // An additional property that is not in the input schema is included in the output.
           additionalProperty: 'foo',
