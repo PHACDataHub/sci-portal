@@ -12,7 +12,6 @@ export const createDebugWorkspaceAction = () => {
     schema: {},
     async handler(ctx) {
       const emptyDir = await ctx.createTemporaryDirectory();
-      console.log(emptyDir);
       try {
         await executeShellCommand({
           command: 'git',
@@ -22,7 +21,9 @@ export const createDebugWorkspaceAction = () => {
             cwd: ctx.workspacePath,
           },
         });
-      } catch {}
+      } catch (err) {
+        ctx.logger.error('git diff failed', err);
+      }
 
       ctx.logger.info(`Finished executing git diff`);
     },
