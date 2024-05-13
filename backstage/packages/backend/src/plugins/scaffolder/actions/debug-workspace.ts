@@ -12,7 +12,6 @@ export const createDebugWorkspaceAction = () => {
     schema: {},
     async handler(ctx) {
       const emptyDir = await ctx.createTemporaryDirectory();
-      console.log(emptyDir);
       try {
         await executeShellCommand({
           command: 'git',
