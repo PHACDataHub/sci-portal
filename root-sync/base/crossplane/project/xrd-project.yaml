@@ -32,8 +32,18 @@ spec:
                   type: string
                 projectId:
                   type: string
+                projectEditors:
+                  type: array
+                  items:
+                    type: string
+                projectViewers:
+                  type: array
+                  items:
+                    type: string
               required:
                 - rootFolderId
                 - folderName
                 - projectName
                 - projectId
+                - projectEditors
+                - projectViewers
