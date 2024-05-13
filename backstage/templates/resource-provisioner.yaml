@@ -97,12 +97,14 @@ spec:
     - title: Pull Request
       backstage:featureFlag: template-developer
       properties:
-        closePullRequest:
-          title: Close Pull Request?
-          ui:description: Add the `[Test] ` prefix to close the pull request.
-          type: boolean
-          default: true
-          ui:widget: radio
+        pullRequestAction:
+          title: Pull Request Action
+          type: string
+          default: Diff Only
+          enum:
+            - Diff Only
+            - Publish and Close Pull Request
+            - Publish Pull Request
 
   steps:
     - id: ctx
@@ -119,17 +121,28 @@ spec:
         url: ./${{steps.ctx.output.template}}/changes
         values: ${{steps.ctx.output.template_values}}
 
-    - id: publish
+    - id: debug-pull-request
+      name: Debug Pull Request
+      action: debug:workspace
+      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
+      backstage:featureFlag: template-developer
+      input:
+        command: diff
+        workingDirectory: . # the workspacePath
+        args: ${{ parameters.args }}
+
+    - id: publish-pull-request
       name: Submit Pull Request
       action: publish:github:pull-request
+      if: ${{ parameters.pullRequestAction != 'Diff Only' }}
       input:
         repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
         branchName: ${{steps.ctx.output.branch}}
-        title: ${{"[Test] " if parameters.closePullRequest else ''}}Create ${{steps.ctx.output.template}}
+        title: ${{'[Test] ' if parameters.pullRequestAction == 'Publish and Close Pull Request' else ''}}Create ${{steps.ctx.output.template}}
         description: ${{steps.ctx.output.pr_description}}
         targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.projectName}}
 
   output:
     links:
-      - url: ${{steps.publish.output.remoteUrl}}
+      - url: ${{steps.publish-pull-request.output.remoteUrl}}
         title: 'View Pull Request'
