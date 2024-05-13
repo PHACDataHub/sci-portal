@@ -47,7 +47,7 @@ catalog:
 
     # Resource Provisioner template
     - type: file
-      target: /app/templates/resource-provisioner.yaml
+      target: /app/templates/project-create/template.yaml
       rules:
         - allow: [Template]
 

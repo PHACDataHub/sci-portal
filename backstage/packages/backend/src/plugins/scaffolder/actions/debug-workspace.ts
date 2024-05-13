@@ -22,7 +22,7 @@ export const createDebugWorkspaceAction = () => {
           },
         });
       } catch (err) {
-        ctx.logger.error('git diff failed', err);
+        // We expect an error when `git diff` reports a diff and fails with exit code 1.
       }
 
       ctx.logger.info(`Finished executing git diff`);

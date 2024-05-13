@@ -274,7 +274,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         '',
       )} from Template`;
       const pullRequestDescription = env.render(
-        path.join(template, 'description.md.njk'),
+        path.join(template, 'pull-request-description.njk'),
         templateContext,
       );
       ctx.output('pr_title', pullRequestTitle);
