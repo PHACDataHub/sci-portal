@@ -100,6 +100,63 @@ spec:
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
+    
+    - name: PROJECT-IAM
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef:
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+              apiVersion: iam.cnrm.cloud.google.com/v1beta1
+              kind: IAMPolicy
+              metadata:
+                name: "TO BE PATCHED"
+                namespace: default
+              spec:
+                resourceRef:
+                  kind: Project
+                  name: "TO BE PATCHED"
+                bindings:
+                  - role: roles/editor
+                    members:
+                      - "TO BE PATCHED"
+                  - role: roles/viewer
+                    members:
+                      - "TO BE PATCHED"
+                auditConfigs:
+                  - service: allServices
+                    auditLogConfigs:
+                      - logType: DATA_WRITE
+                      - logType: DATA_READ
+          references:
+            - dependsOn:
+                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+                kind: Project
+                name: "TO BE PATCHED"
+                namespace: default
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.references[0].dependsOn.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.forProvider.manifest.spec.resourceRef.name"
+        - fromFieldPath: "spec.projectEditors"
+          toFieldPath: "spec.forProvider.manifest.spec.bindings[0].members"
+        - fromFieldPath: "spec.projectViewers"
+          toFieldPath: "spec.forProvider.manifest.spec.bindings[1].members"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.forProvider.manifest.metadata.name"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "iampolicy-%s"
+
+      readinessChecks:
+        - type: NonEmpty
+          fieldPath: status.atProvider.manifest
 
     - name: BUDGET
       base:
@@ -172,63 +229,6 @@ spec:
                 fmt: "budget-%s"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
-      readinessChecks:
-        - type: NonEmpty
-          fieldPath: status.atProvider.manifest
-
-    - name: BILLING-IAM
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          providerConfigRef:
-            name: kubernetes-provider
-          forProvider:
-            manifest:
-              apiVersion: iam.cnrm.cloud.google.com/v1beta1
-              kind: IAMPolicy
-              metadata:
-                name: "TO BE PATCHED"
-                namespace: default
-              spec:
-                resourceRef:
-                  kind: Project
-                  name: "TO BE PATCHED"
-                bindings:
-                  - role: roles/editor
-                    members:
-                      - "TO BE PATCHED"
-                  - role: roles/viewer
-                    members:
-                      - "TO BE PATCHED"
-                auditConfigs:
-                  - service: allServices
-                    auditLogConfigs:
-                      - logType: DATA_WRITE
-                      - logType: DATA_READ
-          references:
-            - dependsOn:
-                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-                kind: Project
-                name: "TO BE PATCHED"
-                namespace: default
-      patches:
-        - fromFieldPath: "spec.projectName"
-          toFieldPath: "spec.references[0].dependsOn.name"
-        - fromFieldPath: "spec.projectName"
-          toFieldPath: "spec.forProvider.manifest.spec.resourceRef.name"
-        - fromFieldPath: "spec.projectEditors"
-          toFieldPath: "spec.forProvider.manifest.spec.bindings[0].members"
-        - fromFieldPath: "spec.projectViewers"
-          toFieldPath: "spec.forProvider.manifest.spec.bindings[1].members"
-        - fromFieldPath: "spec.projectName"
-          toFieldPath: "spec.forProvider.manifest.metadata.name"
-          transforms:
-            - type: string
-              string:
-                type: Format
-                fmt: "iampolicy-%s"
-
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
