@@ -119,18 +119,6 @@ describe('provisioner', () => {
       expect(call).toEqual([name, 'request-<uuid>']);
     });
 
-    it('should set the GCP Folder name in the output', async () => {
-      const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
-      await action.handler(ctx);
-
-      const name = 'folderName';
-      const call = (ctx.output as jest.Mock).mock.calls.find(
-        args => args[0] === name,
-      );
-      expect(call).toEqual([name, 'ph-test-42']);
-    });
-
     it('should set the pull request description in the output', async () => {
       const action = createProvisionTemplateAction(config);
       const ctx = createContext({ workspacePath });
@@ -147,7 +135,6 @@ describe('provisioner', () => {
 
         ### GCP Project
 
-        **Folder Name:** ph-test-42
         **Project Name:** ph-test-42
         **Project ID:** ph-test-42
         **Data Classification:** Unclassified
@@ -185,7 +172,6 @@ describe('provisioner', () => {
 
           // Project
           rootFolderId: '108494461414',
-          folderName: 'ph-test-42',
           projectName: 'ph-test-42',
           projectId: 'ph-test-42',
 

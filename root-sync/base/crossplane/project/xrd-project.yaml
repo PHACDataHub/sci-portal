@@ -26,8 +26,6 @@ spec:
               properties:
                 rootFolderId:
                   type: string
-                folderName:
-                  type: string
                 projectName:
                   type: string
                 projectId:
@@ -42,7 +40,6 @@ spec:
                     type: string
               required:
                 - rootFolderId
-                - folderName
                 - projectName
                 - projectId
                 - projectEditors

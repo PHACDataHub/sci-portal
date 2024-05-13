@@ -13,35 +13,6 @@ spec:
     apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
     kind: xProject
   resources:
-    - name: FOLDER
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          providerConfigRef:
-            name: kubernetes-provider
-          forProvider:
-            manifest:
-              apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-              kind: Folder
-              metadata:
-                name: "TO BE PATCHED"
-                namespace: default
-              spec:
-                displayName: "TO BE PATCHED"
-                folderRef:
-                  external: "TO BE PATCHED"
-      patches:
-        - fromFieldPath: "spec.folderName"
-          toFieldPath: "spec.forProvider.manifest.metadata.name"
-        - fromFieldPath: "spec.folderName"
-          toFieldPath: "spec.forProvider.manifest.spec.displayName"
-        - fromFieldPath: "spec.rootFolderId"
-          toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
-
-      readinessChecks:
-        - type: NonEmpty
-          fieldPath: status.atProvider.manifest
 
     - name: PROJECT
       base:
@@ -67,18 +38,6 @@ spec:
                 billingAccountRef:
                   external: "TO BE PATCHED"
           references:
-            - dependsOn:
-                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-                kind: Folder
-                name: "TO BE PATCHED"
-                namespace: default
-            - patchesFrom:
-                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-                kind: Folder
-                name: "TO BE PATCHED"
-                namespace: default
-                fieldPath: "status.folderId"
-              toFieldPath: "spec.folderRef.external"
             - patchesFrom:
                 apiVersion: v1
                 kind: ConfigMap
@@ -91,12 +50,10 @@ spec:
           toFieldPath: "spec.forProvider.manifest.metadata.name"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.name"
+        - fromFieldPath: "spec.rootFolderId"
+          toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
         # - fromFieldPath: "spec.projectId" -- xulid is too long
         #   toFieldPath: "spec.forProvider.manifest.spec.resourceID"
-        - fromFieldPath: "spec.folderName"
-          toFieldPath: "spec.references[0].dependsOn.name"
-        - fromFieldPath: "spec.folderName"
-          toFieldPath: "spec.references[1].patchesFrom.name"
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest

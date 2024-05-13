@@ -137,7 +137,7 @@ export const createProvisionTemplateAction = (config: Config) => {
               vanityName: {
                 title: 'Vanity Name',
                 description:
-                  'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Folder named `<department>-<vanity-name>` and a Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
+                  'The resource display name. The name must less than 26 characters. The name will be used to create a GCP Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414)',
                 type: 'string',
                 minLength: 1,
                 maxLength: 26,
@@ -215,9 +215,6 @@ export const createProvisionTemplateAction = (config: Config) => {
       const template = ctx.templateInfo.entity.metadata.name;
       ctx.output('template', template);
 
-      const folderName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
-      ctx.output('folderName', folderName);
-
       const projectName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
       const projectId = projectName;
 
@@ -238,7 +235,6 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Project
         rootFolderId,
-        folderName,
         projectName,
         projectId,
 
