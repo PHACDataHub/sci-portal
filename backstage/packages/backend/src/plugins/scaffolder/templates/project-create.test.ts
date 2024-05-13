@@ -1,8 +1,5 @@
-import { UrlReader } from '@backstage/backend-common';
 import { createMockDirectory } from '@backstage/backend-test-utils';
-import { ScmIntegrations } from '@backstage/integration';
-import { createFetchTemplateAction } from '@backstage/plugin-scaffolder-backend';
-import { createMockActionContext } from './__testUtils__/createMockActionContext';
+import { fetchTemplateActionHandler } from './__testUtils__/fetchTemplateActionHandler';
 
 describe('project-create: fetch:template', () => {
   const mockDir = createMockDirectory();
@@ -11,24 +8,17 @@ describe('project-create: fetch:template', () => {
     mockDir.remove();
   });
 
-  it('should render the expected changes for the Pull Request', async () => {
-    const action = createFetchTemplateAction({
-      reader: Symbol('UrlReader') as unknown as UrlReader,
-      integrations: Symbol('Integrations') as unknown as ScmIntegrations,
-    });
-
-    await action.handler({
-      ...createMockActionContext({ mockDir }),
-      input: {
-        url: './project-create/changes',
-        values: {
-          requestId: '<uuid>',
-          rootFolderId: '<root-folder-id>',
-          projectName: '<project-name>',
-          projectId: '<project-id>',
-        },
+  test('The fetch:template action should render the expected changes for the Pull Request', async () => {
+    await fetchTemplateActionHandler({
+      name: 'project-create',
+      values: {
+        requestId: '<uuid>',
+        rootFolderId: '<root-folder-id>',
+        projectName: '<project-name>',
+        projectId: '<project-id>',
       },
-    });
+      mockDir
+    })
 
     expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
       {
