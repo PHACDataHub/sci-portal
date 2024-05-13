@@ -22,7 +22,7 @@ const config = mockServices.rootConfig({
             owner: '<repo-owner>',
             name: '<repo-name>',
           },
-          templateDir: '../../../../../../templates',
+          templateDir: './templates',
         },
       },
     },
