@@ -22,7 +22,9 @@ export const createDebugWorkspaceAction = () => {
             cwd: ctx.workspacePath,
           },
         });
-      } catch {}
+      } catch {
+        // Do nothing
+      }
 
       ctx.logger.info(`Finished executing git diff`);
     },

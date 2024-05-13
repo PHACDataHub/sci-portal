@@ -259,7 +259,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         ctx.templateInfo.entity.metadata.title ||
         ctx.templateInfo.entity.metadata.name;
       const pullRequestTitlePrefix =
-        ctx.input.parameters.pullRequestAction ==
+        ctx.input.parameters.pullRequestAction ===
         'Publish and Close Pull Request'
           ? '[Test] '
           : '';
