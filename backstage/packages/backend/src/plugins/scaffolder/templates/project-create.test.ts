@@ -17,8 +17,8 @@ describe('project-create: fetch:template', () => {
         projectName: '<project-name>',
         projectId: '<project-id>',
       },
-      mockDir
-    })
+      mockDir,
+    });
 
     expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
       {

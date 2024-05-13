@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import * as url from 'node:url';
-import { UrlReader } from '@backstage/backend-common';
+import { UrlReader, resolvePackagePath } from '@backstage/backend-common';
 import { MockDirectory } from '@backstage/backend-test-utils';
 import { ScmIntegrations } from '@backstage/integration';
 import { createFetchTemplateAction } from '@backstage/plugin-scaffolder-backend';
@@ -12,15 +12,18 @@ export const fetchTemplateActionHandler = ({
   values,
   mockDir,
 }: {
-  namespace?: string,
+  namespace?: string;
   name: string;
   values: any;
   mockDir: MockDirectory;
 }) => {
   // Create the context
+  const rootDir = resolvePackagePath('backend', '../../');
   const templateFilePath = path.join(
-    __dirname,
-    '../../../../../../../templates/', name, 'template.yaml',
+    rootDir,
+    'templates',
+    name,
+    'template.yaml',
   );
   const baseUrl = url.pathToFileURL(templateFilePath).href;
   const ctx = {

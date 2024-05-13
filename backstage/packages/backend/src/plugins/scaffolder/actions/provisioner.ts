@@ -5,6 +5,7 @@ import { Config } from '@backstage/config';
 import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { JsonObject } from '@backstage/types';
+import { resolvePackagePath } from '@backstage/backend-common';
 
 const rootFolderId = '108494461414';
 
@@ -20,9 +21,10 @@ export const getConfig = (config: Config): ProvisionerConfig => {
   const rawTemplateDir = config.getString(
     'backend.plugins.provisioner.templateDir',
   );
+  const rootDir = resolvePackagePath('backend', '../../');
   const templateDir = path.isAbsolute(rawTemplateDir)
     ? rawTemplateDir
-    : path.join(__dirname, rawTemplateDir);
+    : path.join(rootDir, rawTemplateDir);
 
   return {
     repo: {
