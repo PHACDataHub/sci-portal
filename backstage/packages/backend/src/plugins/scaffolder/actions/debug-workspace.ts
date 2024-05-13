@@ -21,8 +21,8 @@ export const createDebugWorkspaceAction = () => {
             cwd: ctx.workspacePath,
           },
         });
-      } catch {
-        // Do nothing
+      } catch (err) {
+        ctx.logger.error('git diff failed', err);
       }
 
       ctx.logger.info(`Finished executing git diff`);
