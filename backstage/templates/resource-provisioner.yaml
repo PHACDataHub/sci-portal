@@ -51,6 +51,10 @@ spec:
         costCentre:
           title: Cost Centre
           type: string
+        costCentreName:
+          title: Cost Centre Name
+          description: The human-readable name for the Cost Centre.
+          type: string
         section32ManagerEmail:
           title: Section 32 Manager Email Address
           type: string

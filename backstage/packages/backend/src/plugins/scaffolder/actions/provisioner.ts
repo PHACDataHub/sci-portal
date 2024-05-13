@@ -87,6 +87,7 @@ interface TemplateParameters extends JsonObject {
 
   // Administration
   costCentre: string;
+  costCentreName: string;
   section32ManagerEmail: string;
   justification: string;
 
@@ -157,8 +158,13 @@ export const createProvisionTemplateAction = (config: Config) => {
 
               // Administration
               costCentre: {
-                title: 'costCentre',
+                title: 'Cost Centre',
                 description: 'The Cost Centre associated with the resource.',
+                type: 'string',
+              },
+              costCentreName: {
+                title: 'Cost Centre Name',
+                description: 'The human-readable name for the Cost Centre.',
                 type: 'string',
               },
               section32ManagerEmail: {
