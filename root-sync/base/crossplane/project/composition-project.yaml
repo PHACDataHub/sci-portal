@@ -195,10 +195,10 @@ spec:
                   kind: Project
                   name: "TO BE PATCHED"
                 bindings:
-                  - role: roles/owner
+                  - role: roles/editor
                     members:
                       - "TO BE PATCHED"
-                  - role: roles/editor
+                  - role: roles/viewer
                     members:
                       - "TO BE PATCHED"
                 auditConfigs:
@@ -217,9 +217,9 @@ spec:
           toFieldPath: "spec.references[0].dependsOn.name"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.resourceRef.name"
-        - fromFieldPath: "spec.projectOwners"
-          toFieldPath: "spec.forProvider.manifest.spec.bindings[0].members"
         - fromFieldPath: "spec.projectEditors"
+          toFieldPath: "spec.forProvider.manifest.spec.bindings[0].members"
+        - fromFieldPath: "spec.projectViewers"
           toFieldPath: "spec.forProvider.manifest.spec.bindings[1].members"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.metadata.name"

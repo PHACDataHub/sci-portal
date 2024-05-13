@@ -32,11 +32,11 @@ spec:
                   type: string
                 projectId:
                   type: string
-                projectOwners:
+                projectEditors:
                   type: array
                   items:
                     type: string
-                projectEditors:
+                projectViewers:
                   type: array
                   items:
                     type: string
@@ -45,5 +45,5 @@ spec:
                 - folderName
                 - projectName
                 - projectId
-                - projectOwners
                 - projectEditors
+                - projectViewers
