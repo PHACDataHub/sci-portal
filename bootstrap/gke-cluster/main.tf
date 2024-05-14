@@ -71,7 +71,7 @@ resource "google_service_account_iam_member" "iam_workloadidentity_tf" {
   role               = "roles/iam.workloadIdentityUser"
 
   # Workload Identity is specified per-project and per-namespace
-   member = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/provider-terraform]"
+  member = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/provider-terraform]"
 }
 
 resource "google_project_iam_member" "editor_role" {
