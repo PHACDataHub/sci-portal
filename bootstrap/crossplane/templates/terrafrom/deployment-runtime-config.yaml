@@ -2,3 +2,9 @@ apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
   name: tf-controller-config
+spec:
+  serviceAccountTemplate:
+    metadata:
+      name: provider-terraform
+      annotations:
+        iam.gke.io/gcp-service-account: phac-backstage-kcc-sa@pht-01hsv4d2m0n.iam.gserviceaccount.com
