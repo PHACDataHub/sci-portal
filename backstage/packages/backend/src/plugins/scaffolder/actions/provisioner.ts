@@ -52,15 +52,15 @@ const toUser = (ownerEmail: string): User => ({
 });
 
 /**
- * Returns a unique project ID based on the department and part of a ULID.
+ * Returns a unique project ID based on the department and the lowercase timestamp part of a ULID.
  */
 const createProjectId = (department: TemplateParameters['department']) => {
   // All projects are treated as Experimental for now.
   const environment = 'x';
 
-  // The unique ID is based on a ULID. It used the 10-character timestamp part, and one more.
-  // This follows Keith's specification, use in acm-core, and the ulid tool defined in https://github.com/PHACDataHub/rust-tools/tree/main/tools/ulid#building-this-tool-from-a-dockerfile-to-be-used-in-a-container-part-of-multi-stage-build.
-  const id = ulid().substring(0, 11).toLowerCase();
+  // This follows Keith's specification from an email dated 2024-05-14 to use only the 10-character timestamp part of the ULID.
+  // This differs from the implementation of the ulid tool defined in https://github.com/PHACDataHub/rust-tools/tree/main/tools/ulid, and use in other repos.
+  const id = ulid().substring(0, 10).toLowerCase();
 
   return `${department}${environment}-${id}`;
 };
