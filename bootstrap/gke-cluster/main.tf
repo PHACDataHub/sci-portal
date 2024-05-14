@@ -66,13 +66,22 @@ resource "google_service_account_iam_member" "iam_workloadidentity_kcc" {
   member = "serviceAccount:${var.project_id}.svc.id.goog[cnrm-system/cnrm-controller-manager]"
 }
 
-resource "google_service_account_iam_member" "iam_workloadidentity_tf" {
+resource "google_service_account_iam_member" "iam_workloadidentity_kcc_sa" {
   service_account_id = google_service_account.phac-backstage-kcc-sa.name
   role               = "roles/iam.workloadIdentityUser"
 
   # Workload Identity is specified per-project and per-namespace
   member = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/phac-backstage-kcc-sa]"
 }
+
+# Enable Workload Identity for crossplane terraform provider  
+resource "google_service_account_iam_member" "iam_workloadidentity_tf" {
+  service_account_id = google_service_account.phac-backstage-kcc-sa.name
+  role               = "roles/iam.workloadIdentityUser"
+
+  member = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/provider-terraform]"
+}
+
 
 resource "google_project_iam_member" "editor_role" {
   project = var.project_id
