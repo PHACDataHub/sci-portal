@@ -1,11 +1,13 @@
 import * as path from 'path';
-import nunjucks from 'nunjucks';
-import { v4 as uuidv4 } from 'uuid';
+
 import { Config } from '@backstage/config';
 import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { JsonObject } from '@backstage/types';
 import { resolvePackagePath } from '@backstage/backend-common';
+import nunjucks from 'nunjucks';
+import { ulid } from 'ulidx';
+import { v4 as uuidv4 } from 'uuid';
 
 const rootFolderId = '108494461414';
 
@@ -48,6 +50,20 @@ const toUser = (ownerEmail: string): User => ({
   email: ownerEmail,
   name: ownerEmail.split('@')[0],
 });
+
+/**
+ * Returns a unique project ID based on the department and part of a ULID.
+ */
+const createProjectId = (department: TemplateParameters['department']) => {
+  // All projects are treated as Experimental for now.
+  const environment = 'x';
+
+  // The unique ID is based on a ULID. It used the 10-character timestamp part, and one more.
+  // This follows Keith's specification, use in acm-core, and the ulid tool defined in https://github.com/PHACDataHub/rust-tools/tree/main/tools/ulid#building-this-tool-from-a-dockerfile-to-be-used-in-a-container-part-of-multi-stage-build.
+  const id = ulid().substring(0, 11).toLowerCase();
+
+  return `${department}${environment}-${id}`;
+};
 
 /**
  * Returns an array of unique email addresses, ignoring whitespace and extra commas.
@@ -224,7 +240,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       ctx.output('template', template);
 
       const projectName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
-      const projectId = projectName;
+      const projectId = createProjectId(ctx.input.parameters.department);
 
       // Render the Pull Request description template
       const env = nunjucks.configure(templateDir);
