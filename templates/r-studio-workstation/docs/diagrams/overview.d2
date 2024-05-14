@@ -1,0 +1,242 @@
+direction: down
+
+title: |md
+  # Analytics Environment
+|
+
+On-Prem/VPN Before: {
+  Epidemiologists: {
+    shape: image
+    icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  }
+
+  Browser: {
+    console\.google\.cloud\.com: {
+      shape: image
+      icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+    }
+  }
+
+  Liquid Files: {
+    shape: image
+    icon: https://avatars.githubusercontent.com/u/4522949?v=4
+  }
+
+  Liquid Files -> Epidemiologists: e-mail P/T xlsx files
+  Epidemiologists -> Browser: upload xlsx
+}
+
+On-Prem/VPN After: {
+  Epidemiologists: {
+    shape: image
+    icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  }
+
+  Browser: {
+    console\.google\.cloud\.com: {
+      shape: image
+      icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+    }
+  }
+
+  Corporate Filesystem: {
+    shape: image
+    icon: https://icons.terrastruct.com/essentials%2F245-folder.svg
+  }
+  Browser -> Corporate Filesystem: analysis artifacts
+}
+
+Provinces/Territories: {
+  Epidemiologists: {
+    shape: image
+    icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  }
+
+  Administrators: {
+    shape: image
+    icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  }
+
+  Liquid Files: {
+    shape: image
+    icon: https://avatars.githubusercontent.com/u/4522949?v=4
+  }
+
+  Epidemiologists -> Liquid Files: upload xlsx
+  Administrators -> Liquid Files: upload xlsx
+}
+
+Provinces/Territories.Liquid Files -> On-Prem/VPN Before.Liquid Files: transfer
+
+GCP Tenant: {
+  style: {
+    fill: "#008744"
+    opacity: 0.1
+  }
+  "": {
+    shape: image
+    icon: ./icons/gcp-logo.svg
+  }
+  \<epi-analyst-project\>: {
+    style: {
+      opacity: 0.2
+      fill: "#0057e7"
+    }
+    "": {
+      shape: image
+      icon: ./icons/gcp-project.png
+    }
+
+    analytics-bucket: {
+      style: {
+        opacity: 0.25
+        fill: "#ffa700"
+      }
+      "": {
+        shape: image
+        icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FStorage%2FCloud%20Storage.svg
+      }
+
+      /upstream/cases/\<yyyy\>/\<pt\>/: {
+        style: {
+          opacity: 0
+        }
+        \*\.xlsx: {
+          shape: image
+          icon: https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg
+        }
+      }
+
+      /upstream/outcomes/\<yyyy\>/\<pt\>/: {
+        style: {
+          opacity: 0
+        }
+        \*\.xlsx: {
+          shape: image
+          icon: https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg
+        }
+      }
+
+      /cases/\<year=yyyy\>/\<pt=XX\>/: {
+        style: {
+          opacity: 0
+        }
+        \*\.parquet: {
+          shape: image
+          icon: https://upload.wikimedia.org/wikipedia/commons/4/47/Apache_Parquet_logo.svg
+        }
+      }
+
+      /outcomes/\<year=yyyy\>/\<pt=XX\>/: {
+        style: {
+          opacity: 0
+        }
+        \*\.parquet: {
+          shape: image
+          icon: https://upload.wikimedia.org/wikipedia/commons/4/47/Apache_Parquet_logo.svg
+        }
+      }
+
+      /merged/\<year=yyyy\>/\<pt=XX\>/: {
+        style: {
+          opacity: 0
+        }
+        \*\.parquet: {
+          shape: image
+          icon: https://upload.wikimedia.org/wikipedia/commons/4/47/Apache_Parquet_logo.svg
+        }
+      }
+
+      /outputs/\<year=yyyy\>/: {
+        style: {
+          opacity: 0
+        }
+        reports: {
+          shape: image
+          icon: https://icons.terrastruct.com/essentials%2F257-file.svg
+        }
+
+        graphs/plots: {
+          shape: image
+          icon: https://icons.terrastruct.com/essentials%2F001-analytics.svg
+        }
+
+        aggregated tables: {
+          shape: image
+          icon: https://cdn2.iconfinder.com/data/icons/font-awesome/1792/table-512.png
+        }
+      }
+    }
+
+    cloud-workstation: {
+      style: {
+        opacity: 0.25
+        fill: "#d62d20"
+      }
+
+      data-cleaning-scripts: {
+        style: {
+          opacity: 0.5
+          fill: "#d62d20"
+        }
+        "": {
+          shape: image
+          icon: https://www.r-project.org/logo/Rlogo.svg
+        }
+        arrow (in-memory): {
+          shape: image
+          icon: https://arrow.apache.org/img/arrow-logo_vertical_black-txt_transparent-bg.png
+        }
+      }
+
+      data-integration-scripts: {
+        style: {
+          opacity: 0.5
+          fill: "#d62d20"
+        }
+        "": {
+          shape: image
+          icon: https://www.r-project.org/logo/Rlogo.svg
+        }
+        arrow (in-memory): {
+          shape: image
+          icon: https://arrow.apache.org/img/arrow-logo_vertical_black-txt_transparent-bg.png
+        }
+      }
+
+      data-analysis-notebook: {
+        style: {
+          opacity: 0.5
+          fill: "#d62d20"
+        }
+        "": {
+          shape: image
+          icon: https://www.r-project.org/logo/Rlogo.svg
+        }
+      }
+    }
+
+    # Data cleaning workflow
+    analytics-bucket./upstream/cases/\<yyyy\>/\<pt\>/ -> cloud-workstation.data-cleaning-scripts: read excel
+    analytics-bucket./upstream/outcomes/\<yyyy\>/\<pt\>/ -> cloud-workstation.data-cleaning-scripts: read excel
+    cloud-workstation.data-cleaning-scripts -> analytics-bucket./cases/\<year=yyyy\>/\<pt=XX\>/: write parquet
+    cloud-workstation.data-cleaning-scripts -> analytics-bucket./outcomes/\<year=yyyy\>/\<pt=XX\>/: write parquet
+    # Data integration workflow
+    analytics-bucket./cases/\<year=yyyy\>/\<pt=XX\>/ -> cloud-workstation.data-integration-scripts: read parquet
+    analytics-bucket./outcomes/\<year=yyyy\>/\<pt=XX\>/ -> cloud-workstation.data-integration-scripts: read parquet
+    cloud-workstation.data-integration-scripts -> analytics-bucket./merged/\<year=yyyy\>/\<pt=XX\>/: write parquet
+    # Data analysis workflow
+    analytics-bucket./merged/\<year=yyyy\>/\<pt=XX\>/ -> cloud-workstation.data-analysis-notebook: read parquet
+    cloud-workstation.data-analysis-notebook -> analytics-bucket./outputs/\<year=yyyy\>/.reports
+    cloud-workstation.data-analysis-notebook -> analytics-bucket./outputs/\<year=yyyy\>/.aggregated tables
+    cloud-workstation.data-analysis-notebook -> analytics-bucket./outputs/\<year=yyyy\>/.graphs/plots
+  }
+}
+# Excel data uploaded to GCS bucket
+On-Prem/VPN Before.Browser -> GCP Tenant.\<epi-analyst-project\>.analytics-bucket./upstream/cases/\<yyyy\>/\<pt\>/: upload
+On-Prem/VPN Before.Browser -> GCP Tenant.\<epi-analyst-project\>.analytics-bucket./upstream/outcomes/\<yyyy\>/\<pt\>/: upload
+
+# Download final artifacts back to Epidemiologist workstation
+GCP Tenant.\<epi-analyst-project\>.analytics-bucket./outputs/\<year=yyyy\>/.graphs/plots -> On-Prem/VPN After.Browser: download
+GCP Tenant.\<epi-analyst-project\>.analytics-bucket./outputs/\<year=yyyy\>/.reports -> On-Prem/VPN After.Browser: download
+GCP Tenant.\<epi-analyst-project\>.analytics-bucket./outputs/\<year=yyyy\>/.aggregated tables -> On-Prem/VPN After.Browser: download
