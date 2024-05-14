@@ -1,0 +1,252 @@
+direction: down
+
+title: |md
+  # Network Overview
+|
+
+UWaterloo CRAN Mirror: {
+  shape: image
+  icon: https://icons.terrastruct.com/essentials%2F112-server.svg
+}
+
+GCP Platform: {
+  shape: image
+  icon: ./icons/gcp-logo.svg
+}
+
+TB Project: {
+  \<epi-analyst-project\>: {
+    shape: image
+    icon: ./icons/gcp-project.png
+  }
+
+  custom mode VPC: {
+    nat-auto-external-ip: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20External%20IP%20Addresses.svg
+    }
+    vpc_network: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FVirtual%20Private%20Cloud.svg
+    }
+
+    private-googleapis-ips-route: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Routes.svg
+    }
+
+    egress-allow-private-gcp-services: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Firewall%20Rules.svg
+    }
+
+    egress-deny-all: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Firewall%20Rules.svg
+    }
+
+    ingress-deny-all: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Firewall%20Rules.svg
+    }
+
+    egress-allow-tcp-git: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Firewall%20Rules.svg
+    }
+
+    egress-allow-waterloo-cran: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Firewall%20Rules.svg
+    }
+
+    egress-allow-intra-subnet: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Firewall%20Rules.svg
+    }
+
+    gcr\.io: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20DNS.svg
+    }
+
+    private\.googleapis\.com: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20DNS.svg
+    }
+
+    cloud-router: {
+      shape: image
+      icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Router.svg
+    }
+
+    subnetwork: {
+      workstation-subnet: {
+        shape: image
+        icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20Network.svg
+      }
+
+      cloud-nat: {
+        shape: image
+        icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FNetworking%2FCloud%20NAT.svg
+      }
+
+      cloud workstations control plane: {
+        shape: image
+        icon: https://icons.terrastruct.com/essentials%2F092-network.svg
+      }
+
+      cloud workstations: {
+        "cloud workstations": {
+          shape: image
+          icon: https://cloud.google.com/static/docs/images/logos/cloud-workstations.svg
+        }
+
+        gce virtual machine: {
+          "": {
+            shape: image
+            icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FCompute%2FCompute%20Engine.svg
+          }
+
+          R/RStudio: {
+            shape: image
+            icon: https://www.r-project.org/logo/Rlogo.svg
+          }
+
+          proxy-forwarding-agent: {
+            shape: image
+            icon: https://go.dev/blog/go-brand/Go-Logo/SVG/Go-Logo_Blue.svg
+          }
+        }
+      }
+    }
+    # At the time of writing, the GCP terraform module does not expose the workstation cluster control plane IP address.
+    # Since we have an Egress deny all rule, we need to explicitly allow egress from a workstation VM to the control plane.
+    subnetwork.cloud workstations.gce virtual machine -> egress-allow-intra-subnet -> subnetwork.cloud workstations control plane
+  }
+}
+
+Google APIs and Services: {
+  Private Google Services
+
+  \*\.northamerica-northeast1\.notebooks\.cloud\.google\.com
+
+  \<random characters\>\.northamerica-northeast1\.notebooks\.cloud\.google\.com
+
+  Artifact Registry: {
+    shape: image
+    icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FDeveloper%20Tools%2FContainer%20Registry.svg
+  }
+
+  analytics-bucket: {
+    shape: image
+    icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FStorage%2FCloud%20Storage.svg
+  }
+  # Workstations will read and write data to analytics-bucket
+  Private Google Services -> analytics-bucket: {
+    style: {
+      stroke: orange
+    }
+  }
+}
+
+Internet: {
+  shape: image
+  icon: https://icons.terrastruct.com/essentials%2F140-internet.svg
+}
+
+GitHub: {
+  shape: image
+  icon: https://icons.terrastruct.com/dev%2Fgithub.svg
+}
+
+Client Browser: {
+  "": {
+    shape: image
+    icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+  }
+}
+
+# tcp egress to github IPs is allowed
+GitHub <- TB Project.custom mode VPC.egress-allow-tcp-git <- TB Project.custom mode VPC.nat-auto-external-ip <- TB Project.custom mode VPC.subnetwork.cloud-nat <- TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.R/RStudio: {
+  style: {
+    stroke: green
+  }
+}
+
+# tcp egress to UWaterloo CRAN Mirror IP is allowed
+UWaterloo CRAN Mirror <- TB Project.custom mode VPC.egress-allow-waterloo-cran <- TB Project.custom mode VPC.nat-auto-external-ip <- TB Project.custom mode VPC.subnetwork.cloud-nat <- TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.R/RStudio: {
+  style: {
+    stroke: green
+  }
+}
+
+# by default, egress is denied
+TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.R/RStudio -> TB Project.custom mode VPC.subnetwork.cloud-nat -> TB Project.custom mode VPC.nat-auto-external-ip -> TB Project.custom mode VPC.egress-deny-all: {
+  style: {
+    stroke: red
+    stroke-dash: 3
+  }
+}
+
+TB Project.custom mode VPC.egress-deny-all -> internet: deny {
+  style: {
+    stroke: red
+    stroke-dash: 3
+  }
+}
+
+TB Project.custom mode VPC.ingress-deny-all <- internet: deny {
+  style: {
+    stroke: red
+    stroke-dash: 3
+  }
+}
+
+# proxy-forwarding-agent pulled from google service artifact registry
+TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.R/RStudio <-> TB Project.custom mode VPC.gcr\.io: googleapis IPs {
+  style: {
+    stroke: orange
+  }
+}
+TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.R/RStudio -> TB Project.custom mode VPC.private-googleapis-ips-route -> TB Project.custom mode VPC.egress-allow-private-gcp-services -> Google APIs and Services.Private Google Services: {
+  style: {
+    stroke: orange
+  }
+}
+Google APIs and Services.Private Google Services -> Google APIs and Services.Artifact Registry: proxy-forwarding-agent {
+  style: {
+    stroke: orange
+  }
+}
+
+# proxy-forwarding-agent initiates request to inverting proxy service
+
+TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.proxy-forwarding-agent <-> TB Project.custom mode VPC.private-googleapis-ips-route <-> TB Project.custom mode VPC.egress-allow-private-gcp-services <-> Google APIs and Services.Private Google Services: {
+  style: {
+    stroke: deepskyblue
+  }
+}
+
+Google APIs and Services.Private Google Services -> Google APIs and Services.\*\.northamerica-northeast1\.notebooks\.cloud\.google\.com: agent request to inverting proxy {
+  style: {
+    stroke: deepskyblue
+  }
+}
+
+# Jupyterlab needs to get ips from private.googleapis.com dns record
+TB Project.custom mode VPC.subnetwork.cloud workstations.gce virtual machine.R/RStudio <-> TB Project.custom mode VPC.private\.googleapis\.com: googleapis IPs {
+  style: {
+    stroke: orange
+  }
+}
+
+# cloud nat resource depends on cloud router
+TB Project.custom mode VPC.cloud-router <- TB Project.custom mode VPC.subnetwork.cloud-nat: depends on
+
+# Client browser connects to Google-managed proxy server
+Client Browser."" <-> Google APIs and Services.\<random characters\>\.northamerica-northeast1\.notebooks\.cloud\.google\.com <-> Google APIs and Services.Private Google Services: {
+  style: {
+    stroke: deepskyblue
+  }
+}
