@@ -19,8 +19,8 @@ resource "google_compute_subnetwork" "workstation-subnetwork" {
   network                  = google_compute_network.vpc_network.id
   log_config {
     aggregation_interval = "INTERVAL_5_SEC"
-    flow_sampling = 1.0
-    metadata = "INCLUDE_ALL_METADATA"
+    flow_sampling        = 1.0
+    metadata             = "INCLUDE_ALL_METADATA"
   }
 }
 

@@ -1,6 +1,6 @@
 locals {
   workstation_users = [for email in var.project_principals : "user:${email}"]
-  region = "northamerica-northeast1"
+  region            = "northamerica-northeast1"
 }
 
 resource "google_workstations_workstation_cluster" "workstation_clusters" {

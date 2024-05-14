@@ -61,7 +61,7 @@ resource "google_cloudbuildv2_repository" "my-repository" {
 
 
 resource "google_cloudbuild_trigger" "rstudio-image-trigger" {
-  name = "rstudio-image-build"
+  name     = "rstudio-image-build"
   location = local.region
 
   repository_event_config {
