@@ -1,0 +1,30 @@
+---
+# This workflow is used for Continuous Integration for the templates/ directory.
+
+name: CI for templates/
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "templates/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./templates
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.5"
+          terraform_wrapper: false
+
+      - name: Check format
+        run: terraform fmt -check -recursive
