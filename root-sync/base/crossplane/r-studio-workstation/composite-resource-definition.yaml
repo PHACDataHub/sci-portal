@@ -1,0 +1,46 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xrstudioworkstations.data-science-portal.phac-aspc.gc.ca
+spec:
+  defaultCompositionRef:
+    name: r-studio-workstation
+  group: data-science-portal.phac-aspc.gc.ca
+  names:
+    kind: xRStudioWorkstation
+    plural: xrstudioworkstations
+  claimNames:
+    kind: RStudioWorkstationClaim
+    plural: rstudioworkstationclaims
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                rootFolderId:
+                  type: string
+                projectName:
+                  type: string
+                projectId:
+                  type: string
+                projectEditors:
+                  type: array
+                  items:
+                    type: string
+                projectViewers:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - rootFolderId
+                - projectName
+                - projectId
+                - projectEditors
+                - projectViewers

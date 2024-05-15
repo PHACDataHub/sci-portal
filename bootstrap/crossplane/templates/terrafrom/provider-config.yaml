@@ -1,25 +1,20 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: default
+  name: t-project-003 # "TO BE PATCHED" (with project ID)
 spec:
-  # This optional configuration block can be used to inject HCL into any workspace that uses this provider config
   configuration: |
-    provider "google" {
-      project     = "${GCP_PROJECT_ID}"
-      region      = "${GCP_REGION}"
-    }
-
-    provider "google-beta" {
-      project     = "${GCP_PROJECT_ID}"
-      region      = "${GCP_REGION}"
-    }
-
-    // Modules _must_ use remote state. The provider does not persist state.
     terraform {
-      backend "kubernetes" {
-        secret_suffix     = "providerconfig-default"
-        namespace         = "crossplane-system"
-        in_cluster_config = true
+      backend "gcs" {
+        bucket  = "433b88e1164c5268-bucket-tfstate"
+        prefix  = "by-project-id/t-project-003"
       }
     }
+
+# TODOs
+# - [x] Make a bucket at the SciencePlatform level
+# - Get the Project ID
+        # prefix  = "by-project-id/${var.project_id}/state"
+# - Decide on how to configure the bucket name
+# - Remove the global ProviderConfig.
+# - Document that we're expecting the providers to be configured
