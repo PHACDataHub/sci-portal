@@ -1,0 +1,17 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: gen-ai
+spec:
+  forProvider:
+    module: git::https://github.com/PHACDataHub/sci-portal.git//templates/radlabs/gen_ai?ref=main
+    source: Remote
+    vars:
+      - key: billing_account_id
+        value: <value>
+      - key: organization_id
+        value: <value>
+      - key: notification_channels_email
+        value: <value>
+      - key: folder_id
+        value: <value>

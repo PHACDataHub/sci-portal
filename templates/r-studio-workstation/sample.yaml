@@ -1,0 +1,29 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: r-studio-workstation
+spec:
+  forProvider:
+    module: git::https://github.com/PHACDataHub/sci-portal.git//templates/r-studio-workstation?ref=main
+    source: Remote
+    vars:
+      - key: project
+        value: <value>
+      - key: gcs_labels
+        value: <value>
+      - key: notification_channels_email
+        value: <value>
+      - key: cloudbuild_repo
+        value: <value>
+      - key: github_pat
+        value: <value>
+      - key: github_cloudbuild_installation_id
+        value: <value>
+      - key: google_cloud_workstation_clusters
+        value: <value>
+      - key: google_cloud_workstation_configurations
+        value: <value>
+      - key: google_cloud_workstations
+        value: <value>
+      - key: project_principals
+        value: <value>
