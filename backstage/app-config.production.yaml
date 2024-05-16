@@ -51,6 +51,10 @@ catalog:
       rules:
         - allow: [Template]
     - type: file
+      target: /app/templates/rad-lab-data-science-create/template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
       target: /app/templates/rad-lab-gen-ai-create/template.yaml
       rules:
         - allow: [Template]
