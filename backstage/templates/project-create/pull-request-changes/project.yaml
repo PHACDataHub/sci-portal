@@ -7,3 +7,11 @@ spec:
   rootFolderId: '${{values.rootFolderId}}'
   projectName: ${{values.projectName}}
   projectId: ${{values.projectId}}
+  projectEditors:
+  {%- for owner in values.owners %}
+    - user:${{owner}}
+  {%- endfor %}
+  projectViewers:
+  {%- for editor in values.editors %}
+    - user:${{editor}}
+  {%- endfor %}
