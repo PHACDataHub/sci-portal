@@ -69,7 +69,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
         <SidebarItem
           icon={AddCircleOutlineIcon}
-          to="create/templates/default/project-create"
+          to="create"
           text="Create Resource"
         />
         <SidebarItem

@@ -50,6 +50,10 @@ catalog:
       target: /app/templates/project-create/template.yaml
       rules:
         - allow: [Template]
+    - type: file
+      target: /app/templates/rad-lab-gen-ai-create/template.yaml
+      rules:
+        - allow: [Template]
 
 kubernetes:
   serviceLocatorMethod:

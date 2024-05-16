@@ -1,6 +1,6 @@
 ---
 apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-kind: ProjectClaim
+kind: RadLabGenAIClaim
 metadata:
   name: ${{values.projectName}}-${{values.requestId}}
 spec:
@@ -9,9 +9,9 @@ spec:
   projectId: ${{values.projectId}}
   projectEditors:
   {%- for owner in values.owners %}
-    - user:${{owner}}
+    - user:${{owner.email}}
   {%- endfor %}
   projectViewers:
   {%- for editor in values.editors %}
-    - user:${{editor}}
+    - user:${{editor.email}}
   {%- endfor %}

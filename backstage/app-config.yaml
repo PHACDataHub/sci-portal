@@ -107,3 +107,7 @@ catalog:
       target: ../../templates/project-create/template.yaml
       rules:
         - allow: [Template]
+    - type: file
+      target: ../../templates/rad-lab-gen-ai-create/template.yaml
+      rules:
+        - allow: [Template]
