@@ -32,7 +32,7 @@ spec:
                   cnrm.cloud.google.com/auto-create-network: "false"
               spec:
                 name: "TO BE PATCHED"
-                # resourceID: "TO BE PATCHED" -- xulid is too long
+                resourceID: "TO BE PATCHED"
                 folderRef:
                   external: "TO BE PATCHED"
                 billingAccountRef:
@@ -52,12 +52,12 @@ spec:
           toFieldPath: "spec.forProvider.manifest.spec.name"
         - fromFieldPath: "spec.rootFolderId"
           toFieldPath: "spec.forProvider.manifest.spec.folderRef.external"
-        # - fromFieldPath: "spec.projectId" -- xulid is too long
-        #   toFieldPath: "spec.forProvider.manifest.spec.resourceID"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.spec.resourceID"
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
-    
+
     - name: PROJECT-IAM
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
