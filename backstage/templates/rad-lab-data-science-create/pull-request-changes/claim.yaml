@@ -1,0 +1,17 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabDataScienceClaim
+metadata:
+  name: ${{values.projectName}}-${{values.requestId}}
+spec:
+  rootFolderId: '${{values.rootFolderId}}'
+  projectName: ${{values.projectName}}
+  projectId: ${{values.projectId}}
+  projectEditors:
+  {%- for owner in values.owners %}
+    - user:${{owner.email}}
+  {%- endfor %}
+  projectViewers:
+  {%- for editor in values.editors %}
+    - user:${{editor.email}}
+  {%- endfor %}
