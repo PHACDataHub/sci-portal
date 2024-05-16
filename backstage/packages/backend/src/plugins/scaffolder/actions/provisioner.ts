@@ -239,7 +239,10 @@ export const createProvisionTemplateAction = (config: Config) => {
       const template = ctx.templateInfo.entity.metadata.name;
       ctx.output('template', template);
 
-      const projectName = `${ctx.input.parameters.department}-${ctx.input.parameters.vanityName}`;
+      // We assume all projects are for Experimentation.
+      const environment = 'x';
+
+      const projectName = `${ctx.input.parameters.department}${environment}-${ctx.input.parameters.vanityName}`;
       const projectId = createProjectId(ctx.input.parameters.department);
 
       // Render the Pull Request description template
