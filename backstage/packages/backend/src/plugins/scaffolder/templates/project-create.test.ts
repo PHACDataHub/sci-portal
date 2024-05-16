@@ -16,6 +16,12 @@ describe('project-create: fetch:template', () => {
         rootFolderId: '<root-folder-id>',
         projectName: '<project-name>',
         projectId: '<project-id>',
+        owners: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
+        editors: [
+          'samantha.jones@gcp.hc-sc.gc.ca',
+          'alex.mcdonald@gcp.hc-sc.gc.ca',
+          'john.campbell@gcp.hc-sc.gc.ca',
+        ],
       },
       mockDir,
     });
@@ -31,6 +37,13 @@ describe('project-create: fetch:template', () => {
         rootFolderId: '<root-folder-id>'
         projectName: <project-name>
         projectId: <project-id>
+        projectEditors:
+          - user:jane.doe@gcp.hc-sc.gc.ca
+          - user:john.doe@gcp.hc-sc.gc.ca
+        projectViewers:
+          - user:samantha.jones@gcp.hc-sc.gc.ca
+          - user:alex.mcdonald@gcp.hc-sc.gc.ca
+          - user:john.campbell@gcp.hc-sc.gc.ca
       ",
       }
     `);

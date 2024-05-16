@@ -150,7 +150,7 @@ describe('provisioner', () => {
         **Cost Centre Name:** TPS Reports
         **Justification:** This project will be used for testing our custom action.
         **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
-        **Service Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
+        **Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
         **Editors:** samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca
 
         ### Budget
