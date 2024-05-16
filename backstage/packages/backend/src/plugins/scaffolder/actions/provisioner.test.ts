@@ -141,7 +141,7 @@ describe('provisioner', () => {
         ### GCP Project
 
         **Project Name:** ph-test-42
-        **Project ID:** phx-01an4z07by
+        **Project ID:** phx-01an4z07by7
         **Data Classification:** Unclassified
 
         ### Administrative Details
@@ -179,7 +179,7 @@ describe('provisioner', () => {
           // Project
           rootFolderId: '108494461414',
           projectName: 'ph-test-42',
-          projectId: 'phx-01an4z07by',
+          projectId: 'phx-01an4z07by7',
 
           // Information Management and Security
           dataClassificationTitle: 'Unclassified',
