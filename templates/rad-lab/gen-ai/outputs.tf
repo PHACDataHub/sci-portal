@@ -25,29 +25,29 @@ output "deployment_id" {
   value       = local.random_id
 }
 
-output "workbench_googlemanaged_names" {
-  description = "Google Managed Notebook Instance Names"
-  value       = join(", ", google_notebooks_runtime.ai_workbench_googlemanaged[*].name)
-}
+# output "workbench_googlemanaged_names" {
+#   description = "Google Managed Notebook Instance Names"
+#   value       = join(", ", google_notebooks_runtime.ai_workbench_googlemanaged[*].name)
+# }
 
-output "workbench_googlemanaged_urls" {
-  description = "Google Managed Notebook access URLs"
-  value       = formatlist("https://%s", google_notebooks_runtime.ai_workbench_googlemanaged[*].proxy_uri)
-}
+# output "workbench_googlemanaged_urls" {
+#   description = "Google Managed Notebook access URLs"
+#   value       = formatlist("https://%s", google_notebooks_runtime.ai_workbench_googlemanaged[*].proxy_uri)
+# }
 
-output "workbench_usermanaged_names" {
-  description = "User Managed Notebook Instance Names"
-  value       = google_notebooks_instance.ai_workbench_usermanaged[*].name
-}
+# output "workbench_usermanaged_names" {
+#   description = "User Managed Notebook Instance Names"
+#   value       = google_notebooks_instance.ai_workbench_usermanaged[*].name
+# }
 
-output "workbench_usermanaged_urls" {
-  description = "User managed notebook access URLs"
-  value       = formatlist("https://%s", google_notebooks_instance.ai_workbench_usermanaged[*].proxy_uri)
+# output "workbench_usermanaged_urls" {
+#   description = "User managed notebook access URLs"
+#   value       = formatlist("https://%s", google_notebooks_instance.ai_workbench_usermanaged[*].proxy_uri)
 
-  depends_on = [
-    null_resource.ai_workbench_usermanaged_provisioning_state
-  ]
-}
+#   depends_on = [
+#     null_resource.ai_workbench_usermanaged_provisioning_state
+#   ]
+# }
 
 output "project_id" {
   description = "GenAI Project ID"
