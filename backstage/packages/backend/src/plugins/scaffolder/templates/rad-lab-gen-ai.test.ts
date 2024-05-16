@@ -1,7 +1,7 @@
 import { createMockDirectory } from '@backstage/backend-test-utils';
 import { fetchTemplateActionHandler } from './__testUtils__/fetchTemplateActionHandler';
 
-describe('project-create: fetch:template', () => {
+describe('rad-lab-gen-ai-create: fetch:template', () => {
   const mockDir = createMockDirectory();
 
   afterEach(() => {
@@ -10,7 +10,7 @@ describe('project-create: fetch:template', () => {
 
   test('The fetch:template action should render the expected changes for the Pull Request', async () => {
     await fetchTemplateActionHandler({
-      name: 'project-create',
+      name: 'rad-lab-gen-ai-create',
       values: {
         requestId: '<uuid>',
         rootFolderId: '<root-folder-id>',
@@ -33,7 +33,7 @@ describe('project-create: fetch:template', () => {
       {
         "claim.yaml": "---
       apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-      kind: ProjectClaim
+      kind: RadLabGenAIClaim
       metadata:
         name: <project-name>-<uuid>
       spec:
