@@ -3,9 +3,9 @@ variable "billing_account_id" {
   description = "The ID of the billing account"
 }
 
-variable "organization_id" {
+variable "project_id" {
   type        = string
-  description = "The ID of the organization"
+  description = "The ID of the project"
 }
 
 variable "folder_id" {
