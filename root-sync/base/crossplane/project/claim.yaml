@@ -1,0 +1,12 @@
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: t-project-004
+spec:
+  rootFolderId: "108494461414"
+  projectName: t-project-004
+  projectId: t-project-004
+  projectEditors: 
+    - "user:rajan.subedi@gcp.hc-sc.gc.ca"
+  projectViewers: 
+    - "user:rajan.subedi@focisolutions.com"

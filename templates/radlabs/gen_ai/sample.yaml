@@ -1,11 +1,11 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: gen-ai-v2
+  name: gen-ai-v3
 spec:
   # Isolate the Terraform state for each GCP Project in a separate state file. The backend is configured in the ProviderConfig.
   providerConfigRef:
-    name: t-project-002 # "TO BE PATCHED" (with project ID)
+    name: t-project # "TO BE PATCHED" (with project ID)
   forProvider:
     module: git::https://github.com/GoogleCloudPlatform/rad-lab.git//modules/gen_ai?ref=v13.3.1
     source: Remote
@@ -20,7 +20,7 @@ spec:
       - key: folder_id
         value: "108494461414" # "TO BE PATCHED"
       - key: project_id_prefix # (Project ID)
-        value: "t-project-002" # "TO BE PATCHED"
+        value: "t-project-004" # "TO BE PATCHED"
       - key: zone
         value: "northamerica-northeast1-a"
 
@@ -69,7 +69,8 @@ spec:
       # - key: gpu_accelerator_core_count
       #   value: "false"
 
-
+      - key: create_usermanaged_notebook
+        value: "false"
 # For data_science, the only new variable is set_trustedimage_project_policy. Try it with "true"
       # - key: set_trustedimage_project_policy
       #   value: "true"

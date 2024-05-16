@@ -1,0 +1,28 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  # This optional configuration block can be used to inject HCL into any workspace that uses this provider config
+  # TODO: The providers are defined the RAD Lab modules and conflict with ours. Are the RAD Lab providers configured using the project/region.
+  configuration: |
+    provider "google" {
+      alias = "auth"
+      project     = "pht-01hsv4d2m0n"
+      region      = "northamerica-northeast1"
+    }
+
+    provider "google-beta" {
+      alias = "auth"
+      project     = "pht-01hsv4d2m0n"
+      region      = "northamerica-northeast1"
+    }
+
+    // Modules _must_ use remote state. The provider does not persist state.
+    terraform {
+      backend "kubernetes" {
+        secret_suffix     = "providerconfig-default"
+        namespace         = "crossplane-system"
+        in_cluster_config = true
+      }
+    }

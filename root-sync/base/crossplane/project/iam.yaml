@@ -1,0 +1,17 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicy
+metadata:
+  name: iampolicy-sample-project
+spec:
+  resourceRef:
+    kind: Project
+    name: ph-test-sean-01
+  bindings:
+    - members:
+        - "user:rajan.subedi@gcp.hc-sc.gc.ca"
+      role: roles/owner
+  auditConfigs:
+    - service: allServices
+      auditLogConfigs:
+        - logType: DATA_WRITE
+        - logType: DATA_READ

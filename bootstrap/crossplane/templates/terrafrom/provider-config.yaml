@@ -1,13 +1,13 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: t-project-003 # "TO BE PATCHED" (with project ID)
+  name: t-project # "TO BE PATCHED" (with project ID)
 spec:
   configuration: |
     terraform {
       backend "gcs" {
         bucket  = "433b88e1164c5268-bucket-tfstate"
-        prefix  = "by-project-id/t-project-003"
+        prefix  = "by-project-id/t-project"
       }
     }
 

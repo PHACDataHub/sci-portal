@@ -12,7 +12,7 @@ spec:
             - name: package-runtime
               args:
                 - --debug
-                - --timeout=60m
+                - --timeout=20m
               env:
                 - name: TF_LOG
                   value: TRACE
