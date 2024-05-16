@@ -1,0 +1,9 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabGenAIClaim
+metadata:
+  name: ph-sean-dev1-541fad3f-c763-4efc-bb33-79cc1f482cb8
+spec:
+  rootFolderId: '108494461414'
+  projectName: ph-sean-dev1
+  projectId: phx-01hy0v5296
