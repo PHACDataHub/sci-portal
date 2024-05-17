@@ -19,9 +19,10 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
 
   test('The data-science-portal:template:get-context action should render the expected Pull Request description', async () => {
     const { ctx } = await getContextActionHandler({
-      template: { name: 'project-create' },
+      template: { name: 'rad-lab-gen-ai-create' },
       parameters: {
         ...projectParameters,
+        machineSize: 'Medium',
       },
       mockDir,
     });
@@ -50,6 +51,10 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
 
       **Annual Budget Amount (CAD):** $2,000
       **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
+
+      ### Rad Lab GenAI
+
+      **Machine Size**: Medium
       "
     `);
   });
