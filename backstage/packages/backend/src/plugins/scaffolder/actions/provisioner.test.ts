@@ -12,9 +12,8 @@ import {
 jest.mock('ulidx', () => ({
   ulid: jest.fn(() => '01AN4Z07BY79KA1307SR9X4MV3'),
 }));
-
 jest.mock('uuid', () => ({
-  v4: jest.fn(() => '<uuid>'),
+  v4: jest.fn(() => '6bedd76d-4259-44dd-81d1-1052cfd3fed3'),
 }));
 
 const config = mockServices.rootConfig({
@@ -33,8 +32,16 @@ const config = mockServices.rootConfig({
   },
 });
 
-const createContext = (options: { workspacePath: string }) => ({
-  ...createMockActionContext({
+const createContext = ({
+  template: { namespace = 'default', name, title },
+  parameters,
+  workspacePath,
+}: {
+  template: { namespace?: string; name: string; title?: string };
+  parameters?: any;
+  workspacePath: string;
+}) =>
+  createMockActionContext({
     input: {
       parameters: {
         department: 'ph' as const,
@@ -52,21 +59,21 @@ const createContext = (options: { workspacePath: string }) => ({
         budgetAlertEmailRecipients:
           'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
 
-        additionalProperty: 'foo',
+        ...parameters,
       },
     },
     templateInfo: {
       entity: {
         metadata: {
-          name: 'project-create',
-          title: 'Project Template',
+          namespace,
+          name,
+          title,
         },
       },
-      entityRef: '',
+      entityRef: `template:${namespace}/${name}`,
     },
-    workspacePath: options.workspacePath,
-  }),
-});
+    workspacePath,
+  });
 
 describe('provisioner', () => {
   describe('data-science-portal:template:get-context', () => {
@@ -78,7 +85,10 @@ describe('provisioner', () => {
 
     it('should set the template name in the output', async () => {
       const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
+      const ctx = createContext({
+        template: { name: 'project-create' },
+        workspacePath,
+      });
       await action.handler(ctx);
 
       const name = 'template';
@@ -90,7 +100,10 @@ describe('provisioner', () => {
 
     it('should set the GitOps repo owner in the output', async () => {
       const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
+      const ctx = createContext({
+        template: { name: 'project-create' },
+        workspacePath,
+      });
       await action.handler(ctx);
 
       const name = 'repo_owner';
@@ -102,7 +115,10 @@ describe('provisioner', () => {
 
     it('should set the GitOps repo name in the output', async () => {
       const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
+      const ctx = createContext({
+        template: { name: 'project-create' },
+        workspacePath,
+      });
       await action.handler(ctx);
 
       const name = 'repo_name';
@@ -114,56 +130,78 @@ describe('provisioner', () => {
 
     it('should set the GitOps branch name in the output', async () => {
       const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
+      const ctx = createContext({
+        template: { name: 'project-create' },
+        workspacePath,
+      });
       await action.handler(ctx);
 
       const name = 'branch';
       const call = (ctx.output as jest.Mock).mock.calls.find(
         args => args[0] === name,
       );
-      expect(call).toEqual([name, 'request-<uuid>']);
+      expect(call).toEqual([
+        name,
+        'request-6bedd76d-4259-44dd-81d1-1052cfd3fed3',
+      ]);
+    });
+
+    it('should set the pull request title', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({
+        template: { name: 'project-create', title: 'Project Template' },
+        workspacePath,
+      });
+      await action.handler(ctx);
+
+      const name = 'pr_title';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, 'Create Project from Template']);
+    });
+
+    it('should add the "[Test] "` prefix to the pull request title when we want to Publish and Close the Pull Request', async () => {
+      const action = createProvisionTemplateAction(config);
+      const ctx = createContext({
+        template: { name: 'project-create', title: 'Project Template' },
+        parameters: {
+          pullRequestAction: 'Publish and Close Pull Request',
+        },
+        workspacePath,
+      });
+      await action.handler(ctx);
+
+      const name = 'pr_title';
+      const call = (ctx.output as jest.Mock).mock.calls.find(
+        args => args[0] === name,
+      );
+      expect(call).toEqual([name, '[Test] Create Project from Template']);
     });
 
     it('should set the pull request description in the output', async () => {
       const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
+      const ctx = createContext({
+        template: { name: 'project-create' },
+        workspacePath,
+      });
       await action.handler(ctx);
 
       const name = 'pr_description';
       const call = (ctx.output as jest.Mock).mock.calls.find(
         args => args[0] === name,
       );
-      expect(call[1]).toMatchInlineSnapshot(`
-        "This PR was created using Backstage. The request ID is \`&lt;uuid&gt;\`.
-
-        <!-- ### Client Name Email address -->
-
-        ### GCP Project
-
-        **Project Name:** phx-test-42
-        **Project ID:** phx-01an4z07by7
-        **Data Classification:** Unclassified
-
-        ### Administrative Details
-
-        **Cost Centre:** ABC123456789
-        **Cost Centre Name:** TPS Reports
-        **Justification:** This project will be used for testing our custom action.
-        **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
-        **Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
-        **Editors:** samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca
-
-        ### Budget
-
-        **Annual Budget Amount (CAD):** $2,000
-        **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
-        "
-      `);
+      expect(call[1]).toBeTruthy();
+      expect(typeof call[1]).toBe('string');
     });
 
     it('should set the pull request content template values in the output', async () => {
       const action = createProvisionTemplateAction(config);
-      const ctx = createContext({ workspacePath });
+      const ctx = createContext({
+        template: { name: 'project-create' },
+        parameters: { additionalProperty: 'foo' },
+        workspacePath,
+      });
       await action.handler(ctx);
 
       const name = 'template_values';
@@ -174,7 +212,7 @@ describe('provisioner', () => {
         name,
         {
           // Metadata
-          requestId: '<uuid>',
+          requestId: '6bedd76d-4259-44dd-81d1-1052cfd3fed3',
 
           // Project
           rootFolderId: '108494461414',

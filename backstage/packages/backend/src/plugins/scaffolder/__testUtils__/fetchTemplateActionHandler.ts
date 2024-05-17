@@ -7,13 +7,11 @@ import { createFetchTemplateAction } from '@backstage/plugin-scaffolder-backend'
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
 
 export const fetchTemplateActionHandler = ({
-  namespace = 'default',
-  name,
+  template: { namespace = 'default', name },
   values,
   mockDir,
 }: {
-  namespace?: string;
-  name: string;
+  template: { namespace?: string; name: string };
   values: any;
   mockDir: MockDirectory;
 }) => {
