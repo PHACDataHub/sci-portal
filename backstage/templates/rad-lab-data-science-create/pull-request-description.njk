@@ -1,23 +1,6 @@
-This PR was created using Backstage. The request ID is `{{requestId}}`.
+{% extends "project-create/pull-request-description.njk" %}
+{%block child %}
+### Rad Lab Data Science
 
-<!-- ### Client Name Email address -->
-
-### GCP Project
-
-**Project Name:** {{projectName}}
-**Project ID:** {{projectId}}
-**Data Classification:** {{dataClassificationTitle}}
-
-### Administrative Details
-
-**Cost Centre:** {{costCentre}}
-**Cost Centre Name:** {{costCentreName}}
-**Justification:** {{justification}}
-**Section 32 Manager Email:** {{section32ManagerEmail}}
-**Owners:** {{owners | map('email') | join(', ')}}
-**Editors:** {{editors | map('email') | join(', ')}}
-
-### Budget
-
-**Annual Budget Amount (CAD):** {{formattedBudgetAmount}}
-**Budget Alert Email Recipients:** {{budgetAlertEmailRecipients | join(', ')}}
+**Machine Size**: {{machineSize}}
+{% endblock %}
