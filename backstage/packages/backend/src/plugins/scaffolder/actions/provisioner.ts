@@ -277,7 +277,7 @@ export const createProvisionTemplateAction = (config: Config) => {
           ctx.input.parameters.budgetAlertEmailRecipients,
         ),
 
-        // Backstage Catalog Entity
+        // Permissions
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
         editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
       };
