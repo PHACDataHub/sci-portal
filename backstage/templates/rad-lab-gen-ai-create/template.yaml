@@ -5,6 +5,8 @@ metadata:
   name: rad-lab-gen-ai-create
   title: RAD Lab GenAI Template
   description: Create a Vertex AI Workbench which hosts the contents of the public Google Cloud [Generative AI](https://github.com/GoogleCloudPlatform/generative-ai) repository. The repository contains notebooks and content that demonstrate how to use, develop, and manage generative AI workflows using generative AI, powered by Vertex AI and Generative AI App Builder on Google Cloud. This Project has a budget and budget alerts. The Platform Team will review your request before the Project is created.
+  tags:
+    - rad-lab
 spec:
   owner: platform-team
   type: service

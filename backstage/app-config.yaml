@@ -90,9 +90,7 @@ costInsights:
       minimumFractionDigits: 3
 
 catalog:
-  import:
-    entityFilename: catalog-info.yaml
-    pullRequestBranchName: backstage-integration
+  readonly: true
   rules:
     - allow: [Component, System, API, Resource, Location]
   locations:
@@ -104,14 +102,6 @@ catalog:
 
     # Resource Provisioner template
     - type: file
-      target: ../../templates/project-create/template.yaml
+      target: ../../templates/catalog-info.yaml
       rules:
-        - allow: [Template]
-    - type: file
-      target: ../../templates/rad-lab-data-science-create/template.yaml
-      rules:
-        - allow: [Template]
-    - type: file
-      target: ../../templates/rad-lab-gen-ai-create/template.yaml
-      rules:
-        - allow: [Template]
+        - allow: [Location, Template]
