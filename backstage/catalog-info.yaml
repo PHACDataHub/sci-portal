@@ -1,11 +1,43 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: data-science-portal
+  title: Data Science Portal
+spec:
+  owner: group:platform-team
+
+---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: backstage
+  title: Backstage
   description: Backstage Application
   annotations:
     backstage.io/techdocs-ref: dir:.
 spec:
   type: website
-  owner: john@example.com
+  owner: group:platform-team
   lifecycle: experimental
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+spec:
+  type: root
+  children:
+    - group:foci
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: foci-team
+  title: Foci Solutions Team
+spec:
+  type: team
+  children: []
