@@ -1,0 +1,16 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-sean-dev1-e742347e-2acb-489c-af7b-900d64961ed4
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-sean-dev1
+  projectId: phx-01hydqvy6za
+  projectEditors:
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+    - user:sean.poulter@focisolutions.com
+  projectViewers:
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
