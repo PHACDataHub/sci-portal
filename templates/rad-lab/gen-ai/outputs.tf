@@ -40,15 +40,14 @@ output "workbench_usermanaged_names" {
   value       = google_notebooks_instance.ai_workbench_usermanaged[*].name
 }
 
-# Requires null_resource.ai_workbench_usermanaged_provisioning_state which requires gcloud cli
-# output "workbench_usermanaged_urls" {
-#   description = "User managed notebook access URLs"
-#   value       = formatlist("https://%s", google_notebooks_instance.ai_workbench_usermanaged[*].proxy_uri)
+output "workbench_usermanaged_urls" {
+  description = "User managed notebook access URLs"
+  value       = formatlist("https://%s", google_notebooks_instance.ai_workbench_usermanaged[*].proxy_uri)
 
-#   depends_on = [
-#     null_resource.ai_workbench_usermanaged_provisioning_state
-#   ]
-# }
+  depends_on = [
+    null_resource.ai_workbench_usermanaged_provisioning_state
+  ]
+}
 
 output "project_id" {
   description = "GenAI Project ID"

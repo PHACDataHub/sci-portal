@@ -178,16 +178,14 @@ resource "google_service_account_iam_member" "sa_ai_notebook_iam" {
   service_account_id = google_service_account.sa_p_workbench.id
 }
 
-# Pod will not have access to gcloud cli
+resource "null_resource" "ai_workbench_usermanaged_provisioning_state" {
+  for_each = toset(google_notebooks_instance.ai_workbench_usermanaged[*].name)
+  provisioner "local-exec" {
+    command = "while [ \"$(gcloud notebooks instances list --location ${var.zone} --project ${local.project.project_id} --filter 'NAME:${each.value} AND STATE:ACTIVE' --format 'value(STATE)' | wc -l | xargs)\" != 1 ]; do echo \"${each.value} not active yet.\"; done"
+  }
 
-# resource "null_resource" "ai_workbench_usermanaged_provisioning_state" {
-#   for_each = toset(google_notebooks_instance.ai_workbench_usermanaged[*].name)
-#   provisioner "local-exec" {
-#     command = "while [ \"$(gcloud notebooks instances list --location ${var.zone} --project ${local.project.project_id} --filter 'NAME:${each.value} AND STATE:ACTIVE' --format 'value(STATE)' | wc -l | xargs)\" != 1 ]; do echo \"${each.value} not active yet.\"; done"
-#   }
-
-#   depends_on = [google_notebooks_instance.ai_workbench_usermanaged]
-# }
+  depends_on = [google_notebooks_instance.ai_workbench_usermanaged]
+}
 
 resource "google_notebooks_instance" "ai_workbench_usermanaged" {
   count        = var.notebook_count > 0 && var.create_usermanaged_notebook ? var.notebook_count : 0
