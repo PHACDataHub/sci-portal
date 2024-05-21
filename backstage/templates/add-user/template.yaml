@@ -1,0 +1,93 @@
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: add-user
+  title: Backstage User Template
+  description: Create a Backstage User in the [sci-portal-users](https://github.com/PHACDataHub/sci-portal-users) repo.
+spec:
+  owner: platform-team
+  type: User
+
+  parameters:
+    - title: Add User
+      required:
+        - email
+        - displayName
+      properties:
+        email:
+          title: Email Address
+          description: The user's @gcp.hc-sc.gc.ca email address.
+          type: string
+          format: email
+          ui:autofocus: true
+        displayName:
+          title: Display Name
+          type: string
+        groups:
+          title: Groups
+          description: Add the user to existing Backstage Groups.
+          ui:field: MultiEntityPicker
+          ui:options:
+            catalogFilter:
+              kind: Group
+    - title: Pull Request
+      backstage:featureFlag: template-developer
+      properties:
+        pullRequestAction:
+          title: Pull Request Action
+          type: string
+          default: Diff Only
+          enum:
+            - Diff Only
+            - Publish and Close Pull Request
+            - Publish Pull Request
+
+  steps:
+    - id: create-user-entity
+      name: Create User
+      action: catalog:write
+      input:
+        filePath: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}.yaml
+        entity:
+          apiVersion: backstage.io/v1alpha1
+          kind: User
+          metadata:
+            name: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}
+          spec:
+            profile:
+              displayName: '${{parameters.displayName}}'
+              email: ${{parameters.email}}
+              # picture:
+            memberOf: ${{parameters.groups}}
+
+    - id: debug-pull-request
+      name: Debug Pull Request
+      action: debug:workspace
+      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
+      backstage:featureFlag: template-developer
+      input:
+        command: diff
+        workingDirectory: . # the workspacePath
+
+    - id: publish-pull-request
+      name: Submit Pull Request
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?owner=PHACDataHub&repo=sci-portal-users
+        branchName: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}
+        title: Add ${{parameters.email}}
+        description: This PR adds a `User` for ${{parameters.email}}.
+        reviewers:
+          - tcaky
+          - vedantthapa
+          - KDezenosky
+          - seanpoulter-foci
+          - ssubedir
+        targetPath: ./users/
+        commitMessage: Add ${{parameters.email}}
+
+  output:
+    links:
+      - url: ${{steps.publish-pull-request.output.remoteUrl}}
+        title: 'View Pull Request'

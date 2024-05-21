@@ -41,7 +41,7 @@ catalog:
   locations:
     # Backstage entities
     - type: file
-      target: /app/catalog/entities.yaml
+      target: /app/catalog-info.yaml
       rules:
         - allow: [System, User, Group]
 
