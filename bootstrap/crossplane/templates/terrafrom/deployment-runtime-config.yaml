@@ -3,6 +3,20 @@ kind: DeploymentRuntimeConfig
 metadata:
   name: tf-controller-config
 spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              image: localhost:5001/provider-terraform:v0.16.0
+              # args:
+              #   - --debug
+              #   # - --timeout=5m
+              # env:
+              #   - name: TF_LOG
+              #     value: INFO
   serviceAccountTemplate:
     metadata:
       name: provider-terraform
