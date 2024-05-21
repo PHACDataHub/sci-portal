@@ -5,6 +5,8 @@ metadata:
   name: add-user
   title: Backstage User Template
   description: Create a Backstage User in the [sci-portal-users](https://github.com/PHACDataHub/sci-portal-users) repo.
+  tags:
+    - backstage
 spec:
   owner: platform-team
   type: User
