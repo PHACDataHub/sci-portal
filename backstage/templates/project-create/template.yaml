@@ -133,7 +133,6 @@ spec:
       input:
         command: diff
         workingDirectory: . # the workspacePath
-        args: ${{ parameters.args }}
 
     - id: publish-pull-request
       name: Submit Pull Request
