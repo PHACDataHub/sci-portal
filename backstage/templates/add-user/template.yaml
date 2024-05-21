@@ -91,5 +91,5 @@ spec:
 
   output:
     links:
-      - url: ${{steps.publish-pull-request.output.remoteUrl}}
+      - url: ${{steps['publish-pull-request'].output.remoteUrl}}
         title: 'View Pull Request'
