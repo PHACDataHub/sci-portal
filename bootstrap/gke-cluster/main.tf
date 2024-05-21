@@ -80,6 +80,12 @@ resource "google_project_iam_member" "editor_role" {
   member  = "serviceAccount:${google_service_account.phac-backstage-kcc-sa.email}"
 }
 
+resource "google_project_iam_member" "gke_deploy" {
+  project = var.project_id
+  role    = "roles/container.developer"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
 # Grants the KCC the roles defined in locals to the primary portal folder
 resource "google_folder_iam_member" "kcc_folder_role_bindings" {
   for_each = toset(local.kcc_props.folder_roles)
