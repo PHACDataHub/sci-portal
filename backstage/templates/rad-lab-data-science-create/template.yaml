@@ -5,6 +5,8 @@ metadata:
   name: rad-lab-data-science-create
   title: RAD Lab Data Science Template
   description: Create a Vertex AI Workbench which hosts sample Jupyter Notebooks as part of data science module deployment. This Project has a budget and budget alerts. The Platform Team will review your request before the Project is created.
+  tags:
+    - rad-lab
 spec:
   owner: platform-team
   type: service
