@@ -10,14 +10,15 @@ spec:
         spec:
           containers:
             - name: package-runtime
-              args:
-                - --debug
-                - --timeout=20m
-              env:
-                - name: TF_LOG
-                  value: INFO
-                - name: TF_LOG_PATH
-                  value: log_terraform.log
+              image: docker.io/ssubedir/crossplane-terraform-gcloud:v1 # TODO: Update to use artifact registry image
+              # args:
+              #   - --debug
+              #   - --timeout=20m
+              # env:
+              #   - name: TF_LOG
+              #     value: INFO
+              #   - name: TF_LOG_PATH
+              #     value: log_terraform.log
 
   serviceAccountTemplate:
     metadata:
