@@ -1,0 +1,59 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xradlabdatasciences.data-science-portal.phac-aspc.gc.ca
+spec:
+  defaultCompositionRef:
+    name: rad-lab-data-science
+  group: data-science-portal.phac-aspc.gc.ca
+  names:
+    kind: xRadLabDataScience
+    plural: xradlabdatasciences
+  claimNames:
+    kind: RadLabDataScienceClaim
+    plural: radlabdatascienceclaims
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                # Base Properties
+                rootFolderId:
+                  type: string
+                projectName:
+                  type: string
+                projectId:
+                  type: string
+                projectEditors:
+                  type: array
+                  items:
+                    type: string
+                projectViewers:
+                  type: array
+                  items:
+                    type: string
+                
+                #Gen AI Properties
+                shieldedVm:
+                  type: string
+                owners: # "["<name>@gcp.hc-sc.gc.ca",...]"
+                  type: string
+                trustedUsers: # "["<name>@gcp.hc-sc.gc.ca",...]"
+                  type: string
+              required:
+                # Base Properties
+                - rootFolderId
+                - projectName
+                - projectId
+                - projectEditors
+                - projectViewers
+                - shieldedVm
+                - owners
+                - trustedUsers
