@@ -31,6 +31,19 @@ resource "google_cloudbuild_trigger" "data_science_portal_trigger" {
   filename       = "backstage/packages/backend/cloudbuild.yaml"
 }
 
+resource "google_cloudbuild_trigger" "provider_terraform_trigger" {
+  name     = "proivder-terraform-image-trigger"
+  location = var.cloudbuild_host_connection_region
+  repository_event_config {
+    repository = google_cloudbuildv2_repository.data_science_portal.id
+    push {
+      branch = var.cloudbuild_repository_branch
+    }
+  }
+  included_files = ["bootstrap/crossplane/templates/terrafrom/build/Dockerfile"]
+  filename       = "bootstrap/crossplane/templates/terrafrom/build/cloudbuild.yaml"
+}
+
 module "gke" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
   version = "~> 30.0"

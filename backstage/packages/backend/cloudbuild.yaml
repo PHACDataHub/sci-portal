@@ -1,5 +1,5 @@
 steps:
-  # Get GitHub App credentials
+  # The build requires the GitHub App credentials to be defined.
   - name: 'ubuntu'
     dir: 'backstage'
     entrypoint: bash
@@ -29,20 +29,20 @@ steps:
   # Build Image
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'backstage'
-    args: ['image','build','.','-f','packages/backend/Dockerfile','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/ph-backstage/backstage:latest','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/ph-backstage/backstage:$SHORT_SHA']
+    args: ['image','build','.','-f','packages/backend/Dockerfile','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:latest','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:$SHORT_SHA']
     env:
       - 'DOCKER_BUILDKIT=1'
 
   # Publish Image
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'backstage'
-    args: ['push', '--all-tags','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/ph-backstage/backstage']
+    args: ['push', '--all-tags','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE']
 
   # Deploy Image to GKE
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
-    - --image=$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/ph-backstage/backstage:$SHORT_SHA
+    - --image=$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:$SHORT_SHA
     - --cluster=$_CLUSTER_NAME
     - --location=$_CLUSTER_LOCATION
     - --filename=root-sync/base/backstage/backstage.yaml
@@ -50,5 +50,7 @@ steps:
 substitutions:
   _NPM_IMAGE_TAG: node-18.12.0
   _ARTIFACT_REGISTRY_LOCATION: northamerica-northeast1-docker
+  _ARTIFACT_REGISTRY_REPOSITORY: ph-backstage
+  _ARTIFACT_REGISTRY_IMAGE: backstage
   _CLUSTER_NAME: phac-backstage
   _CLUSTER_LOCATION: northamerica-northeast1
