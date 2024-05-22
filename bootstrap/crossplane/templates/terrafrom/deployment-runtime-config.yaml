@@ -3,6 +3,23 @@ kind: DeploymentRuntimeConfig
 metadata:
   name: tf-controller-config
 spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              image: northamerica-northeast1-docker.pkg.dev/pht-01hsv4d2m0n/ph-backstage/provider-terraform:latest
+              args:
+                # - --debug
+                - --timeout=40m
+              # env:
+              #   - name: TF_LOG
+              #     value: INFO
+              #   - name: TF_LOG_PATH
+              #     value: log_terraform.log
+
   serviceAccountTemplate:
     metadata:
       name: provider-terraform

@@ -1,0 +1,202 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: rad-lab-gen-ai
+  annotations:
+    crossplane.io/composition-schema-aware-validation-mode: strict
+spec:
+  compositeTypeRef:
+    apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+    kind: xRadLabGenAI
+  resources:
+    - name: BASE-PROJECT
+      base:
+        apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+        kind: xProject
+        spec:
+          rootFolderId: "TO BE PATCHED"
+          projectName: "TO BE PATCHED"
+          projectId: "TO BE PATCHED"
+          projectEditors: ["TO BE PATCHED"]
+          projectViewers: ["TO BE PATCHED"]
+    
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.projectName"
+        - fromFieldPath: "spec.rootFolderId"
+          toFieldPath: "spec.rootFolderId"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.projectId"
+        - fromFieldPath: "spec.projectEditors"
+          toFieldPath: "spec.projectEditors"
+        - fromFieldPath: "spec.projectViewers"
+          toFieldPath: "spec.projectViewers"
+
+    - name: TERRAFORM-CONFIG
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef:
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+              apiVersion: tf.upbound.io/v1beta1
+              kind: ProviderConfig
+              metadata:
+                name: "TO BE PATCHED"
+                namespace: default
+              spec:
+                configuration: "TO BE PATCHED"
+          references:
+            - dependsOn:
+                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+                kind: Project
+                name: "TO BE PATCHED"
+                namespace: default
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.references[0].dependsOn.name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.metadata.name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.spec.configuration"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: |
+                  terraform {
+                    backend "gcs" {
+                      bucket  = "433b88e1164c5268-bucket-tfstate"
+                      prefix  = "project-id/%s"
+                    }
+                  }
+
+      readinessChecks:
+        - type: NonEmpty
+          fieldPath: status.atProvider.manifest
+
+    - name: GEN-AI-WORKSPACE
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef:
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+                apiVersion: tf.upbound.io/v1beta1
+                kind: Workspace
+                metadata:
+                  name: "TO BE PATCHED"
+                  namespace: default
+                spec:
+                  providerConfigRef:
+                    name: "TO BE PATCHED"
+                  forProvider:
+                    module: git::https://github.com/PHACDataHub/sci-portal.git//templates/rad-lab/gen-ai?ref=main
+                    source: Remote
+                    vars: 
+                      ##
+                      # Project
+                      ##
+                      - key: billing_account_id
+                        value: "TO BE PATCHED"
+                      - key: folder_id
+                        value: "TO BE PATCHED"
+                      - key: project_id_prefix
+                        value: "TO BE PATCHED"
+                      # TODO: Document this will change based on data classification.  
+                      - key: set_shielded_vm_policy
+                        value: "TO BE PATCHED"
+
+
+
+                      ##
+                      # Permissions
+                      ##
+                      - key: owner_users 
+                        value: "TO BE PATCHED"
+                      - key: trusted_users 
+                        value: "TO BE PATCHED"
+
+                      - key: create_project
+                        value: "false"
+                      - key: zone
+                        value: "northamerica-northeast1-a"
+
+                      ##
+                      # Security Controls
+                      ##
+                      - key: set_domain_restricted_sharing_policy
+                        value: "false"
+                      - key: set_external_ip_policy
+                        value: "false"
+                      
+                      ##
+                      # (Option) Deep Learning VM Image
+                      #
+                      # See https://cloud.google.com/deep-learning-vm/docs/images.
+                      # This may affect the machine type and GPU acceleration.
+                      ##
+                      # - key: image_family
+                      #   value: ""
+
+                      ##
+                      # (Option) Machine Type
+                      ##
+                      - key: machine_type
+                        value: n1-standard-8
+
+                      ##
+                      # (Option) GPU Acceleration
+                      ##
+                      - key: enable_gpu_driver
+                        value: "false"
+                      # - key: gpu_accelerator_type
+                      #   value: "false"
+                      # - key: gpu_accelerator_core_count
+                      #   value: "false"
+
+                      - key: create_usermanaged_notebook
+                        value: "false"
+          references:
+            - dependsOn: # GenAi requires a base project with budget.
+                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+                kind: Project
+                name: "TO BE PATCHED"
+                namespace: default
+            - dependsOn: # Custom ProviderConfig for storing terraform state
+                apiVersion: tf.upbound.io/v1beta1
+                kind: ProviderConfig
+                name: "TO BE PATCHED"
+                namespace: default
+            - patchesFrom:
+                apiVersion: v1
+                kind: ConfigMap
+                namespace: backstage
+                name: backstage-config
+                fieldPath: data.GCP_BILLING_ACCOUNT_ID
+              toFieldPath: "spec.forProvider.spec.forProvider.vars[0].value"
+
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.references[0].dependsOn.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.references[1].dependsOn.name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.metadata.name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.spec.providerConfigRef.name"
+        - fromFieldPath: "spec.rootFolderId"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[1].value"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[2].value"
+        - fromFieldPath: "spec.shieldedVm"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[3].value"
+        - fromFieldPath: "spec.owners"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[4].value"
+        - fromFieldPath: "spec.trustedUsers"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[5].value"

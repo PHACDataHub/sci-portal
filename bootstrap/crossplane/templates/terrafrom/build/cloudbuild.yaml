@@ -1,14 +1,14 @@
 steps:
   # Build Image
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'backstage'
+    dir: 'bootstrap/crossplane/templates/terrafrom/build/'
     args: ['image','build','.','--build-arg=PROVIDER_TERRAFORM_VERSION=$_PROVIDER_TERRAFORM_VERSION', '--build-arg=CLOUD_SDK_VERSION=$_CLOUD_SDK_VERSION','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:latest','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:$SHORT_SHA','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:$_PROVIDER_TERRAFORM_VERSION']
     env:
       - 'DOCKER_BUILDKIT=1'
 
   # Publish Image
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'backstage'
+    dir: 'bootstrap/crossplane/templates/terrafrom/build/'
     args: ['push', '--all-tags','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE']
 
 substitutions:
