@@ -5,9 +5,6 @@ metadata:
   name: rad-lab-gen-ai
   annotations:
     crossplane.io/composition-schema-aware-validation-mode: strict
-  labels:
-    provider: kubernetes
-    guide: self
 spec:
   compositeTypeRef:
     apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
