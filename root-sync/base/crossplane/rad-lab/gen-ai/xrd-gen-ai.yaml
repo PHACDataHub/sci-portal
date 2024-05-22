@@ -42,7 +42,7 @@ spec:
                 
                 #Gen AI Properties
                 shieldedVm:
-                  type: boolean
+                  type: string
                 owners: # "["<name>@gcp.hc-sc.gc.ca",...]"
                   type: string
                 trustedUsers: # "["<name>@gcp.hc-sc.gc.ca",...]"

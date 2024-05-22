@@ -11,9 +11,9 @@ spec:
           containers:
             - name: package-runtime
               image: docker.io/ssubedir/crossplane-terraform-gcloud:v1 # TODO: Update to use artifact registry image
-              # args:
-              #   - --debug
-              #   - --timeout=20m
+              args:
+                # - --debug
+                - --timeout=40m
               # env:
               #   - name: TF_LOG
               #     value: INFO

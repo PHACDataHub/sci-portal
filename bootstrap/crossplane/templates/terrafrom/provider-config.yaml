@@ -6,11 +6,13 @@ spec:
   # This optional configuration block can be used to inject HCL into any workspace that uses this provider config
   configuration: |
     provider "google" {
+      alias = "auth"
       project     = "${GCP_PROJECT_ID}"
       region      = "${GCP_REGION}"
     }
 
     provider "google-beta" {
+      alias = "auth"
       project     = "${GCP_PROJECT_ID}"
       region      = "${GCP_REGION}"
     }

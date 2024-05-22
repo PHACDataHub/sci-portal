@@ -12,14 +12,14 @@ spec:
   resources:
     - name: BASE-PROJECT
       base:
-        apiVersion: data-science-portal.phac-aspc.gc.ca
+        apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
         kind: xProject
         spec:
           rootFolderId: "TO BE PATCHED"
           projectName: "TO BE PATCHED"
           projectId: "TO BE PATCHED"
-          projectEditors: "TO BE PATCHED"
-          projectViewers: "TO BE PATCHED"
+          projectEditors: ["TO BE PATCHED"]
+          projectViewers: ["TO BE PATCHED"]
     
       patches:
         - fromFieldPath: "spec.projectName"
@@ -46,6 +46,7 @@ spec:
               kind: ProviderConfig
               metadata:
                 name: "TO BE PATCHED"
+                namespace: default
               spec:
                 configuration: "TO BE PATCHED"
           references:
@@ -90,6 +91,7 @@ spec:
                 kind: Workspace
                 metadata:
                   name: "TO BE PATCHED"
+                  namespace: default
                 spec:
                   providerConfigRef:
                     name: "TO BE PATCHED"
@@ -158,9 +160,14 @@ spec:
                       # - key: gpu_accelerator_core_count
                       #   value: "false"
           references:
-            - dependsOn:
+            - dependsOn: # GenAi requires a base project with budget.
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
+                name: "TO BE PATCHED"
+                namespace: default
+            - dependsOn: # Custom ProviderConfig for storing terraform state
+                apiVersion: tf.upbound.io/v1beta1
+                kind: ProviderConfig
                 name: "TO BE PATCHED"
                 namespace: default
             - patchesFrom:
@@ -174,29 +181,19 @@ spec:
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.references[0].dependsOn.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.references[1].dependsOn.name"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.metadata.name"
         - fromFieldPath: "spec.projectId"
-          toFieldPath: "spec.forProvider.spec.providerConfigRef.name"
+          toFieldPath: "spec.forProvider.manifest.spec.providerConfigRef.name"
         - fromFieldPath: "spec.rootFolderId"
-          toFieldPath: "spec.forProvider.spec.forProvider.vars[1].value"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[1].value"
         - fromFieldPath: "spec.projectId"
-          toFieldPath: "spec.forProvider.spec.forProvider.vars[2].value"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[2].value"
         - fromFieldPath: "spec.shieldedVm"
-          toFieldPath: "spec.forProvider.spec.forProvider.vars[3].value"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[3].value"
         - fromFieldPath: "spec.owners"
-          toFieldPath: "spec.forProvider.spec.forProvider.vars[4].value"
-          transforms:
-            - type: string
-              string:
-                type: Format
-                fmt: |
-                  "%s"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[4].value"
         - fromFieldPath: "spec.trustedUsers"
-          toFieldPath: "spec.forProvider.spec.forProvider.vars[5].value"
-          transforms:
-            - type: string
-              string:
-                type: Format
-                fmt: |
-                  "%s"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[5].value"
