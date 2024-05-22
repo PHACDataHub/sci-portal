@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: package-runtime
-              image: docker.io/ssubedir/crossplane-terraform-gcloud:v1 # TODO: Update to use artifact registry image
+              image: northamerica-northeast1-docker.pkg.dev/pht-01hsv4d2m0n/ph-backstage/provider-terraform:latest
               args:
                 # - --debug
                 - --timeout=40m
