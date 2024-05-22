@@ -1,0 +1,19 @@
+steps:
+  # Build Image
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'backstage'
+    args: ['image','build','.','--build-arg=PROVIDER_TERRAFORM_VERSION=$_PROVIDER_TERRAFORM_VERSION', '--build-arg=CLOUD_SDK_VERSION=$_CLOUD_SDK_VERSION','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:latest','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:$SHORT_SHA','--tag','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE:$_PROVIDER_TERRAFORM_VERSION']
+    env:
+      - 'DOCKER_BUILDKIT=1'
+
+  # Publish Image
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'backstage'
+    args: ['push', '--all-tags','$_ARTIFACT_REGISTRY_LOCATION.pkg.dev/$PROJECT_ID/$_ARTIFACT_REGISTRY_REPOSITORY/$_ARTIFACT_REGISTRY_IMAGE']
+
+substitutions:
+  _ARTIFACT_REGISTRY_LOCATION: northamerica-northeast1-docker
+  _ARTIFACT_REGISTRY_REPOSITORY: ph-backstage
+  _ARTIFACT_REGISTRY_IMAGE: provider-terraform
+  _PROVIDER_TERRAFORM_VERSION: v0.16.0
+  _CLOUD_SDK_VERSION: 476.0.0
