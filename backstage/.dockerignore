@@ -1,8 +1,9 @@
 .git
 .yarn/cache
 .yarn/install-state.gz
+cloudbuild.yaml
 node_modules
-packages/*/src
 packages/*/node_modules
+packages/*/src
 plugins
 *.local.yaml
