@@ -159,6 +159,9 @@ spec:
                       #   value: "false"
                       # - key: gpu_accelerator_core_count
                       #   value: "false"
+
+                      - key: create_usermanaged_notebook
+                        value: "false"
           references:
             - dependsOn: # GenAi requires a base project with budget.
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
