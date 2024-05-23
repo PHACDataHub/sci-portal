@@ -32,7 +32,7 @@ output "workbench_googlemanaged_names" {
 
 output "workbench_googlemanaged_urls" {
   description = "Google Managed Notebook access URLs"
-  value       = formatlist("https://%s", google_notebooks_runtime.ai_workbench_googlemanaged[*].proxy_uri)
+  value       = formatlist("https://console.cloud.google.com/vertex-ai/workbench/managed?project=%s", local.project.project_id)
 }
 
 output "workbench_usermanaged_names" {
