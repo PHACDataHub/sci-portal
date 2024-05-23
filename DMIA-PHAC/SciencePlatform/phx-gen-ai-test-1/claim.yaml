@@ -1,0 +1,13 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabGenAIClaim
+metadata:
+  name: phx-gen-ai-test-1-f23e130d-de9f-4519-b7ab-32ac43c5614f
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-gen-ai-test-1
+  projectId: phx-01hyk9fm83t
+  projectEditors:
+    - user:rajan.subedi@focisolutions.com
+  projectViewers:
+    - user:rajan.subedi@gcp.hc-sc.gc.ca
