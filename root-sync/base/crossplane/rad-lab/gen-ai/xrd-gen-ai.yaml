@@ -39,14 +39,6 @@ spec:
                   type: array
                   items:
                     type: string
-                
-                #Gen AI Properties
-                shieldedVm:
-                  type: string
-                owners: # "["<name>@gcp.hc-sc.gc.ca",...]"
-                  type: string
-                trustedUsers: # "["<name>@gcp.hc-sc.gc.ca",...]"
-                  type: string
               required:
                 # Base Properties
                 - rootFolderId
@@ -54,6 +46,3 @@ spec:
                 - projectId
                 - projectEditors
                 - projectViewers
-                - shieldedVm
-                - owners
-                - trustedUsers
