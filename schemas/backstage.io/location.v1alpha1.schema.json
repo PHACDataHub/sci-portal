@@ -20,7 +20,7 @@
   ],
   "allOf": [
     {
-      "$ref": "Entity"
+      "$ref": "../backstage/Entity.schema.json"
     },
     {
       "type": "object",
