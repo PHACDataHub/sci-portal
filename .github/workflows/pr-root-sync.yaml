@@ -55,7 +55,7 @@ jobs:
           kubeconform -v
         env:
           GH_TOKEN: ${{ github.token }}
-          KUBECONFORM_VERSION: v0.6.4
+          KUBECONFORM_VERSION: v0.6.6
 
       - name: Check manifests in base/
         working-directory: ./root-sync/base
@@ -63,7 +63,8 @@ jobs:
           set -euxo pipefail
           kustomize build . \
           | kubeconform \
-            -verbose -strict \
+            -summary \
+            -strict \
             -ignore-missing-schemas \
             -schema-location default \
             -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
@@ -74,7 +75,8 @@ jobs:
           set -euxo pipefail
           kustomize build . \
           | kubeconform \
-            -verbose -strict \
+            -summary \
+            -strict \
             -ignore-missing-schemas \
             -schema-location default \
             -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
