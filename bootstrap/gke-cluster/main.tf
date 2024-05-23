@@ -40,7 +40,7 @@ resource "google_cloudbuild_trigger" "provider_terraform_trigger" {
       branch = var.cloudbuild_repository_branch
     }
   }
-  included_files = ["bootstrap/crossplane/templates/terrafrom/build/Dockerfile"]
+  included_files = ["bootstrap/crossplane/templates/terrafrom/build/*"]
   filename       = "bootstrap/crossplane/templates/terrafrom/build/cloudbuild.yaml"
 }
 
