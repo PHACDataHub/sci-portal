@@ -108,19 +108,12 @@ spec:
                         value: "TO BE PATCHED"
                       - key: project_id_prefix
                         value: "TO BE PATCHED"
-                      # TODO: Document this will change based on data classification.  
-                      - key: set_shielded_vm_policy
-                        value: "TO BE PATCHED"
 
 
 
                       ##
                       # Permissions
                       ##
-                      - key: owner_users 
-                        value: "TO BE PATCHED"
-                      - key: trusted_users 
-                        value: "TO BE PATCHED"
 
                       - key: create_project
                         value: "false"
@@ -194,9 +187,3 @@ spec:
           toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[1].value"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[2].value"
-        - fromFieldPath: "spec.shieldedVm"
-          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[3].value"
-        - fromFieldPath: "spec.owners"
-          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[4].value"
-        - fromFieldPath: "spec.trustedUsers"
-          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[5].value"
