@@ -134,7 +134,8 @@ spec:
                         value: "false"
                       - key: set_external_ip_policy
                         value: "false"
-                      
+                      - key: set_trustedimage_project_policy
+                        value: "false"                      
                       ##
                       # (Option) Deep Learning VM Image
                       #
@@ -148,7 +149,7 @@ spec:
                       # (Option) Machine Type
                       ##
                       - key: machine_type
-                        value: n1-standard-8
+                        value: n1-standard-1
 
                       ##
                       # (Option) GPU Acceleration
