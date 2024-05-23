@@ -46,6 +46,7 @@ import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
 import { DefaultFilters } from '@backstage/plugin-catalog-react';
+import { CustomCatalogPage } from './components/catalog/CustomCatalogIndex';
 
 const app = createApp({
   components: {
@@ -121,7 +122,9 @@ const routes = (
           }
         />
       }
-    />
+    >
+      <CustomCatalogPage />
+    </Route>
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}
