@@ -193,10 +193,11 @@ spec:
         apiVersion: apiextensions.crossplane.io/v1alpha1
         kind: Usage
         spec:
+          replayDeletion: true
           reason: "Allow workspace to run terraform destroy before Crossplane deletes the project on which it depends"
           of:
-            apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-            kind: Project
+            apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+            kind: xProject
             resourceRef:
               name: "TO BE PATCHED"
           by:
@@ -216,6 +217,7 @@ spec:
         apiVersion: apiextensions.crossplane.io/v1alpha1
         kind: Usage
         spec:
+          replayDeletion: true
           reason: "ProviderConfig configures the Workspace's Terraform state"
           of:
             apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
