@@ -13,7 +13,6 @@ import {
 import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
-import { TechRadarPage } from '@backstage-community/plugin-tech-radar';
 import {
   DefaultTechDocsHome,
   TechDocsIndexPage,
@@ -155,10 +154,6 @@ const routes = (
       }
     />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
-    <Route
-      path="/tech-radar"
-      element={<TechRadarPage width={1500} height={800} />}
-    />
     <Route
       path="/catalog-import"
       element={
