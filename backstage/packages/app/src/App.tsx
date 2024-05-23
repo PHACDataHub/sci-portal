@@ -5,6 +5,8 @@ import {
   CatalogEntityPage,
   CatalogIndexPage,
   catalogPlugin,
+  CatalogTable,
+  CatalogTableColumnsFunc,
 } from '@backstage/plugin-catalog';
 import {
   CatalogImportPage,
@@ -32,6 +34,7 @@ import { HomePage } from './components/home/HomePage';
 import {
   AlertDisplay,
   OAuthRequestDialog,
+  OverflowTooltip,
   SignInPage,
 } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
@@ -46,6 +49,26 @@ import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
 import { DefaultFilters } from '@backstage/plugin-catalog-react';
+
+const customCatalogColumnsFunc: CatalogTableColumnsFunc = entityListContext => {
+  return [
+    ...CatalogTable.defaultColumnsFunc(entityListContext),
+    {
+      title: '% Budget',
+      field: 'entity.metadata.budget',
+      render: ({}) => (
+        <OverflowTooltip text={'Test'} placement="bottom-start" />
+      ),
+    },
+    {
+      title: 'Cost',
+      field: 'entity.metadata.cost',
+      render: ({}) => (
+        <OverflowTooltip text={'Test'} placement="bottom-start" />
+      ),
+    },
+  ];
+};
 
 const app = createApp({
   components: {
@@ -110,6 +133,7 @@ const routes = (
       path="/catalog"
       element={
         <CatalogIndexPage
+          columns={customCatalogColumnsFunc}
           filters={
             <>
               <DefaultFilters
