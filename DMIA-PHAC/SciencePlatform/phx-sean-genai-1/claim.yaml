@@ -1,0 +1,16 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabGenAIClaim
+metadata:
+  name: phx-sean-genai-1-058f0996-e133-4aa8-97e4-3b94d2161cde
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-sean-genai-1
+  projectId: phx-01hyk133w33
+  projectEditors:
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+    - user:sean.poulter@focisolutions.com
+  projectViewers:
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
