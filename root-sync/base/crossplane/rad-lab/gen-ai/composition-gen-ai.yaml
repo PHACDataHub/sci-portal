@@ -177,7 +177,7 @@ spec:
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.references[0].dependsOn.name"
-        - fromFieldPath: "spec.projectName"
+        - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.references[1].dependsOn.name"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.metadata.name"
