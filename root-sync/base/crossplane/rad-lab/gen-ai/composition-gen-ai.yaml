@@ -188,27 +188,23 @@ spec:
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[2].value"
 
-    - name: WORKSPACE-USES-PROJECT
+    - name: PROVIDER-CONFIG-USES-PROJECT
       base:
         apiVersion: apiextensions.crossplane.io/v1alpha1
         kind: Usage
         spec:
           replayDeletion: true
-          reason: "Allow workspace to run terraform destroy before Crossplane deletes the project on which it depends"
           of:
             apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
             kind: xProject
-            resourceRef:
-              name: "TO BE PATCHED"
+            resourceSelector:
+              matchControllerRef: true
           by:
             apiVersion: tf.upbound.io/v1beta1
-            kind: Workspace
+            kind: ProviderConfig
             resourceRef:
               name: "TO BE PATCHED"
-
       patches:
-        - fromFieldPath: "spec.projectName"
-          toFieldPath: "spec.of.resourceRef.name"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.by.resourceRef.name"
 
@@ -218,9 +214,8 @@ spec:
         kind: Usage
         spec:
           replayDeletion: true
-          reason: "ProviderConfig configures the Workspace's Terraform state"
           of:
-            apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+            apiVersion: tf.upbound.io/v1beta1
             kind: ProviderConfig
             resourceRef:
               name: "TO BE PATCHED"
