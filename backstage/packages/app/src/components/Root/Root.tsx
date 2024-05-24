@@ -77,7 +77,6 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           to="cost-dashboard"
           text="Cost Dashboard"
         />
-
         {/* End global nav */}
       </SidebarGroup>
       <SidebarSpace />
