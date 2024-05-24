@@ -203,6 +203,26 @@ spec:
               kind: Service
               metadata:
                 namespace: default
-                name: service-dataplex
+                name: "TO BE PATCHED"
               spec:
+                projectRef:
+                  name: "TO BE PATCHED"
                 resourceID: dataplex.googleapis.com
+          references:
+            - dependsOn:
+                apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+                kind: Project
+                name: "TO BE PATCHED"
+                namespace: default
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.references[0].dependsOn.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.forProvider.manifest.spec.projectRef.name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.metadata.name"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "dataplex-%s"

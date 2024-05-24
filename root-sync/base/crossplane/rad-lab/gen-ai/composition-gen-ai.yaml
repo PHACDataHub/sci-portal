@@ -78,7 +78,7 @@ spec:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
 
-    - name: GEN-AI-WORKSPACE
+    - name: WORKSPACE
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -187,3 +187,45 @@ spec:
           toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[1].value"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[2].value"
+
+    - name: PROVIDER-CONFIG-USES-PROJECT
+      base:
+        apiVersion: apiextensions.crossplane.io/v1alpha1
+        kind: Usage
+        spec:
+          replayDeletion: true
+          of:
+            apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+            kind: xProject
+            resourceSelector:
+              matchControllerRef: true
+          by:
+            apiVersion: tf.upbound.io/v1beta1
+            kind: ProviderConfig
+            resourceRef:
+              name: "TO BE PATCHED"
+      patches:
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.by.resourceRef.name"
+
+    - name: WORKSPACE-USES-PROVIDER-CONFIG
+      base:
+        apiVersion: apiextensions.crossplane.io/v1alpha1
+        kind: Usage
+        spec:
+          replayDeletion: true
+          of:
+            apiVersion: tf.upbound.io/v1beta1
+            kind: ProviderConfig
+            resourceRef:
+              name: "TO BE PATCHED"
+          by:
+            apiVersion: tf.upbound.io/v1beta1
+            kind: Workspace
+            resourceRef:
+              name: "TO BE PATCHED"
+      patches:
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.of.resourceRef.name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.by.resourceRef.name"
