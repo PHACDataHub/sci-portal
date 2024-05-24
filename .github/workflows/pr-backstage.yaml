@@ -17,7 +17,8 @@ jobs:
         node-version: [18.x]
         runs-on: [ubuntu-latest, windows-latest]
 
-    runs-on: ${{ matrix.os }}
+    name: Node.js v${{ matrix.node-version }} on ${{ machine.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
 
     defaults:
       run:
