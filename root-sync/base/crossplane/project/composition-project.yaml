@@ -268,7 +268,7 @@ spec:
           toFieldPath: "spec.references[0].dependsOn.name"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.projectRef.name"
-        - fromFieldPath: "spec.projectId"
+        - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.metadata.name"
           transforms:
             - type: string
