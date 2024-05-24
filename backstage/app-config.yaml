@@ -75,20 +75,6 @@ auth:
 # Sign in without a pop-up. See https://backstage.io/docs/auth/#sign-in-configuration.
 enableExperimentalRedirectFlow: true
 
-costInsights:
-  engineerCost: 200000
-  products:
-    projectBudgets:
-      name: Project Budgets
-      # icon:
-    costCentres:
-      name: Cost Centres
-  baseCurrency:
-    locale: en-US
-    options:
-      currency: CAD
-      minimumFractionDigits: 3
-
 catalog:
   readonly: true
   rules:
