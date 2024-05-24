@@ -115,6 +115,33 @@ spec:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
 
+    - name: IAM-USES-PROJECT
+      base:
+        apiVersion: apiextensions.crossplane.io/v1alpha1
+        kind: Usage
+        spec:
+          replayDeletion: true
+          of:
+            apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+            kind: Project
+            resourceRef:
+              name: "TO BE PATCHED"
+          by:
+            apiVersion: iam.cnrm.cloud.google.com/v1beta1
+            kind: IAMPolicy
+            resourceRef:
+              name: "TO BE PATCHED"
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.of.resourceRef.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.by.resourceRef.name"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "iampolicy-%s"
+
     - name: BUDGET
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -190,7 +217,29 @@ spec:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
 
-    - name: DATAPLEX_API
+    - name: BUDGET-USES-PROJECT
+      base:
+        apiVersion: apiextensions.crossplane.io/v1alpha1
+        kind: Usage
+        spec:
+          replayDeletion: true
+          of:
+            apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+            kind: Project
+            resourceRef:
+              name: "TO BE PATCHED"
+          by:
+            apiVersion: billingbudgets.cnrm.cloud.google.com/v1beta1
+            kind: BillingBudgetsBudget
+            resourceRef:
+              name: "TO BE PATCHED"
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.of.resourceRef.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.by.resourceRef.name"
+
+    - name: DATAPLEX-API
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -226,3 +275,31 @@ spec:
               string:
                 type: Format
                 fmt: "dataplex-%s"
+
+    - name: DATAPLEX-API-USES-PROJECT
+      base:
+        apiVersion: apiextensions.crossplane.io/v1alpha1
+        kind: Usage
+        spec:
+          replayDeletion: true
+          of:
+            apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+            kind: Project
+            resourceRef:
+              name: "TO BE PATCHED"
+          by:
+            apiVersion: serviceusage.cnrm.cloud.google.com/v1beta1
+            kind: Service
+            resourceRef:
+              name: "TO BE PATCHED"
+      patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.of.resourceRef.name"
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "spec.by.resourceRef.name"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "dataplex-%s"
+
