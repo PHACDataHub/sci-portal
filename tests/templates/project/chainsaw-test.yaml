@@ -90,6 +90,8 @@ spec:
                 projectViewers:
                   - user:sean.poulter@focisolutions.com
                   - user:sean.poulter@gcp.hc-sc.gc.ca
+                labels:
+                  cost-centre: abc123456789
 
         - description: Assert the ProjectClaim has been created
           assert:
@@ -116,6 +118,8 @@ spec:
                 name: ($projectName)
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
+                labels:
+                  cost-centre: abc123456789
               spec:
                 name: ($projectName)
                 resourceID: ($projectId)

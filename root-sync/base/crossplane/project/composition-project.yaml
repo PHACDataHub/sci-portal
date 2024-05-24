@@ -30,6 +30,7 @@ spec:
                 namespace: default
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
+                labels: "TO BE PATCHED"
               spec:
                 name: "TO BE PATCHED"
                 resourceID: "TO BE PATCHED"
@@ -48,6 +49,8 @@ spec:
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.metadata.name"
+        - fromFieldPath: "spec.labels"
+          toFieldPath: "spec.forProvider.manifest.metadata.labels"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.name"
         - fromFieldPath: "spec.rootFolderId"

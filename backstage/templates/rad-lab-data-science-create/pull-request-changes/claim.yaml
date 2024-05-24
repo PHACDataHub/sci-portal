@@ -15,3 +15,5 @@ spec:
   {%- for editor in values.editors %}
     - user:${{editor.email}}
   {%- endfor %}
+  labels:
+    cost-centre: ${{values.costCentre | lower}}
