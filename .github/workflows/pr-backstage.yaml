@@ -12,16 +12,17 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    name:
+    strategy:
+      matrix:
+        node-version: [18.x]
+        runs-on: [ubuntu-latest, windows-latest]
+
+    name: Node.js v${{ matrix.node-version }} on ${{ machine.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
 
     defaults:
       run:
         working-directory: ./backstage
-
-    strategy:
-      matrix:
-        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v4
