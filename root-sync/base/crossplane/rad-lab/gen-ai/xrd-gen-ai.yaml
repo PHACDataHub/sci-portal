@@ -43,7 +43,8 @@ spec:
                   x-kubernetes-preserve-unknown-fields: true
                   type: object
                   properties:
-                    cost-centre: string
+                    cost-centre:
+                      type: string
                     # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
                   required:
                     - cost-centre
