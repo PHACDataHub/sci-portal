@@ -23,35 +23,6 @@ spec:
 
   steps:
     - try:
-        - delete:
-            ref:
-              apiVersion: apiextensions.crossplane.io/v1
-              kind: CompositeResourceDefinition
-              name: xprojects.data-science-portal.phac-aspc.gc.ca
-        - apply:
-            file: ../../../root-sync/base/crossplane/project/xrd-project.yaml
-        - description: Assert the CompositeResourceDefinition has been created
-          assert:
-            resource:
-              apiVersion: apiextensions.crossplane.io/v1
-              kind: CompositeResourceDefinition
-              metadata:
-                name: xprojects.data-science-portal.phac-aspc.gc.ca
-              status:
-                (conditions[?type == 'Established']):
-                  - status: "True"
-                (conditions[?type == 'Offered']):
-                  - status: "True"
-
-        - delete:
-            ref:
-              apiVersion: apiextensions.crossplane.io/v1
-              kind: Composition
-              name: project
-        - apply:
-            file: ../../../root-sync/base/crossplane/project/composition-project.yaml
-
-    - try:
         - description: Generate the request ID
           script:
             content: uuidgen | tr '[:upper:]' '[:lower:]'
@@ -90,6 +61,8 @@ spec:
                 projectViewers:
                   - user:sean.poulter@focisolutions.com
                   - user:sean.poulter@gcp.hc-sc.gc.ca
+                labels:
+                  cost-centre: abc123456789
 
         - description: Assert the ProjectClaim has been created
           assert:
@@ -116,6 +89,8 @@ spec:
                 name: ($projectName)
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
+                labels:
+                  cost-centre: abc123456789
               spec:
                 name: ($projectName)
                 resourceID: ($projectId)

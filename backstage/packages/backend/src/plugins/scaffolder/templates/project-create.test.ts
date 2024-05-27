@@ -86,6 +86,7 @@ describe('project-create: fetch:template', () => {
           { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
           { email: 'john.campbell@gcp.hc-sc.gc.ca' },
         ],
+        costCentre: 'ABC123456789',
       },
       mockDir,
     });
@@ -108,6 +109,8 @@ describe('project-create: fetch:template', () => {
           - user:samantha.jones@gcp.hc-sc.gc.ca
           - user:alex.mcdonald@gcp.hc-sc.gc.ca
           - user:john.campbell@gcp.hc-sc.gc.ca
+        labels:
+          cost-centre: abc123456789
       ",
       }
     `);
