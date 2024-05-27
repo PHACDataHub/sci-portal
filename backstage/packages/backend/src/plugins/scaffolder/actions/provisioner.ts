@@ -5,7 +5,7 @@ import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { JsonObject } from '@backstage/types';
 import { resolvePackagePath } from '@backstage/backend-common';
-import nunjucks from 'nunjucks';
+import * as nunjucks from 'nunjucks';
 import { ulid } from 'ulidx';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -231,13 +231,10 @@ export const createProvisionTemplateAction = (config: Config) => {
 
       const requestId = uuidv4();
 
-      const { repo, templateDir } = getConfig(config);
+      const { repo } = getConfig(config);
       ctx.output('repo_owner', repo.owner);
       ctx.output('repo_name', repo.name);
       ctx.output('branch', `request-${requestId}`);
-
-      const template = ctx.templateInfo.entity.metadata.name;
-      ctx.output('template', template);
 
       // We assume all projects are for Experimentation.
       const environment = 'x';
@@ -245,16 +242,8 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectName = `${ctx.input.parameters.department}${environment}-${ctx.input.parameters.vanityName}`;
       const projectId = createProjectId(ctx.input.parameters.department);
 
-      // Render the Pull Request description template
-      const env = nunjucks.configure(templateDir);
-
-      // Add the map() filter from jinja into Nunjucks.
-      // https://jinja.palletsprojects.com/en/3.1.x/templates/#jinja-filters.map
-      env.addFilter('map', (array: any, attribute: string) => {
-        return array.map((item: any) => item[attribute]);
-      });
-
-      const templateContext = {
+      // Populate the template values
+      const templateValues = {
         ...ctx.input.parameters,
 
         // Metadata
@@ -281,7 +270,9 @@ export const createProvisionTemplateAction = (config: Config) => {
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
         editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
       };
-
+      ctx.output('template_values', templateValues);
+    
+      // Set the Pull Request title
       const templateTitle =
         ctx.templateInfo.entity.metadata.title ||
         ctx.templateInfo.entity.metadata.name;
@@ -294,15 +285,23 @@ export const createProvisionTemplateAction = (config: Config) => {
         / Template$/i,
         '',
       )} from Template`;
+      ctx.output('pr_title', pullRequestTitle);
+
+      // Render the Pull Request description from a template
+      const template = ctx.templateInfo.entity.metadata.name;
+      ctx.output('template', template);
+
+      const { templateDir } = getConfig(config);
+      const env = nunjucks.configure(templateDir);
+      env.addFilter('map', (array: any, attribute: string) => {
+        // See https://jinja.palletsprojects.com/en/3.1.x/templates/#jinja-filters.map.
+        return array.map((item: any) => item[attribute]);
+      });
       const pullRequestDescription = env.render(
         path.join(template, 'pull-request-description.njk'),
-        templateContext,
+        templateValues,
       );
-      ctx.output('pr_title', pullRequestTitle);
       ctx.output('pr_description', pullRequestDescription);
-
-      // Populate the template values for the Pull Request changes
-      ctx.output('template_values', templateContext);
     },
   });
 };
