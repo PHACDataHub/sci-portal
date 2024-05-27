@@ -184,12 +184,13 @@ spec:
               metadata:
                 name: "TO BE PATCHED"
                 namespace: default
-                labels: "TO BE PATCHED"
               spec:
                 billingAccountRef:
                   external: "TO BE PATCHED"
                 displayName: "TO BE PATCHED"
                 budgetFilter:
+                  labels:
+                    keyValue: "TO BE PATCHED"
                   projects:
                     - name: "TO BE PATCHED"
                   calendarPeriod: "YEAR"
@@ -250,7 +251,7 @@ spec:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
         - fromFieldPath: "spec.labels"
-          toFieldPath: "spec.forProvider.manifest.metadata.labels"
+          toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.labels"
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
