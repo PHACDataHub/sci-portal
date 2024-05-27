@@ -248,6 +248,8 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Metadata
         requestId,
+        requestEmail:
+          ctx?.user?.entity?.spec?.profile?.email ?? ctx?.user?.ref ?? '',
 
         // Project
         rootFolderId,
@@ -271,7 +273,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
       };
       ctx.output('template_values', templateValues);
-    
+
       // Set the Pull Request title
       const templateTitle =
         ctx.templateInfo.entity.metadata.title ||

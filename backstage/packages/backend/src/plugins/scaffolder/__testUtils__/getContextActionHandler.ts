@@ -26,35 +26,42 @@ export const getContextActionHandler = async ({
   template: { namespace = 'default', name, title },
   config = rootConfig,
   parameters,
+  user,
   mockDir,
 }: {
   template: { namespace?: string; name: string; title?: string };
   parameters?: any;
   config?: RootConfigService;
+  user?: ActionContext<JsonObject>['user'];
   mockDir: MockDirectory;
 }): Promise<{
   ctx: ActionContext<JsonObject> & { getOutput: (name: string) => any };
 }> => {
   const action = createProvisionTemplateAction(config);
-  const ctx = createMockActionContext({
-    input: {
-      parameters: {
-        ...projectParameters,
-        ...parameters,
-      },
-    },
-    templateInfo: {
-      entity: {
-        metadata: {
-          namespace,
-          name,
-          title,
+  const ctx = {
+    ...createMockActionContext({
+      input: {
+        parameters: {
+          ...projectParameters,
+          ...parameters,
         },
       },
-      entityRef: `template:${namespace}/${name}`,
-    },
-    workspacePath: mockDir.resolve('workspace'),
-  });
+      templateInfo: {
+        entity: {
+          metadata: {
+            namespace,
+            name,
+            title,
+          },
+        },
+        entityRef: `template:${namespace}/${name}`,
+      },
+      workspacePath: mockDir.resolve('workspace'),
+    }),
+
+    // The user is not passed through as of v1.27.3 - https://github.com/backstage/backstage/blob/fe4b090b6f5c38b38fc282be3384efcce4423c7d/plugins/scaffolder-node-test-utils/src/actions/mockActionConext.ts#L32-L33.
+    user,
+  };
 
   await action.handler(ctx);
 

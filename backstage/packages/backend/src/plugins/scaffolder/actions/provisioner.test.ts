@@ -143,6 +143,14 @@ describe('provisioner', () => {
 
           additionalProperty: 'OK',
         },
+        user: {
+          entity: {
+            apiVersion: 'backstage.io/v1alpha1',
+            kind: 'User',
+            metadata: { name: '' },
+            spec: { profile: { email: 'jane.doe@gcp.hc-sc.gc.ca' } },
+          },
+        },
         mockDir,
       });
 
@@ -161,6 +169,7 @@ describe('provisioner', () => {
 
         // Metadata
         requestId: '6bedd76d-4259-44dd-81d1-1052cfd3fed3',
+        requestEmail: 'jane.doe@gcp.hc-sc.gc.ca',
 
         // Project
         rootFolderId: '108494461414',

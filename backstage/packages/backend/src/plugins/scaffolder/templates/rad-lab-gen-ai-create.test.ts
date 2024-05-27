@@ -24,13 +24,22 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
         ...projectParameters,
         machineSize: 'Medium',
       },
+      user: {
+        entity: {
+          apiVersion: 'backstage.io/v1alpha1',
+          kind: 'User',
+          metadata: { name: '' },
+          spec: { profile: { email: 'jane.doe@gcp.hc-sc.gc.ca' } },
+        },
+      },
       mockDir,
     });
 
     expect(ctx.getOutput('pr_description')).toMatchInlineSnapshot(`
-      "This PR was created using Backstage. The request ID is \`6bedd76d-4259-44dd-81d1-1052cfd3fed3\`.
+      "This PR was created using Backstage.
 
-      <!-- ### Client Name Email address -->
+      **Request ID:** \`6bedd76d-4259-44dd-81d1-1052cfd3fed3\`
+      **Requested By:** jane.doe@gcp.hc-sc.gc.ca
 
       ### GCP Project
 
