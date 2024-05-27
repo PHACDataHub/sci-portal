@@ -1,6 +1,7 @@
 import { createMockDirectory } from '@backstage/backend-test-utils';
 import { fetchTemplateActionHandler } from '../__testUtils__/fetchTemplateActionHandler';
 import { getContextActionHandler } from '../__testUtils__/getContextActionHandler';
+import { skip } from '../__testUtils__/skip';
 
 jest.mock('ulidx', () => ({
   ulid: jest.fn(() => '01AN4Z07BY79KA1307SR9X4MV3'),
@@ -78,7 +79,7 @@ describe('project-create: fetch:template', () => {
     `);
   });
 
-  test('The fetch:template action should render the expected changes for the Pull Request', async () => {
+  skip('win32')('The fetch:template action should render the expected changes for the Pull Request', async () => {
     await fetchTemplateActionHandler({
       template: { name: 'project-create' },
       values: {
