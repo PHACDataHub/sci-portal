@@ -43,17 +43,13 @@ export const googleAuthWithCustomSignInResolver = createBackendModule({
               }
 
               // Sign in with the user from the Catalog if possible
-              const catalogQuery = {
-                filter: {
-                  kind: ['User'],
-                  namespace: domain,
-                  name,
-                },
+              const entityFilterQuery = {
+                filter: [{ kind: 'User', 'spec.profile.email': profile.email }],
               };
               try {
-                const { entity } = await ctx.findCatalogUser(catalogQuery);
+                const { entity } = await ctx.findCatalogUser(entityFilterQuery);
                 if (entity) {
-                  return ctx.signInWithCatalogUser(catalogQuery);
+                  return ctx.signInWithCatalogUser(entityFilterQuery);
                 }
               } catch (err) {
                 if (!(err instanceof NotFoundError)) {
