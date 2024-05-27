@@ -38,6 +38,9 @@ backend:
       templateDir: '/app/templates'
 
 catalog:
+  readonly: true
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group]
   locations:
     # Backstage entities
     - type: file
@@ -47,17 +50,33 @@ catalog:
 
     # Resource Provisioner template
     - type: file
-      target: /app/templates/project-create/template.yaml
+      target: /app/templates/catalog-info.yaml
       rules:
-        - allow: [Template]
-    - type: file
-      target: /app/templates/rad-lab-data-science-create/template.yaml
-      rules:
-        - allow: [Template]
-    - type: file
-      target: /app/templates/rad-lab-gen-ai-create/template.yaml
-      rules:
-        - allow: [Template]
+        - allow: [Location, Template]
+
+  providers:
+    github:
+      # Load Users and Groups from the sci-portal-users repo.
+      sci-portal-users:
+        organization: 'PHACDataHub'
+        filters:
+          repository: '^sci-portal-users$'
+          branch: 'main'
+        catalogPath: '/**/*.yaml'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+
+      # Load Components and Resources from part of the sci-portal repo.
+      sci-portal:
+        organization: 'PHACDataHub'
+        filters:
+          repository: '^sci-portal$'
+          branch: 'main'
+        catalogPath: '/DMIA-PHAC/**/catalog-info.yaml'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
 
 kubernetes:
   serviceLocatorMethod:

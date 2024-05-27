@@ -20,6 +20,7 @@ backend.add(googleAuthWithCustomSignInResolver);
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
 backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
