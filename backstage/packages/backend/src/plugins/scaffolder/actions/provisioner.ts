@@ -1,10 +1,10 @@
 import * as path from 'path';
 
+import { resolvePackagePath } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { JsonObject } from '@backstage/types';
-import { resolvePackagePath } from '@backstage/backend-common';
 import * as nunjucks from 'nunjucks';
 import { ulid } from 'ulidx';
 import { v4 as uuidv4 } from 'uuid';

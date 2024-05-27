@@ -1,10 +1,10 @@
-import * as path from 'node:path';
 import * as url from 'node:url';
-import { UrlReader, resolvePackagePath } from '@backstage/backend-common';
-import { MockDirectory } from '@backstage/backend-test-utils';
+import { UrlReader } from '@backstage/backend-common';
 import { ScmIntegrations } from '@backstage/integration';
+import { resolvePackagePath } from '@backstage/backend-plugin-api';
 import { createFetchTemplateAction } from '@backstage/plugin-scaffolder-backend';
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
+import { MockDirectory } from '@backstage/backend-test-utils';
 
 export const fetchTemplateActionHandler = ({
   template: { namespace = 'default', name },
@@ -16,13 +16,7 @@ export const fetchTemplateActionHandler = ({
   mockDir: MockDirectory;
 }) => {
   // Create the context
-  const rootDir = resolvePackagePath('backend', '../../');
-  const templateFilePath = path.join(
-    rootDir,
-    'templates',
-    name,
-    'template.yaml',
-  );
+  const templateFilePath = resolvePackagePath('backend', `../../templates/${name}/template.yaml`);
   const baseUrl = url.pathToFileURL(templateFilePath).href;
   const ctx = {
     ...createMockActionContext({

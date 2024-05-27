@@ -11,14 +11,13 @@ on:
       - "backstage/**"
 
 jobs:
-  test:
+  test-linux:
     strategy:
       matrix:
         node-version: [18.x]
-        runs-on: [ubuntu-latest, windows-latest]
 
-    name: Node.js v${{ matrix.node-version }} on ${{ matrix.runs-on }}
-    runs-on: ${{ matrix.runs-on }}
+    name: Node.js v${{ matrix.node-version }} on Linux
+    runs-on: ubuntu-latest
 
     defaults:
       run:
@@ -57,6 +56,60 @@ jobs:
 
           # Create the credentials file that is used by the "build" npm script
           touch github-app-integration-credentials.yaml
+
+          task backstage:build
+
+      - name: Test
+        run: yarn test
+
+  test-windows:
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    name: Node.js v${{ matrix.node-version }} on Windows
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./backstage
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "backstage/yarn.lock"
+
+      - name: Use Yarn v1
+        if: ${{ false }} # Skip on Windows
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.19 --activate
+
+          # Prevent churn
+          if ! grep -q 'yarn lockfile v1' yarn.lock; then
+            echo "::error file=yarn.lock,line=1,endLine=1,title=Error: Unexpected changes to yarn.lock::We expect the yarn lockfile use v1. To use newer versions of Yarn follow the migration guide at https://backstage.io/docs/tutorials/yarn-migration."
+          fi
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+
+      - name: Install dependencies
+        run: |
+          yarn config set network-timeout 300000
+          yarn install --immutable
+
+      - name: Build
+        run: |
+          # Fetch origin/main used by the "lint" npm script
+          git fetch origin main
+
+          # Create the credentials file that is used by the "build" npm script
+          echo $null >github-app-integration-credentials.yaml
 
           task backstage:build
 
