@@ -143,7 +143,7 @@ spec:
         branchName: ${{steps.ctx.output.branch}}
         title: ${{steps.ctx.output.pr_title}}
         description: ${{steps.ctx.output.pr_description}}
-        targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.projectName}}
+        targetPath: ./${{steps.ctx.output.pr_targetPath}}
 
   output:
     links:

@@ -1,0 +1,13 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ${{values.projectId}}
+  title: ${{values.projectName}}
+  annotations:
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/${{values.pr_targetPath}}/
+    backstage.io/source-template: template:default/project-create
+    cloud.google.com/project: ${{values.projectId}}
+spec:
+  type: project
+  owner: ${{values.catalogEntityOwner}}
