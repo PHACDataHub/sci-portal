@@ -37,6 +37,8 @@ spec:
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
+        metadata:
+          name: "TO BE PATCHED"
         spec:
           providerConfigRef:
             name: kubernetes-provider
@@ -56,6 +58,13 @@ spec:
                 name: "TO BE PATCHED"
                 namespace: default
       patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "metadata.name"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "%s-terraform-config"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.references[0].dependsOn.name"
         - fromFieldPath: "spec.projectId"
@@ -82,6 +91,8 @@ spec:
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
+        metadata:
+          name: "TO BE PATCHED"
         spec:
           providerConfigRef:
             name: kubernetes-provider
@@ -175,6 +186,13 @@ spec:
               toFieldPath: "spec.forProvider.spec.forProvider.vars[0].value"
 
       patches:
+        - fromFieldPath: "spec.projectName"
+          toFieldPath: "metadata.name"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "%s-workspace"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.references[0].dependsOn.name"
         - fromFieldPath: "spec.projectId"
