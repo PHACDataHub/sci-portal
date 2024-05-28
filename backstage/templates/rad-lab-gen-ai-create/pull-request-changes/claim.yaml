@@ -12,8 +12,8 @@ spec:
     - user:${{owner.email}}
   {%- endfor %}
   projectViewers:
-  {%- for editor in values.editors %}
-    - user:${{editor.email}}
+  {%- for viewer in values.viewers %}
+    - user:${{viewer.email}}
   {%- endfor %}
   labels:
     cost-centre: ${{values.costCentre | lower}}

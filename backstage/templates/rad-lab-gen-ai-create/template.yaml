@@ -71,15 +71,15 @@ spec:
             rows: 2
         owners:
           title: Owners
-          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.
+          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by a comma.
           type: string
           ui:widget: textarea
           ui:options:
             rows: 2
           ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
-        editors:
-          title: Editors
-          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by comma.
+        viewers:
+          title: Viewers
+          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to view this service, separated by a comma.
           type: string
           ui:widget: textarea
           ui:options:

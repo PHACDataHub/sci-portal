@@ -101,7 +101,7 @@ interface TemplateParameters extends JsonObject {
   dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
   owners?: string;
-  editors?: string;
+  viewers?: string;
 
   // Administration
   costCentre: string;
@@ -164,13 +164,13 @@ export const createProvisionTemplateAction = (config: Config) => {
               owners: {
                 title: 'Owners',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by comma.',
+                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by a comma.',
                 type: 'string',
               },
-              editors: {
-                title: 'Editors',
+              viewers: {
+                title: 'Viewers',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by comma.',
+                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to view this service, separated by a comma.',
                 type: 'string',
               },
 
@@ -270,7 +270,7 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Permissions
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
-        editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
+        viewers: parseEmailInput(ctx.input.parameters.viewers).map(toUser),
 
         // Backstage
         catalogEntityOwner: ctx.user?.ref,
