@@ -271,6 +271,9 @@ export const createProvisionTemplateAction = (config: Config) => {
         // Permissions
         owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
         editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
+
+        // Backstage
+        catalogEntityOwner: ctx.user?.ref,
       };
       ctx.output('template_values', templateValues);
 
@@ -304,6 +307,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         templateValues,
       );
       ctx.output('pr_description', pullRequestDescription);
+      ctx.output('pr_targetPath', `DMIA-PHAC/SciencePlatform/${projectName}`);
     },
   });
 };

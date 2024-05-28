@@ -86,6 +86,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           { email: 'john.campbell@gcp.hc-sc.gc.ca' },
         ],
         costCentre: 'ABC123456789',
+        catalogEntityOwner: 'user:default/jane.doe'
       },
       mockDir,
     });

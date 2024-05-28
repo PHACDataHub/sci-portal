@@ -96,12 +96,28 @@ describe('project-create: fetch:template', () => {
           { email: 'john.campbell@gcp.hc-sc.gc.ca' },
         ],
         costCentre: 'ABC123456789',
+        pr_targetPath: 'DMIA-PHAC/SciencePlatform/<project-name>',
+        catalogEntityOwner: 'user:default/jane.doe',
       },
       mockDir,
     });
 
     expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
       {
+        "catalog-info.yaml": "---
+      apiVersion: backstage.io/v1alpha1
+      kind: Resource
+      metadata:
+        name: <project-id>
+        title: <project-name>
+        annotations:
+          backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-name>/
+          backstage.io/source-template: template:default/project-create
+          cloud.google.com/project: <project-id>
+      spec:
+        type: project
+        owner: user:default/jane.doe
+      ",
         "claim.yaml": "---
       apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
       kind: ProjectClaim
