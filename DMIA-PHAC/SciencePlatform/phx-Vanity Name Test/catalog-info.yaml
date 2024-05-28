@@ -1,0 +1,12 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: project
+  title: Project
+  description: A GCP Project with a budget and budget alerts.
+  annotations:
+    backstage.io/source-template: template:default/project-create
+spec:
+  type: project
+  owner: ctx.user.ref
