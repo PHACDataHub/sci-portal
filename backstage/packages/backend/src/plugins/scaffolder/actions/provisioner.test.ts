@@ -138,7 +138,7 @@ describe('provisioner', () => {
             'samantha.jones@phac-aspc.gc.ca, alex.mcdonald@phac-aspc.gc.ca',
           owners:
             '   ,,, , jeanne.smith@phac-aspc.gc.ca,karen.schumacher@phac-aspc.gc.ca,,',
-          editors:
+          viewers:
             ' samantha.jones@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
 
           additionalProperty: 'OK',
@@ -192,7 +192,7 @@ describe('provisioner', () => {
             email: 'karen.schumacher@phac-aspc.gc.ca',
           },
         ],
-        editors: [
+        viewers: [
           { name: 'samantha.jones', email: 'samantha.jones@gcp.hc-sc.gc.ca' },
           { name: 'john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
         ],
