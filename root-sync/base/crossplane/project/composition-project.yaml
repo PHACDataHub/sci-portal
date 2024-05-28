@@ -189,8 +189,6 @@ spec:
                   external: "TO BE PATCHED"
                 displayName: "TO BE PATCHED"
                 budgetFilter:
-                  labels:
-                    keyValue: "TO BE PATCHED"
                   projects:
                     - name: "TO BE PATCHED"
                   calendarPeriod: "YEAR"
@@ -250,8 +248,6 @@ spec:
                 fmt: "budget-%s"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
-        - fromFieldPath: "spec.labels"
-          toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.labels"
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
