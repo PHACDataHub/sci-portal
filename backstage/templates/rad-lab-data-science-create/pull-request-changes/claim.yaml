@@ -16,4 +16,6 @@ spec:
     - user:${{viewer.email}}
   {%- endfor %}
   labels:
-    cost-centre: ${{values.costCentre | lower}}
+  {%- for key, value in values.projectLabels %}
+    ${{ key }}: '${{ value }}'
+  {%- endfor %}

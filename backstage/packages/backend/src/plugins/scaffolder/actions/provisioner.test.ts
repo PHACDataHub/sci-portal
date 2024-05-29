@@ -183,6 +183,9 @@ describe('provisioner', () => {
         rootFolderId: '108494461414',
         projectName: 'hcx-test-case',
         projectId: 'hcx-01an4z07by7',
+        projectLabels: {
+          'cost-centre': 'jbu987654321',
+        },
         dataClassificationTitle: 'Protected B',
 
         // Budget

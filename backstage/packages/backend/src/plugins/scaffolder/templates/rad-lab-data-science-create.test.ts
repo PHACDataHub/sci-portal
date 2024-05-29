@@ -73,6 +73,9 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           rootFolderId: '<root-folder-id>',
           projectName: '<project-name>',
           projectId: '<project-id>',
+          projectLabels: {
+            'cost-centre': '<cost-centre>',
+          },
           editors: [
             { email: 'jane.doe@gcp.hc-sc.gc.ca' },
             { email: 'john.doe@gcp.hc-sc.gc.ca' },
@@ -82,7 +85,6 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
             { email: 'john.campbell@gcp.hc-sc.gc.ca' },
           ],
-          costCentre: 'ABC123456789',
           catalogEntityOwner: 'user:default/jane.doe',
         },
         mockDir,
@@ -107,7 +109,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           - user:alex.mcdonald@gcp.hc-sc.gc.ca
           - user:john.campbell@gcp.hc-sc.gc.ca
         labels:
-          cost-centre: abc123456789
+          cost-centre: '<cost-centre>'
       ",
       }
     `);
