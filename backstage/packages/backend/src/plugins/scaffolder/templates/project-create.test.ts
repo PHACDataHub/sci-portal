@@ -15,7 +15,7 @@ export const projectParameters = {
   department: 'ph' as const,
   dataClassification: 'UCLL' as const,
   vanityName: 'test-42',
-  editors: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
+  editors: 'john.doe@gcp.hc-sc.gc.ca',
   viewers:
     'samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
   costCentre: 'ABC123456789',
@@ -24,7 +24,7 @@ export const projectParameters = {
   justification: 'This project will be used for testing our custom action.',
   budgetAmount: 2_000,
   budgetAlertEmailRecipients:
-    'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
+    'john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca',
 };
 
 describe('project-create: fetch:template', () => {
