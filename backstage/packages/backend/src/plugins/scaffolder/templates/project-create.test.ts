@@ -14,7 +14,7 @@ export const projectParameters = {
   department: 'ph' as const,
   dataClassification: 'UCLL' as const,
   vanityName: 'test-42',
-  owners: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
+  editors: 'jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca',
   viewers:
     'samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
   costCentre: 'ABC123456789',
@@ -68,7 +68,7 @@ describe('project-create: fetch:template', () => {
       **Cost Centre Name:** TPS Reports
       **Justification:** This project will be used for testing our custom action.
       **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
-      **Owners:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
+      **Editors:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
       **Viewers:** samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca
 
       ### Budget
@@ -89,7 +89,7 @@ describe('project-create: fetch:template', () => {
           rootFolderId: '<root-folder-id>',
           projectName: '<project-name>',
           projectId: '<project-id>',
-          owners: [
+          editors: [
             { email: 'jane.doe@gcp.hc-sc.gc.ca' },
             { email: 'john.doe@gcp.hc-sc.gc.ca' },
           ],

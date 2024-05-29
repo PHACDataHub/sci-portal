@@ -136,7 +136,7 @@ describe('provisioner', () => {
           budgetAmount: 12345,
           budgetAlertEmailRecipients:
             'samantha.jones@phac-aspc.gc.ca, alex.mcdonald@phac-aspc.gc.ca',
-          owners:
+          editors:
             '   ,,, , jeanne.smith@phac-aspc.gc.ca,karen.schumacher@phac-aspc.gc.ca,,',
           viewers:
             ' samantha.jones@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
@@ -185,7 +185,7 @@ describe('provisioner', () => {
         ],
 
         // Permissions
-        owners: [
+        editors: [
           { name: 'jeanne.smith', email: 'jeanne.smith@phac-aspc.gc.ca' },
           {
             name: 'karen.schumacher',

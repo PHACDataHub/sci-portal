@@ -100,7 +100,7 @@ interface TemplateParameters extends JsonObject {
   department: 'hc' | 'ph';
   dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
-  owners?: string;
+  editors?: string;
   viewers?: string;
 
   // Administration
@@ -161,10 +161,10 @@ export const createProvisionTemplateAction = (config: Config) => {
                 minLength: 1,
                 maxLength: 26,
               },
-              owners: {
-                title: 'Owners',
+              editors: {
+                title: 'Editors',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by a comma.',
+                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by a comma.',
                 type: 'string',
               },
               viewers: {
@@ -269,7 +269,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         ),
 
         // Permissions
-        owners: parseEmailInput(ctx.input.parameters.owners).map(toUser),
+        editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
         viewers: parseEmailInput(ctx.input.parameters.viewers).map(toUser),
 
         // Backstage

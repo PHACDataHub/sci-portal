@@ -66,9 +66,9 @@ spec:
           ui:widget: textarea
           ui:options:
             rows: 2
-        owners:
-          title: Owners
-          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should own this service, separated by a comma.
+        editors:
+          title: Editors
+          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by a comma.
           type: string
           ui:widget: textarea
           ui:options:
