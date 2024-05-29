@@ -39,6 +39,18 @@ spec:
                   type: array
                   items:
                     type: string
+                labels:
+                  x-kubernetes-preserve-unknown-fields: true
+                  type: object
+                  properties:
+                    cost-centre:
+                      type: string
+                    vanity-name:
+                      type: string
+                    # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
+                  required:
+                    - cost-centre
+                    - vanity-name
               required:
                 # Base Properties
                 - rootFolderId
@@ -46,3 +58,4 @@ spec:
                 - projectId
                 - projectEditors
                 - projectViewers
+                - labels

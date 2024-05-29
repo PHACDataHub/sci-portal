@@ -75,6 +75,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           projectId: '<project-id>',
           projectLabels: {
             'cost-centre': '<cost-centre>',
+            'vanity-name': '<project-name>',
           },
           editors: [
             { email: 'jane.doe@gcp.hc-sc.gc.ca' },
@@ -110,6 +111,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           - user:john.campbell@gcp.hc-sc.gc.ca
         labels:
           cost-centre: '<cost-centre>'
+          vanity-name: '<project-name>'
       ",
       }
     `);

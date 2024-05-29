@@ -63,9 +63,11 @@ spec:
                   - user:sean.poulter@gcp.hc-sc.gc.ca
                 labels:
                   cost-centre: 'abc123456789'
+                  vanity-name: '($projectName)'
 
         - description: Assert the ProjectClaim has been created
           assert:
+            timeout: 5m
             resource:
               apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
               kind: ProjectClaim
@@ -90,7 +92,8 @@ spec:
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
                 labels:
-                  cost-centre: abc123456789
+                  cost-centre: 'abc123456789'
+                  vanity-name: '($projectName)'
               spec:
                 name: ($projectName)
                 resourceID: ($projectId)

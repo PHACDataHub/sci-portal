@@ -20,7 +20,8 @@ spec:
           projectId: "TO BE PATCHED"
           projectEditors: ["TO BE PATCHED"]
           projectViewers: ["TO BE PATCHED"]
-    
+          labels: "TO BE PATCHED"
+
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.projectName"
@@ -32,6 +33,8 @@ spec:
           toFieldPath: "spec.projectEditors"
         - fromFieldPath: "spec.projectViewers"
           toFieldPath: "spec.projectViewers"
+        - fromFieldPath: "spec.labels"
+          toFieldPath: "spec.labels"
 
     - name: TERRAFORM-CONFIG
       base:
@@ -109,7 +112,7 @@ spec:
                   forProvider:
                     module: git::https://github.com/PHACDataHub/sci-portal.git//templates/rad-lab/data-science?ref=main
                     source: Remote
-                    vars: 
+                    vars:
                       ##
                       # Project
                       ##
@@ -138,7 +141,7 @@ spec:
                         value: "false"
                       - key: set_external_ip_policy
                         value: "false"
-                      
+
                       ##
                       # (Option) Deep Learning VM Image
                       #
