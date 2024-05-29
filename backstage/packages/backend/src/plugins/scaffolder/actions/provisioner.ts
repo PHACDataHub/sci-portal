@@ -270,6 +270,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         projectId,
         projectLabels: {
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
+          'vanity-name': projectName.toLowerCase(),
         },
 
         // Information Management and Security

@@ -170,7 +170,7 @@ spec:
                       - key: create_usermanaged_notebook
                         value: "false"
           references:
-            - dependsOn: # GenAi requires a base project with budget.
+            - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
                 name: "TO BE PATCHED"
