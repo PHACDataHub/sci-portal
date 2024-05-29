@@ -8,8 +8,8 @@ spec:
   projectName: ${{values.projectName}}
   projectId: ${{values.projectId}}
   projectEditors:
-  {%- for owner in values.owners %}
-    - user:${{owner.email}}
+  {%- for editor in values.editors %}
+    - user:${{editor.email}}
   {%- endfor %}
   projectViewers:
   {%- for viewer in values.viewers %}
