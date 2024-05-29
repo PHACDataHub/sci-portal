@@ -1,12 +1,14 @@
 ---
 apiVersion: backstage.io/v1alpha1
-kind: Resource
+kind: Component
 metadata:
-  name: project
-  title: Project
-  description: A GCP Project with a budget and budget alerts.
+  name: phx-01hz2x4yszk
+  title: phx-Vanity Name Test
   annotations:
-    backstage.io/source-template: template:default/project-create
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hz2x4yszk/
+    backstage.io/source-template: template:default/rad-lab-data-science-create
+    cloud.google.com/project: phx-01hz2x4yszk
 spec:
-  type: project
-  owner: ctx.user.ref
+  type: website
+  owner: user:default/kendra.dezenosky
+  lifecycle: experimental

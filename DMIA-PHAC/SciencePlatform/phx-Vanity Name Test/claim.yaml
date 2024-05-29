@@ -1,13 +1,15 @@
 ---
 apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-kind: ProjectClaim
+kind: RadLabDataScienceClaim
 metadata:
-  name: phx-Vanity Name Test-287af623-8625-439a-8054-06cb04c4ec6a
+  name: phx-Vanity Name Test-7c343d46-cec2-4153-9a98-df37070bb220
 spec:
   rootFolderId: '108494461414'
   projectName: phx-Vanity Name Test
-  projectId: phx-01hz094xctr
+  projectId: phx-01hz2x4yszk
   projectEditors:
+    - user:kendra.dezenosky@focisolutions.com
   projectViewers:
   labels:
-    cost-centre: 12
+    cost-centre: '123'
+    vanity-name: 'phx-vanity name test'
