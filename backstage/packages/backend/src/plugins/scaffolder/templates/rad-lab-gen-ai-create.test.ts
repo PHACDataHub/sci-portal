@@ -2,6 +2,7 @@ import { createMockDirectory } from '@backstage/backend-test-utils';
 import { fetchTemplateActionHandler } from '../__testUtils__/fetchTemplateActionHandler';
 import { getContextActionHandler } from '../__testUtils__/getContextActionHandler';
 import { projectParameters } from './project-create.test';
+import { createUser } from '../__testUtils__/createUser';
 import { skip } from '../__testUtils__/skip';
 
 jest.mock('ulidx', () => ({
@@ -25,14 +26,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
         ...projectParameters,
         machineSize: 'Medium',
       },
-      user: {
-        entity: {
-          apiVersion: 'backstage.io/v1alpha1',
-          kind: 'User',
-          metadata: { name: '' },
-          spec: { profile: { email: 'jane.doe@gcp.hc-sc.gc.ca' } },
-        },
-      },
+      user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca' }),
       mockDir,
     });
 

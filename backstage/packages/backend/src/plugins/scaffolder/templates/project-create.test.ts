@@ -1,6 +1,7 @@
 import { createMockDirectory } from '@backstage/backend-test-utils';
 import { fetchTemplateActionHandler } from '../__testUtils__/fetchTemplateActionHandler';
 import { getContextActionHandler } from '../__testUtils__/getContextActionHandler';
+import { createUser } from '../__testUtils__/createUser';
 import { skip } from '../__testUtils__/skip';
 
 jest.mock('ulidx', () => ({
@@ -39,14 +40,7 @@ describe('project-create: fetch:template', () => {
       parameters: {
         ...projectParameters,
       },
-      user: {
-        entity: {
-          apiVersion: 'backstage.io/v1alpha1',
-          kind: 'User',
-          metadata: { name: '' },
-          spec: { profile: { email: 'jane.doe@gcp.hc-sc.gc.ca' } },
-        },
-      },
+      user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca' }),
       mockDir,
     });
 
