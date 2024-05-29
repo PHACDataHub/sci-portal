@@ -129,7 +129,7 @@ describe('provisioner', () => {
       });
 
       expect(ctx.getOutput('pr_targetPath')).toBe(
-        'DMIA-PHAC/SciencePlatform/phx-01an4z07by7',
+        'DMIA-PHAC/SciencePlatform/phx-01an4z07by7/',
       );
     });
 
@@ -209,6 +209,7 @@ describe('provisioner', () => {
 
         // Backstage
         catalogEntityOwner: 'user:default/jane.doe',
+        sourceLocation: 'DMIA-PHAC/SciencePlatform/hcx-01an4z07by7/',
 
         // Additional properties that are not in the input schema are included in the output.
         additionalProperty: 'OK',
