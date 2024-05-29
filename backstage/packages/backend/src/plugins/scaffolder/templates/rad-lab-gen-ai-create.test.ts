@@ -69,30 +69,32 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
     `);
   });
 
-  skip('win32')('The fetch:template action should render the expected changes for the Pull Request', async () => {
-    await fetchTemplateActionHandler({
-      template: { name: 'rad-lab-gen-ai-create' },
-      values: {
-        requestId: '<uuid>',
-        rootFolderId: '<root-folder-id>',
-        projectName: '<project-name>',
-        projectId: '<project-id>',
-        owners: [
-          { email: 'jane.doe@gcp.hc-sc.gc.ca' },
-          { email: 'john.doe@gcp.hc-sc.gc.ca' },
-        ],
-        editors: [
-          { email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-          { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
-          { email: 'john.campbell@gcp.hc-sc.gc.ca' },
-        ],
-        costCentre: 'ABC123456789',
-        catalogEntityOwner: 'user:default/jane.doe'
-      },
-      mockDir,
-    });
+  skip('win32')(
+    'The fetch:template action should render the expected changes for the Pull Request',
+    async () => {
+      await fetchTemplateActionHandler({
+        template: { name: 'rad-lab-gen-ai-create' },
+        values: {
+          requestId: '<uuid>',
+          rootFolderId: '<root-folder-id>',
+          projectName: '<project-name>',
+          projectId: '<project-id>',
+          owners: [
+            { email: 'jane.doe@gcp.hc-sc.gc.ca' },
+            { email: 'john.doe@gcp.hc-sc.gc.ca' },
+          ],
+          editors: [
+            { email: 'samantha.jones@gcp.hc-sc.gc.ca' },
+            { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
+            { email: 'john.campbell@gcp.hc-sc.gc.ca' },
+          ],
+          costCentre: 'ABC123456789',
+          catalogEntityOwner: 'user:default/jane.doe',
+        },
+        mockDir,
+      });
 
-    expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
+      expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
       {
         "claim.yaml": "---
       apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
@@ -115,5 +117,6 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
       ",
       }
     `);
-  });
+    },
+  );
 });

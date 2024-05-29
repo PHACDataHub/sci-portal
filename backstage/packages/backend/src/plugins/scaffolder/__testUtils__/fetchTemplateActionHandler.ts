@@ -16,7 +16,10 @@ export const fetchTemplateActionHandler = ({
   mockDir: MockDirectory;
 }) => {
   // Create the context
-  const templateFilePath = resolvePackagePath('backend', `../../templates/${name}/template.yaml`);
+  const templateFilePath = resolvePackagePath(
+    'backend',
+    `../../templates/${name}/template.yaml`,
+  );
   const baseUrl = url.pathToFileURL(templateFilePath).href;
   const ctx = {
     ...createMockActionContext({
