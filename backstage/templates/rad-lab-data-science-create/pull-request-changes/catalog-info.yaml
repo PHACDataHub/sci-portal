@@ -9,6 +9,6 @@ metadata:
     backstage.io/source-template: template:default/rad-lab-data-science-create
     cloud.google.com/project: ${{values.projectId}}
 spec:
-  type: project
+  type: rad-lab-module
   owner: ${{values.catalogEntityOwner}}
   lifecycle: experimental
