@@ -253,6 +253,8 @@ export const createProvisionTemplateAction = (config: Config) => {
         editors.unshift({ email, name: ctx.user?.entity?.metadata.name! });
       }
 
+      const pullRequestTargetPath = `DMIA-PHAC/SciencePlatform/${projectId}/`;
+
       // Populate the template values
       const templateValues = {
         ...ctx.input.parameters,
@@ -283,6 +285,7 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Backstage
         catalogEntityOwner: ctx.user?.ref,
+        sourceLocation: pullRequestTargetPath,
       };
       ctx.output('template_values', templateValues);
 
@@ -316,7 +319,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         templateValues,
       );
       ctx.output('pr_description', pullRequestDescription);
-      ctx.output('pr_targetPath', `DMIA-PHAC/SciencePlatform/${projectId}`);
+      ctx.output('pr_targetPath', pullRequestTargetPath);
     },
   });
 };

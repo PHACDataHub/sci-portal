@@ -5,7 +5,7 @@ metadata:
   name: ${{values.projectId}}
   title: ${{values.projectName}}
   annotations:
-    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/${{values.pr_targetPath}}/
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/${{values.sourceLocation}}
     backstage.io/source-template: template:default/project-create
     cloud.google.com/project: ${{values.projectId}}
 spec:

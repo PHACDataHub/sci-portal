@@ -93,8 +93,8 @@ describe('project-create: fetch:template', () => {
             { email: 'john.campbell@gcp.hc-sc.gc.ca' },
           ],
           costCentre: 'ABC123456789',
-          pr_targetPath: 'DMIA-PHAC/SciencePlatform/<project-name>',
           catalogEntityOwner: 'user:default/jane.doe',
+          sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
         },
         mockDir,
       });
@@ -108,7 +108,7 @@ describe('project-create: fetch:template', () => {
         name: <project-id>
         title: <project-name>
         annotations:
-          backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-name>/
+          backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-id>/
           backstage.io/source-template: template:default/project-create
           cloud.google.com/project: <project-id>
       spec:
