@@ -1,8 +1,13 @@
 import { BackstageIdentityResponse } from '@backstage/plugin-auth-node';
 import {
+  catalogConditions,
+  createCatalogConditionalDecision,
+} from '@backstage/plugin-catalog-backend/alpha';
+import {
   AuthorizeResult,
   PolicyDecision,
   isPermission,
+  isResourcePermission,
 } from '@backstage/plugin-permission-common';
 import {
   PermissionPolicy,
@@ -35,6 +40,31 @@ export class CustomPermissionPolicy implements PermissionPolicy {
     ) {
       return createScaffolderTemplateConditionalDecision(request.permission, {
         not: scaffolderTemplateConditions.hasTag({ tag: 'template-developer' }),
+      });
+    }
+
+    if (
+      isNotMemberOfPlatformTeam(user) &&
+      isResourcePermission(request.permission, 'catalog-entity')
+    ) {
+      return createCatalogConditionalDecision(request.permission, {
+        anyOf: [
+          {
+            allOf: [
+              catalogConditions.isEntityKind({
+                kinds: ['Component', 'Resource'],
+              }),
+              catalogConditions.isEntityOwner({
+                claims: user?.identity.ownershipEntityRefs ?? [],
+              }),
+            ],
+          },
+          {
+            not: catalogConditions.isEntityKind({
+              kinds: ['Component', 'Resource'],
+            }),
+          },
+        ],
       });
     }
 
