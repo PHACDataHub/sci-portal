@@ -46,9 +46,9 @@ interface User extends JsonObject {
   email: string;
 }
 
-const toUser = (ownerEmail: string): User => ({
-  email: ownerEmail,
-  name: ownerEmail.split('@')[0],
+const toUser = (email: string): User => ({
+  email,
+  name: email.split('@')[0],
 });
 
 /**
@@ -242,6 +242,17 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectName = `${ctx.input.parameters.department}${environment}-${ctx.input.parameters.vanityName}`;
       const projectId = createProjectId(ctx.input.parameters.department);
 
+      // Add the current user as an editor and budget alert recipient
+      const budgetAlertEmailRecipients = parseEmailInput(
+        ctx.input.parameters.budgetAlertEmailRecipients,
+      );
+      const editors = parseEmailInput(ctx.input.parameters.editors).map(toUser);
+      const email = ctx.user?.entity?.spec.profile?.email;
+      if (email) {
+        budgetAlertEmailRecipients.unshift(email);
+        editors.unshift({ email, name: ctx.user?.entity?.metadata.name! });
+      }
+
       // Populate the template values
       const templateValues = {
         ...ctx.input.parameters,
@@ -264,12 +275,10 @@ export const createProvisionTemplateAction = (config: Config) => {
         formattedBudgetAmount: formatCurrency(
           ctx.input.parameters.budgetAmount,
         ),
-        budgetAlertEmailRecipients: parseEmailInput(
-          ctx.input.parameters.budgetAlertEmailRecipients,
-        ),
+        budgetAlertEmailRecipients: budgetAlertEmailRecipients,
 
         // Permissions
-        editors: parseEmailInput(ctx.input.parameters.editors).map(toUser),
+        editors,
         viewers: parseEmailInput(ctx.input.parameters.viewers).map(toUser),
 
         // Backstage
@@ -307,7 +316,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         templateValues,
       );
       ctx.output('pr_description', pullRequestDescription);
-      ctx.output('pr_targetPath', `DMIA-PHAC/SciencePlatform/${projectName}`);
+      ctx.output('pr_targetPath', `DMIA-PHAC/SciencePlatform/${projectId}`);
     },
   });
 };

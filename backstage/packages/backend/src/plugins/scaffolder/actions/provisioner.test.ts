@@ -122,6 +122,17 @@ describe('provisioner', () => {
       expect(typeof ctx.getOutput('pr_description')).toBe('string');
     });
 
+    it('should set the pull request target path', async () => {
+      const { ctx } = await getContextActionHandler({
+        template: { name: 'project-create' },
+        mockDir,
+      });
+
+      expect(ctx.getOutput('pr_targetPath')).toBe(
+        'DMIA-PHAC/SciencePlatform/phx-01an4z07by7',
+      );
+    });
+
     it('should set the template values in the output', async () => {
       const { ctx } = await getContextActionHandler({
         template: { name: 'project-create' },
@@ -144,7 +155,10 @@ describe('provisioner', () => {
 
           additionalProperty: 'OK',
         },
-        user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca' }),
+        user: createUser({
+          name: 'jane.doe',
+          email: 'jane.doe@gcp.hc-sc.gc.ca',
+        }),
         mockDir,
       });
 
@@ -174,12 +188,14 @@ describe('provisioner', () => {
         // Budget
         formattedBudgetAmount: '$12,345',
         budgetAlertEmailRecipients: [
+          'jane.doe@gcp.hc-sc.gc.ca',
           'samantha.jones@phac-aspc.gc.ca',
           'alex.mcdonald@phac-aspc.gc.ca',
         ],
 
         // Permissions
         editors: [
+          { name: 'jane.doe', email: 'jane.doe@gcp.hc-sc.gc.ca' },
           { name: 'jeanne.smith', email: 'jeanne.smith@phac-aspc.gc.ca' },
           {
             name: 'karen.schumacher',
@@ -190,6 +206,9 @@ describe('provisioner', () => {
           { name: 'samantha.jones', email: 'samantha.jones@gcp.hc-sc.gc.ca' },
           { name: 'john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
         ],
+
+        // Backstage
+        catalogEntityOwner: 'user:default/jane.doe',
 
         // Additional properties that are not in the input schema are included in the output.
         additionalProperty: 'OK',
