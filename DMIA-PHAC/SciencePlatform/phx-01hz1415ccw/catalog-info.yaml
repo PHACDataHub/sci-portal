@@ -1,0 +1,13 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: phx-01hz1415ccw
+  title: phx-sean-demo-02
+  annotations:
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hz1415ccw/
+    backstage.io/source-template: template:default/project-create
+    cloud.google.com/project: phx-01hz1415ccw
+spec:
+  type: project
+  owner: user:default/sean.poulter
