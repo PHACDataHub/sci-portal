@@ -125,7 +125,6 @@ spec:
       backstage:permissions:
         tags:
           - template-developer
-      backstage:featureFlag: template-developer
       properties:
         pullRequestAction:
           title: Pull Request Action
@@ -158,7 +157,6 @@ spec:
         tags:
           - template-developer
       if: ${{ parameters.pullRequestAction == 'Diff Only' }}
-      backstage:featureFlag: template-developer
       input:
         command: diff
         workingDirectory: . # the workspacePath
