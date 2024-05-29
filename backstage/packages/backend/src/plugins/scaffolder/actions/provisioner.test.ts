@@ -3,6 +3,7 @@ import {
   mockServices,
 } from '@backstage/backend-test-utils';
 import { getConfig, parseEmailInput } from './provisioner';
+import { createUser } from '../__testUtils__/createUser';
 import { getContextActionHandler } from '../__testUtils__/getContextActionHandler';
 
 jest.mock('ulidx', () => ({
@@ -143,14 +144,7 @@ describe('provisioner', () => {
 
           additionalProperty: 'OK',
         },
-        user: {
-          entity: {
-            apiVersion: 'backstage.io/v1alpha1',
-            kind: 'User',
-            metadata: { name: '' },
-            spec: { profile: { email: 'jane.doe@gcp.hc-sc.gc.ca' } },
-          },
-        },
+        user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca' }),
         mockDir,
       });
 
