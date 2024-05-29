@@ -268,6 +268,9 @@ export const createProvisionTemplateAction = (config: Config) => {
         rootFolderId,
         projectName,
         projectId,
+        projectLabels: {
+          'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
+        },
 
         // Information Management and Security
         dataClassificationTitle:
