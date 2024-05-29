@@ -103,3 +103,6 @@ auth:
 
 # Sign in without a pop-up. See https://backstage.io/docs/auth/#sign-in-configuration.
 enableExperimentalRedirectFlow: true
+
+permission:
+  enabled: true

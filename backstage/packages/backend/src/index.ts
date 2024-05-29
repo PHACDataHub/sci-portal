@@ -1,9 +1,13 @@
 import { createBackend } from '@backstage/backend-defaults';
-import { createBackendModule } from '@backstage/backend-plugin-api';
+import {
+  coreServices,
+  createBackendModule,
+} from '@backstage/backend-plugin-api';
+import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
-import { coreServices } from '@backstage/backend-plugin-api';
 
 import { googleAuthWithCustomSignInResolver } from './plugins/auth/module';
+import { CustomPermissionPolicy } from './plugins/permissions';
 import { createProvisionTemplateAction } from './plugins/scaffolder/actions/provisioner';
 import { createDebugWorkspaceAction } from './plugins/scaffolder/actions/debug-workspace';
 
@@ -28,7 +32,18 @@ backend.add(
 // permission plugin
 backend.add(import('@backstage/plugin-permission-backend/alpha'));
 backend.add(
-  import('@backstage/plugin-permission-backend-module-allow-all-policy'),
+  createBackendModule({
+    pluginId: 'permission',
+    moduleId: 'allow-all-policy',
+    register(reg) {
+      reg.registerInit({
+        deps: { policy: policyExtensionPoint },
+        async init({ policy }) {
+          policy.setPolicy(new CustomPermissionPolicy());
+        },
+      });
+    },
+  }),
 );
 
 // search plugin
@@ -36,7 +51,7 @@ backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 
-// Add our custom action
+// Add our custom Scaffolder action
 backend.add(
   createBackendModule({
     pluginId: 'scaffolder',

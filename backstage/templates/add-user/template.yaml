@@ -34,6 +34,9 @@ spec:
             catalogFilter:
               kind: Group
     - title: Pull Request
+      backstage:permissions:
+        tags:
+          - template-developer
       backstage:featureFlag: template-developer
       properties:
         pullRequestAction:
@@ -66,6 +69,9 @@ spec:
     - id: debug-pull-request
       name: Debug Pull Request
       action: debug:workspace
+      backstage:permissions:
+        tags:
+          - template-developer
       if: ${{ parameters.pullRequestAction == 'Diff Only' }}
       backstage:featureFlag: template-developer
       input:
