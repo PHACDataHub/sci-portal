@@ -153,10 +153,10 @@ spec:
     - id: debug-pull-request
       name: Debug Pull Request
       action: debug:workspace
+      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
       backstage:permissions:
         tags:
           - template-developer
-      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
       input:
         command: diff
         workingDirectory: . # the workspacePath
@@ -172,6 +172,16 @@ spec:
         title: ${{steps.ctx.output.pr_title}}
         description: ${{steps.ctx.output.pr_description}}
         targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.projectName}}
+
+    - id: label-pull-request
+      name: Add Pull Request Labels
+      action: github:issues:label
+      if: ${{ parameters.pullRequestAction != 'Diff Only' }}
+      input:
+        repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
+        number: ${{steps['publish-pull-request'].output.pullRequestNumber}}
+        labels:
+          - from-template
 
   output:
     links:
