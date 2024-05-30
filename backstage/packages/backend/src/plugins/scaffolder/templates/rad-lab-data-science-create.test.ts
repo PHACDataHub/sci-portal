@@ -71,6 +71,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
         template: { name: 'rad-lab-data-science-create' },
         input: {
           url: './pull-request-changes',
+          targetPath: 'DMIA-PHAC/SciencePlatform/<project-id>/',
           templateFileExtension: '.njk',
           values: {
             requestId: '<uuid>',
@@ -109,7 +110,10 @@ describe('rad-lab-data-science-create: fetch:template', () => {
 
       expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
         {
-          "catalog-info.yaml": "---
+          "DMIA-PHAC": {
+            "SciencePlatform": {
+              "<project-id>": {
+                "catalog-info.yaml": "---
         apiVersion: backstage.io/v1alpha1
         kind: Component
         metadata:
@@ -124,7 +128,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           type: rad-lab-module
           owner: user:default/jane.doe
           lifecycle: experimental",
-          "claim.yaml": "---
+                "claim.yaml": "---
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
         kind: RadLabDataScienceClaim
         metadata:
@@ -149,6 +153,9 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             pricing-structure: 'subscription'
             vanity-name: '<project-name>'
         ",
+              },
+            },
+          },
         }
       `);
     },

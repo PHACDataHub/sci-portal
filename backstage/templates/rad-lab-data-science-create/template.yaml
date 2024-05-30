@@ -149,6 +149,7 @@ spec:
       input:
         url: ./pull-request-changes
         values: ${{steps.ctx.output.template_values}}
+        targetPath: ./${{steps.ctx.output.source_location}}
         templateFileExtension: .njk
 
     - id: debug-pull-request
@@ -172,7 +173,6 @@ spec:
         branchName: ${{steps.ctx.output.branch}}
         title: ${{steps.ctx.output.pr_title}}
         description: ${{steps.ctx.output.pr_description}}
-        targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.projectName}}
 
     - id: label-pull-request
       name: Add Pull Request Labels

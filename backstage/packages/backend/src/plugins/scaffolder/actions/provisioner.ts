@@ -255,7 +255,8 @@ export const createProvisionTemplateAction = (config: Config) => {
       // Unique email addresses
       budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];
 
-      const pullRequestTargetPath = `DMIA-PHAC/SciencePlatform/${projectId}/`;
+      // Set the template output directory
+      const sourceLocation = `DMIA-PHAC/SciencePlatform/${projectId}/`;
 
       // Populate the template values
       const templateValues = {
@@ -276,7 +277,7 @@ export const createProvisionTemplateAction = (config: Config) => {
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
           'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
-          'department': ctx.input.parameters.department.toLowerCase(),
+          department: ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
           'vanity-name': projectName.toLowerCase(),
         },
@@ -289,7 +290,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         formattedBudgetAmount: formatCurrency(
           ctx.input.parameters.budgetAmount,
         ),
-        budgetAlertEmailRecipients: budgetAlertEmailRecipients,
+        budgetAlertEmailRecipients,
 
         // Permissions
         editors,
@@ -297,7 +298,7 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Backstage
         catalogEntityOwner: ctx.user?.ref,
-        sourceLocation: pullRequestTargetPath,
+        sourceLocation,
       };
       ctx.output('template_values', templateValues);
 
@@ -331,7 +332,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         templateValues,
       );
       ctx.output('pr_description', pullRequestDescription);
-      ctx.output('pr_targetPath', pullRequestTargetPath);
+      ctx.output('source_location', sourceLocation);
     },
   });
 };
