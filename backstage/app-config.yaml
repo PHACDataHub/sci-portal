@@ -85,6 +85,7 @@ enableExperimentalRedirectFlow: true
 
 catalog:
   readonly: true
+  orphanStrategy: delete
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group]
   locations:
