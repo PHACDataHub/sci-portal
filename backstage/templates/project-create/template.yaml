@@ -150,7 +150,7 @@ spec:
         targetPath: ./${{steps.ctx.output.pr_targetPath}}
 
     - id: label-pull-request
-      name: Add Pull Request labels
+      name: Add Pull Request Labels
       action: github:issues:label
       if: ${{ parameters.pullRequestAction != 'Diff Only' }}
       input:

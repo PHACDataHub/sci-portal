@@ -174,7 +174,7 @@ spec:
         targetPath: ./DMIA-PHAC/SciencePlatform/${{steps.ctx.output.template_values.projectName}}
 
     - id: label-pull-request
-      name: Add Pull Request labels
+      name: Add Pull Request Labels
       action: github:issues:label
       if: ${{ parameters.pullRequestAction != 'Diff Only' }}
       input:
