@@ -153,7 +153,7 @@ spec:
       name: Add Pull Request labels
       action: github:issues:label
       input:
-        repoUrl: github.com?owner=PHACDataHub&repo=sci-portal-users
+        repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
         number: ${{steps['publish-pull-request'].output.pullRequestNumber}}
         labels:
           - from-template
