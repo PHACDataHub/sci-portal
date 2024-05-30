@@ -63,6 +63,7 @@ spec:
                   - user:sean.poulter@gcp.hc-sc.gc.ca
                 labels:
                   classification: 'ucll'
+                  controlled-by: 'science-portal'
                   cost-centre: 'abc123456789'
                   cost-centre-name: 'tps-reports'
                   pricing-structure: 'subscription'
@@ -96,6 +97,7 @@ spec:
                   cnrm.cloud.google.com/auto-create-network: "false"
                 labels:
                   classification: 'ucll'
+                  controlled-by: 'science-portal'
                   cost-centre: 'abc123456789'
                   cost-centre-name: 'tps-reports'
                   pricing-structure: 'subscription'

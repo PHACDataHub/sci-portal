@@ -76,6 +76,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           projectId: '<project-id>',
           projectLabels: {
             classification: '<classification>',
+            'controlled-by': 'science-portal',
             'cost-centre': '<cost-centre>',
             'cost-centre-name': '<cost-centre-name>',
             'pricing-structure': 'subscription',
@@ -130,6 +131,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             - user:john.campbell@gcp.hc-sc.gc.ca
           labels:
             classification: '<classification>'
+            controlled-by: 'science-portal'
             cost-centre: '<cost-centre>'
             cost-centre-name: '<cost-centre-name>'
             pricing-structure: 'subscription'
