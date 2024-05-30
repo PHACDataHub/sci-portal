@@ -1,0 +1,23 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-project-demo-684a7413-282b-4350-b022-52d50846ba30
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-project-demo
+  projectId: phx-01hz5n9qpcw
+  projectEditors:
+    - user:sean.poulter@focisolutions.com
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+  projectViewers:
+    - user:sean.poulter@focisolutions.com
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'abc123456789'
+    cost-centre-name: 'tps-reports'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-project-demo'
