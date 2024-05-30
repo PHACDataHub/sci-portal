@@ -66,7 +66,6 @@ spec:
                   cost-centre: 'abc123456789'
                   cost-centre-name: 'tps-reports'
                   pricing-structure: 'subscription'
-                  requested-by: 'jane.doe@gcp.hc-sc.gc.ca'
                   vanity-name: '($projectName)'
 
         - description: Assert the ProjectClaim has been created
@@ -100,7 +99,6 @@ spec:
                   cost-centre: 'abc123456789'
                   cost-centre-name: 'tps-reports'
                   pricing-structure: 'subscription'
-                  requested-by: 'jane.doe@gcp.hc-sc.gc.ca'
                   vanity-name: '($projectName)'
               spec:
                 name: ($projectName)
