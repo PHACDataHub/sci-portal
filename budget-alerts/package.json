@@ -1,0 +1,18 @@
+{
+    "name": "budget-alerts",
+    "version": "1.0.0",
+    "description": "Cloud function manages Google Cloud Budget alerts and sends notification emails using GC Notify",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "",
+    "dependencies": {
+      "@google-cloud/functions-framework": "^3.4.0",
+      "@google-cloud/pubsub": "^4.4.0",
+      "axios": "^1.7.2",
+      "notifications-node-client": "8.0.0"
+    }
+  }
+  
