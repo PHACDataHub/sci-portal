@@ -93,6 +93,15 @@ spec:
         targetPath: ./users/
         commitMessage: Add ${{parameters.email}}
 
+    - id: label-pull-request
+      name: Add Pull Request labels
+      action: github:issues:label
+      input:
+        repoUrl: github.com?owner=PHACDataHub&repo=sci-portal-users
+        number: ${{steps['publish-pull-request'].output.pullRequestNumber}}
+        labels:
+          - from-template
+
   output:
     links:
       - url: ${{steps['publish-pull-request'].output.remoteUrl}}
