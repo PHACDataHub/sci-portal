@@ -122,13 +122,13 @@ describe('provisioner', () => {
       expect(typeof ctx.getOutput('pr_description')).toBe('string');
     });
 
-    it('should set the pull request target path', async () => {
+    it('should set the template output (source) location', async () => {
       const { ctx } = await getContextActionHandler({
         template: { name: 'project-create' },
         mockDir,
       });
 
-      expect(ctx.getOutput('pr_targetPath')).toBe(
+      expect(ctx.getOutput('source_location')).toBe(
         'DMIA-PHAC/SciencePlatform/phx-01an4z07by7/',
       );
     });
@@ -188,7 +188,7 @@ describe('provisioner', () => {
           'controlled-by': 'science-portal',
           'cost-centre': 'jbu987654321',
           'cost-centre-name': 'acme',
-          'department': 'hc',
+          department: 'hc',
           'pricing-structure': 'subscription',
           'vanity-name': 'hcx-test-case',
         },

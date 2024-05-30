@@ -14,10 +14,10 @@ export const fetchTemplateActionHandler = ({
   template: { namespace?: string; name: string };
   input: {
     url: string;
-    values: any,
+    values: any;
     targetPath?: string | undefined;
     templateFileExtension?: string | boolean | undefined;
-  }
+  };
   mockDir: MockDirectory;
 }) => {
   // Create the context
