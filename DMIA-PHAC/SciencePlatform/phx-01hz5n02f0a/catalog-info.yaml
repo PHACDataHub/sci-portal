@@ -1,0 +1,14 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: phx-01hz5n02f0a
+  title: phx-rad-lab-demo
+  annotations:
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hz5n02f0a/
+    backstage.io/source-template: template:default/project-create
+    cloud.google.com/project: phx-01hz5n02f0a
+    data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: sean.poulter@focisolutions.com,kendra.dezenosky@focisolutions.com,rajan.subedi@focisolutions.com
+spec:
+  type: project
+  owner: user:default/sean.poulter
