@@ -44,6 +44,8 @@ spec:
                   properties:
                     classification:
                       type: string
+                    controlled-by:
+                      type: string
                     cost-centre:
                       type: string
                     cost-centre-name:
@@ -55,6 +57,7 @@ spec:
                     # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
                   required:
                     - classification
+                    - controlled-by
                     - cost-centre
                     - cost-centre-name
                     - pricing-structure

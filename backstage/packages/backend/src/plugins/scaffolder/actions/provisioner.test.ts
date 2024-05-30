@@ -185,6 +185,7 @@ describe('provisioner', () => {
         projectId: 'hcx-01an4z07by7',
         projectLabels: {
           classification: 'pbmm',
+          'controlled-by': 'science-portal',
           'cost-centre': 'jbu987654321',
           'cost-centre-name': 'acme',
           'pricing-structure': 'subscription',

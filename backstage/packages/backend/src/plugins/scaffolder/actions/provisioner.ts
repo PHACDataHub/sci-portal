@@ -271,6 +271,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         projectLabels: {
           // Only hyphens (-), underscores (_), lowercase characters, and numbers are allowed. International characters are allowed.
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
+          'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
           'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
           'pricing-structure': 'subscription',
