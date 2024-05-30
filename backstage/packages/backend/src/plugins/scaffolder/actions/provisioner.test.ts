@@ -188,7 +188,6 @@ describe('provisioner', () => {
           'cost-centre': 'jbu987654321',
           'cost-centre-name': 'acme',
           'pricing-structure': 'subscription',
-          'requested-by': 'jane.doe@gcp.hc-sc.gc.ca',
           'vanity-name': 'hcx-test-case',
         },
         dataClassificationTitle: 'Protected B',

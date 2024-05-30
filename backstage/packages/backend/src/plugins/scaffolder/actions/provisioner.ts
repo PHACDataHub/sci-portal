@@ -255,14 +255,14 @@ export const createProvisionTemplateAction = (config: Config) => {
 
       const pullRequestTargetPath = `DMIA-PHAC/SciencePlatform/${projectId}/`;
 
-      const requestEmail = ctx?.user?.entity?.spec?.profile?.email ?? ctx?.user?.ref ?? '';
       // Populate the template values
       const templateValues = {
         ...ctx.input.parameters,
 
         // Metadata
         requestId,
-        requestEmail,
+        requestEmail:
+          ctx?.user?.entity?.spec?.profile?.email ?? ctx?.user?.ref ?? '',
 
         // Project
         rootFolderId,
@@ -274,7 +274,6 @@ export const createProvisionTemplateAction = (config: Config) => {
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
           'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
           'pricing-structure': 'subscription',
-          'requested-by': requestEmail,
           'vanity-name': projectName.toLowerCase(),
         },
 
