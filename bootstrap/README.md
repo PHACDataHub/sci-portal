@@ -219,7 +219,7 @@ Create a Secret with the token:
 
 ```sh
 kubectl create secret generic -n backstage backstage-auth-keys \
-  --from-literal=BACKSTAGE_AUTH_KEYS_0="<token>"
+  --from-literal=BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN="<token>"
 ```
 
 ### Configure the Backstage Backend
