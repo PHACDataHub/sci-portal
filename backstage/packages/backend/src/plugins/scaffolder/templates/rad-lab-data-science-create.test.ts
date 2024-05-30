@@ -74,6 +74,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           projectName: '<project-name>',
           projectId: '<project-id>',
           projectLabels: {
+            'classification': '<classification>',
             'cost-centre': '<cost-centre>',
             'vanity-name': '<project-name>',
           },
@@ -125,6 +126,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             - user:alex.mcdonald@gcp.hc-sc.gc.ca
             - user:john.campbell@gcp.hc-sc.gc.ca
           labels:
+            classification: '<classification>'
             cost-centre: '<cost-centre>'
             vanity-name: '<project-name>'
         ",

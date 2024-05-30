@@ -269,6 +269,7 @@ export const createProvisionTemplateAction = (config: Config) => {
         projectName,
         projectId,
         projectLabels: {
+          'classification': ctx.input.parameters.dataClassification.toLowerCase(),
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
           'vanity-name': projectName.toLowerCase(),
         },

@@ -42,12 +42,15 @@ spec:
                   x-kubernetes-preserve-unknown-fields: true
                   type: object
                   properties:
+                    classification:
+                      type: string
                     cost-centre:
                       type: string
                     vanity-name:
                       type: string
                     # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
                   required:
+                    - classification
                     - cost-centre
                     - vanity-name
               required:
