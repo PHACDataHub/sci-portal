@@ -276,6 +276,7 @@ export const createProvisionTemplateAction = (config: Config) => {
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
           'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
+          'department': ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
           'vanity-name': projectName.toLowerCase(),
         },

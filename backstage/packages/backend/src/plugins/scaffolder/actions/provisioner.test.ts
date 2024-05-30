@@ -188,6 +188,7 @@ describe('provisioner', () => {
           'controlled-by': 'science-portal',
           'cost-centre': 'jbu987654321',
           'cost-centre-name': 'acme',
+          'department': 'hc',
           'pricing-structure': 'subscription',
           'vanity-name': 'hcx-test-case',
         },

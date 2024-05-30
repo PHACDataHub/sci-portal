@@ -89,6 +89,7 @@ describe('project-create: fetch:template', () => {
             'controlled-by': 'science-portal',
             'cost-centre': '<cost-centre>',
             'cost-centre-name': '<cost-centre-name>',
+            'department': '<department>',
             'pricing-structure': 'subscription',
             'vanity-name': '<project-name>',
           },
@@ -150,6 +151,7 @@ describe('project-create: fetch:template', () => {
             controlled-by: 'science-portal'
             cost-centre: '<cost-centre>'
             cost-centre-name: '<cost-centre-name>'
+            department: '<department>'
             pricing-structure: 'subscription'
             vanity-name: '<project-name>'
         ",

@@ -79,6 +79,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             'controlled-by': 'science-portal',
             'cost-centre': '<cost-centre>',
             'cost-centre-name': '<cost-centre-name>',
+            'department': '<department>',
             'pricing-structure': 'subscription',
             'vanity-name': '<project-name>',
           },
@@ -140,6 +141,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             controlled-by: 'science-portal'
             cost-centre: '<cost-centre>'
             cost-centre-name: '<cost-centre-name>'
+            department: '<department>'
             pricing-structure: 'subscription'
             vanity-name: '<project-name>'
         ",
