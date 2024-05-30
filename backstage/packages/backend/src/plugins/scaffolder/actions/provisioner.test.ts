@@ -187,6 +187,7 @@ describe('provisioner', () => {
           classification: 'pbmm',
           'cost-centre': 'jbu987654321',
           'cost-centre-name': 'acme',
+          'pricing-structure': 'subscription',
           'vanity-name': 'hcx-test-case',
         },
         dataClassificationTitle: 'Protected B',

@@ -54,6 +54,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
       ### Budget
 
       **Annual Budget Amount (CAD):** $2,000
+      **Pricing Structure**: Subscription
       **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
 
       ### Rad Lab Data Science
@@ -77,6 +78,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             classification: '<classification>',
             'cost-centre': '<cost-centre>',
             'cost-centre-name': '<cost-centre-name>',
+            'pricing-structure': 'subscription',
             'vanity-name': '<project-name>',
           },
           editors: [
@@ -130,6 +132,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             classification: '<classification>'
             cost-centre: '<cost-centre>'
             cost-centre-name: '<cost-centre-name>'
+            pricing-structure: 'subscription'
             vanity-name: '<project-name>'
         ",
         }

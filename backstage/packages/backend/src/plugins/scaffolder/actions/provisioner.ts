@@ -273,6 +273,7 @@ export const createProvisionTemplateAction = (config: Config) => {
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
           'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
+          'pricing-structure': 'subscription',
           'vanity-name': projectName.toLowerCase(),
         },
 
