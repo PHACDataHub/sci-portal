@@ -1,0 +1,21 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-rs-project-001-9e3d4f4d-9bd2-428d-b926-f5e983d5b87e
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-rs-project-001
+  projectId: phx-01hz5eaxy24
+  projectEditors:
+    - user:rajan.subedi@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+  projectViewers:
+    - user:rajan.subedi@gcp.hc-sc.gc.ca
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'rs-project-001'
+    cost-centre-name: 'rs-project-001'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-rs-project-001'
