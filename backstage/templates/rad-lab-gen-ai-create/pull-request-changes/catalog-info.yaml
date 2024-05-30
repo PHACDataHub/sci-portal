@@ -8,6 +8,7 @@ metadata:
     backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/${{values.sourceLocation}}
     backstage.io/source-template: template:default/rad-lab-gen-ai-create
     cloud.google.com/project: ${{values.projectId}}
+    data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: ${{values.budgetAlertEmailRecipients | join(',')}}
 spec:
   type: rad-lab-module
   owner: ${{values.catalogEntityOwner}}
