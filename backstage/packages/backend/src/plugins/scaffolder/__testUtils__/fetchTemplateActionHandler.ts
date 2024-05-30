@@ -8,11 +8,16 @@ import { MockDirectory } from '@backstage/backend-test-utils';
 
 export const fetchTemplateActionHandler = ({
   template: { namespace = 'default', name },
-  values,
+  input,
   mockDir,
 }: {
   template: { namespace?: string; name: string };
-  values: any;
+  input: {
+    url: string;
+    values: any,
+    targetPath?: string | undefined;
+    templateFileExtension?: string | boolean | undefined;
+  }
   mockDir: MockDirectory;
 }) => {
   // Create the context
@@ -48,12 +53,5 @@ export const fetchTemplateActionHandler = ({
     reader: Symbol('UrlReader') as unknown as UrlReader,
     integrations: Symbol('Integrations') as unknown as ScmIntegrations,
   });
-  return action.handler({
-    ...ctx,
-    input: {
-      url: './pull-request-changes',
-      values,
-      templateFileExtension: '.njk',
-    },
-  });
+  return action.handler({ ...ctx, input });
 };

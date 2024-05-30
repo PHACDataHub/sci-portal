@@ -69,36 +69,40 @@ describe('rad-lab-data-science-create: fetch:template', () => {
     async () => {
       await fetchTemplateActionHandler({
         template: { name: 'rad-lab-data-science-create' },
-        values: {
-          requestId: '<uuid>',
-          rootFolderId: '<root-folder-id>',
-          projectName: '<project-name>',
-          projectId: '<project-id>',
-          projectLabels: {
-            classification: '<classification>',
-            'controlled-by': 'science-portal',
-            'cost-centre': '<cost-centre>',
-            'cost-centre-name': '<cost-centre-name>',
-            'department': '<department>',
-            'pricing-structure': 'subscription',
-            'vanity-name': '<project-name>',
+        input: {
+          url: './pull-request-changes',
+          templateFileExtension: '.njk',
+          values: {
+            requestId: '<uuid>',
+            rootFolderId: '<root-folder-id>',
+            projectName: '<project-name>',
+            projectId: '<project-id>',
+            projectLabels: {
+              classification: '<classification>',
+              'controlled-by': 'science-portal',
+              'cost-centre': '<cost-centre>',
+              'cost-centre-name': '<cost-centre-name>',
+              department: '<department>',
+              'pricing-structure': 'subscription',
+              'vanity-name': '<project-name>',
+            },
+            editors: [
+              { email: 'jane.doe@gcp.hc-sc.gc.ca' },
+              { email: 'john.doe@gcp.hc-sc.gc.ca' },
+            ],
+            viewers: [
+              { email: 'samantha.jones@gcp.hc-sc.gc.ca' },
+              { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
+              { email: 'john.campbell@gcp.hc-sc.gc.ca' },
+            ],
+            catalogEntityOwner: 'user:default/jane.doe',
+            sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
+            budgetAlertEmailRecipients: [
+              'jane.doe@gcp.hc-sc.gc.ca',
+              'samantha.jones@phac-aspc.gc.ca',
+              'alex.mcdonald@phac-aspc.gc.ca',
+            ],
           },
-          editors: [
-            { email: 'jane.doe@gcp.hc-sc.gc.ca' },
-            { email: 'john.doe@gcp.hc-sc.gc.ca' },
-          ],
-          viewers: [
-            { email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-            { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
-            { email: 'john.campbell@gcp.hc-sc.gc.ca' },
-          ],
-          catalogEntityOwner: 'user:default/jane.doe',
-          sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
-          budgetAlertEmailRecipients: [
-            'jane.doe@gcp.hc-sc.gc.ca',
-            'samantha.jones@phac-aspc.gc.ca',
-            'alex.mcdonald@phac-aspc.gc.ca',
-          ],
         },
         mockDir,
       });
