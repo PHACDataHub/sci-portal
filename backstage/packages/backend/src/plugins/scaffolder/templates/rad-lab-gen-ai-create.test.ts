@@ -87,34 +87,49 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             { email: 'john.campbell@gcp.hc-sc.gc.ca' },
           ],
           catalogEntityOwner: 'user:default/jane.doe',
+          sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
         },
         mockDir,
       });
 
       expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
-      {
-        "claim.yaml": "---
-      apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-      kind: RadLabGenAIClaim
-      metadata:
-        name: <project-name>-<uuid>
-      spec:
-        rootFolderId: '<root-folder-id>'
-        projectName: <project-name>
-        projectId: <project-id>
-        projectEditors:
-          - user:jane.doe@gcp.hc-sc.gc.ca
-          - user:john.doe@gcp.hc-sc.gc.ca
-        projectViewers:
-          - user:samantha.jones@gcp.hc-sc.gc.ca
-          - user:alex.mcdonald@gcp.hc-sc.gc.ca
-          - user:john.campbell@gcp.hc-sc.gc.ca
-        labels:
-          cost-centre: '<cost-centre>'
-          vanity-name: '<project-name>'
-      ",
-      }
-    `);
+        {
+          "catalog-info.yaml": "---
+        apiVersion: backstage.io/v1alpha1
+        kind: Component
+        metadata:
+          name: <project-id>
+          title: <project-name>
+          annotations:
+            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-id>/
+            backstage.io/source-template: template:default/rad-lab-gen-ai-create
+            cloud.google.com/project: <project-id>
+        spec:
+          type: rad-lab-module
+          owner: user:default/jane.doe
+          lifecycle: experimental",
+          "claim.yaml": "---
+        apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+        kind: RadLabGenAIClaim
+        metadata:
+          name: <project-name>-<uuid>
+        spec:
+          rootFolderId: '<root-folder-id>'
+          projectName: <project-name>
+          projectId: <project-id>
+          projectEditors:
+            - user:jane.doe@gcp.hc-sc.gc.ca
+            - user:john.doe@gcp.hc-sc.gc.ca
+          projectViewers:
+            - user:samantha.jones@gcp.hc-sc.gc.ca
+            - user:alex.mcdonald@gcp.hc-sc.gc.ca
+            - user:john.campbell@gcp.hc-sc.gc.ca
+          labels:
+            cost-centre: '<cost-centre>'
+            vanity-name: '<project-name>'
+        ",
+        }
+      `);
     },
   );
 });
