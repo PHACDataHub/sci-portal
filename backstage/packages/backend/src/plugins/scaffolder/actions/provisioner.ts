@@ -243,7 +243,7 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectId = createProjectId(ctx.input.parameters.department);
 
       // Add the current user as an editor and budget alert recipient
-      const budgetAlertEmailRecipients = parseEmailInput(
+      let budgetAlertEmailRecipients = parseEmailInput(
         ctx.input.parameters.budgetAlertEmailRecipients,
       );
       const editors = parseEmailInput(ctx.input.parameters.editors).map(toUser);
@@ -252,6 +252,8 @@ export const createProvisionTemplateAction = (config: Config) => {
         budgetAlertEmailRecipients.unshift(email);
         editors.unshift({ email, name: ctx.user?.entity?.metadata.name! });
       }
+      // Unique email addresses
+      budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];
 
       const pullRequestTargetPath = `DMIA-PHAC/SciencePlatform/${projectId}/`;
 

@@ -103,52 +103,58 @@ describe('project-create: fetch:template', () => {
           ],
           catalogEntityOwner: 'user:default/jane.doe',
           sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
+          budgetAlertEmailRecipients: [
+            'jane.doe@gcp.hc-sc.gc.ca',
+            'samantha.jones@phac-aspc.gc.ca',
+            'alex.mcdonald@phac-aspc.gc.ca',
+          ],
         },
         mockDir,
       });
 
       expect(mockDir.content({ path: 'workspace' })).toMatchInlineSnapshot(`
-      {
-        "catalog-info.yaml": "---
-      apiVersion: backstage.io/v1alpha1
-      kind: Resource
-      metadata:
-        name: <project-id>
-        title: <project-name>
-        annotations:
-          backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-id>/
-          backstage.io/source-template: template:default/project-create
-          cloud.google.com/project: <project-id>
-      spec:
-        type: project
-        owner: user:default/jane.doe
-      ",
-        "claim.yaml": "---
-      apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-      kind: ProjectClaim
-      metadata:
-        name: <project-name>-<uuid>
-      spec:
-        rootFolderId: '<root-folder-id>'
-        projectName: <project-name>
-        projectId: <project-id>
-        projectEditors:
-          - user:jane.doe@gcp.hc-sc.gc.ca
-          - user:john.doe@gcp.hc-sc.gc.ca
-        projectViewers:
-          - user:samantha.jones@gcp.hc-sc.gc.ca
-          - user:alex.mcdonald@gcp.hc-sc.gc.ca
-          - user:john.campbell@gcp.hc-sc.gc.ca
-        labels:
-          classification: '<classification>'
-          controlled-by: 'science-portal'
-          cost-centre: '<cost-centre>'
-          cost-centre-name: '<cost-centre-name>'
-          pricing-structure: 'subscription'
-          vanity-name: '<project-name>'
-      ",
-      }
-    `);
+        {
+          "catalog-info.yaml": "---
+        apiVersion: backstage.io/v1alpha1
+        kind: Resource
+        metadata:
+          name: <project-id>
+          title: <project-name>
+          annotations:
+            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-id>/
+            backstage.io/source-template: template:default/project-create
+            cloud.google.com/project: <project-id>
+            data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
+        spec:
+          type: project
+          owner: user:default/jane.doe
+        ",
+          "claim.yaml": "---
+        apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+        kind: ProjectClaim
+        metadata:
+          name: <project-name>-<uuid>
+        spec:
+          rootFolderId: '<root-folder-id>'
+          projectName: <project-name>
+          projectId: <project-id>
+          projectEditors:
+            - user:jane.doe@gcp.hc-sc.gc.ca
+            - user:john.doe@gcp.hc-sc.gc.ca
+          projectViewers:
+            - user:samantha.jones@gcp.hc-sc.gc.ca
+            - user:alex.mcdonald@gcp.hc-sc.gc.ca
+            - user:john.campbell@gcp.hc-sc.gc.ca
+          labels:
+            classification: '<classification>'
+            controlled-by: 'science-portal'
+            cost-centre: '<cost-centre>'
+            cost-centre-name: '<cost-centre-name>'
+            pricing-structure: 'subscription'
+            vanity-name: '<project-name>'
+        ",
+        }
+      `);
     },
   );
 });
