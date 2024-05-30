@@ -53,6 +53,7 @@ export const fetchTemplateActionHandler = ({
     input: {
       url: './pull-request-changes',
       values,
+      templateFileExtension: '.njk',
     },
   });
 };
