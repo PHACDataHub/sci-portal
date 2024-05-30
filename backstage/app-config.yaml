@@ -41,6 +41,14 @@ backend:
         name: ${GITOPS_REPO_NAME}
       templateDir: './templates'
 
+  auth:
+    externalAccess:
+      - type: static
+        options:
+          token: ${BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN}
+          subject: budget-alert-events
+
+
 integrations:
   github:
     ### Use a GitHub App for authentication. See https://backstage.io/docs/integrations/github/github-apps.

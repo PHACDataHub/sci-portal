@@ -15,8 +15,11 @@ backend:
   listen: ':7007'
 
   auth:
-    keys:
-      - secret: ${BACKSTAGE_AUTH_KEYS_0}
+    externalAccess:
+      - type: static
+        options:
+          token: ${BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN}
+          subject: budget-alert-events
 
   # config options: https://node-postgres.com/api/client
   database:
