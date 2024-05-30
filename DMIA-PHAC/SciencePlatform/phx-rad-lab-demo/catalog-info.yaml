@@ -2,12 +2,13 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: phx-01hz5a0a436
+  name: phx-01hz5f5jjef
   title: phx-rad-lab-demo
   annotations:
-    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hz5a0a436/
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hz5f5jjef/
     backstage.io/source-template: template:default/rad-lab-gen-ai-create
-    cloud.google.com/project: phx-01hz5a0a436
+    cloud.google.com/project: phx-01hz5f5jjef
+    data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: sean.poulter@focisolutions.com,kendra.dezenosky@focisolutions.com,rajan.subedi@focisolutions.com
 spec:
   type: rad-lab-module
   owner: user:default/sean.poulter
