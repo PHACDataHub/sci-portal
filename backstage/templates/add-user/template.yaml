@@ -44,7 +44,6 @@ spec:
           default: Diff Only
           enum:
             - Diff Only
-            - Publish and Close Pull Request
             - Publish Pull Request
 
   steps:
@@ -68,10 +67,10 @@ spec:
     - id: debug-pull-request
       name: Debug Pull Request
       action: debug:workspace
+      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
       backstage:permissions:
         tags:
           - template-developer
-      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
       input:
         command: diff
         workingDirectory: . # the workspacePath
@@ -79,6 +78,7 @@ spec:
     - id: publish-pull-request
       name: Submit Pull Request
       action: publish:github:pull-request
+      if: ${{ parameters.pullRequestAction != 'Diff Only' }}
       input:
         repoUrl: github.com?owner=PHACDataHub&repo=sci-portal-users
         branchName: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}
@@ -96,6 +96,7 @@ spec:
     - id: label-pull-request
       name: Add Pull Request labels
       action: github:issues:label
+      if: ${{ parameters.pullRequestAction != 'Diff Only' }}
       input:
         repoUrl: github.com?owner=PHACDataHub&repo=sci-portal-users
         number: ${{steps['publish-pull-request'].output.pullRequestNumber}}
