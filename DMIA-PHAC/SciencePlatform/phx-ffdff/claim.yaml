@@ -1,0 +1,20 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabGenAIClaim
+metadata:
+  name: phx-ffdff-99a41367-43b9-4a3c-8d2c-930a0c7adfee
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-ffdff
+  projectId: phx-01hz58ms9gy
+  projectEditors:
+    - user:rajan.subedi@focisolutions.com
+  projectViewers:
+    - user:rajan.subedi@focisolutions.com
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'rajan.subedi@focisolutions.com'
+    cost-centre-name: 'rajan.subedi@focisolutions.com'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-ffdff'
