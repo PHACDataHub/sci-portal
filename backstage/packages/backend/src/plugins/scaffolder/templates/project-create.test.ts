@@ -89,6 +89,7 @@ describe('project-create: fetch:template', () => {
             'cost-centre': '<cost-centre>',
             'cost-centre-name': '<cost-centre-name>',
             'pricing-structure': 'subscription',
+            'requested-by': 'jane.doe@gcp.hc-sc.gc.ca',
             'vanity-name': '<project-name>',
           },
           editors: [
@@ -143,6 +144,7 @@ describe('project-create: fetch:template', () => {
           cost-centre: '<cost-centre>'
           cost-centre-name: '<cost-centre-name>'
           pricing-structure: 'subscription'
+          requested-by: 'jane.doe@gcp.hc-sc.gc.ca'
           vanity-name: '<project-name>'
       ",
       }
