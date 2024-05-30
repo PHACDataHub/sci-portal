@@ -68,6 +68,7 @@ describe('project-create: fetch:template', () => {
       ### Budget
 
       **Annual Budget Amount (CAD):** $2,000
+      **Pricing Structure**: Subscription
       **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
       "
     `);
@@ -87,6 +88,7 @@ describe('project-create: fetch:template', () => {
             classification: '<classification>',
             'cost-centre': '<cost-centre>',
             'cost-centre-name': '<cost-centre-name>',
+            'pricing-structure': 'subscription',
             'vanity-name': '<project-name>',
           },
           editors: [
@@ -140,6 +142,7 @@ describe('project-create: fetch:template', () => {
           classification: '<classification>'
           cost-centre: '<cost-centre>'
           cost-centre-name: '<cost-centre-name>'
+          pricing-structure: 'subscription'
           vanity-name: '<project-name>'
       ",
       }

@@ -65,6 +65,7 @@ spec:
                   classification: 'ucll'
                   cost-centre: 'abc123456789'
                   cost-centre-name: 'tps-reports'
+                  pricing-structure: 'subscription'
                   vanity-name: '($projectName)'
 
         - description: Assert the ProjectClaim has been created
@@ -97,6 +98,7 @@ spec:
                   classification: 'ucll'
                   cost-centre: 'abc123456789'
                   cost-centre-name: 'tps-reports'
+                  pricing-structure: 'subscription'
                   vanity-name: '($projectName)'
               spec:
                 name: ($projectName)
