@@ -12,8 +12,6 @@ spec:
       value: "108494461414"
     - name: projectNamePrefix
       value: phx-chainsaw-
-    - name: dataClassification
-      value: 'ucll'
 
     # Generated values
     - name: requestId
@@ -64,8 +62,9 @@ spec:
                   - user:sean.poulter@focisolutions.com
                   - user:sean.poulter@gcp.hc-sc.gc.ca
                 labels:
-                  classification: '($dataClassification)'
+                  classification: 'ucll'
                   cost-centre: 'abc123456789'
+                  cost-centre-name: 'tps-reports'
                   vanity-name: '($projectName)'
 
         - description: Assert the ProjectClaim has been created
@@ -95,8 +94,9 @@ spec:
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
                 labels:
-                  classification: '($dataClassification)'
+                  classification: 'ucll'
                   cost-centre: 'abc123456789'
+                  cost-centre-name: 'tps-reports'
                   vanity-name: '($projectName)'
               spec:
                 name: ($projectName)

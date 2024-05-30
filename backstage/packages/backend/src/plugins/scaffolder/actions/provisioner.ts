@@ -269,8 +269,10 @@ export const createProvisionTemplateAction = (config: Config) => {
         projectName,
         projectId,
         projectLabels: {
-          'classification': ctx.input.parameters.dataClassification.toLowerCase(),
+          // Only hyphens (-), underscores (_), lowercase characters, and numbers are allowed. International characters are allowed.
+          classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
+          'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
           'vanity-name': projectName.toLowerCase(),
         },
 

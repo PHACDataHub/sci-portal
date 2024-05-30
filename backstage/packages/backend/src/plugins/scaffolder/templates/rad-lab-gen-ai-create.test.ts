@@ -74,8 +74,9 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           projectName: '<project-name>',
           projectId: '<project-id>',
           projectLabels: {
-            'classification': '<classification>',
+            classification: '<classification>',
             'cost-centre': '<cost-centre>',
+            'cost-centre-name': '<cost-centre-name>',
             'vanity-name': '<project-name>',
           },
           editors: [
@@ -128,6 +129,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           labels:
             classification: '<classification>'
             cost-centre: '<cost-centre>'
+            cost-centre-name: '<cost-centre-name>'
             vanity-name: '<project-name>'
         ",
         }
