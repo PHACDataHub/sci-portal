@@ -184,8 +184,9 @@ describe('provisioner', () => {
         projectName: 'hcx-test-case',
         projectId: 'hcx-01an4z07by7',
         projectLabels: {
-          'classification': 'pbmm',
+          classification: 'pbmm',
           'cost-centre': 'jbu987654321',
+          'cost-centre-name': 'acme',
           'vanity-name': 'hcx-test-case',
         },
         dataClassificationTitle: 'Protected B',
