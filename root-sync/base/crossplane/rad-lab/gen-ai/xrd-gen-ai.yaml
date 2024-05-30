@@ -51,6 +51,8 @@ spec:
                       type: string
                     pricing-structure:
                       type: string
+                    requested-by:
+                      type: string
                     vanity-name:
                       type: string
                     # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
@@ -59,6 +61,7 @@ spec:
                     - cost-centre
                     - cost-centre-name
                     - pricing-structure
+                    - requested-by
                     - vanity-name
               required:
                 # Base Properties
