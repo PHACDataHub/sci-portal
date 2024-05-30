@@ -12,6 +12,8 @@ spec:
       value: "108494461414"
     - name: projectNamePrefix
       value: phx-chainsaw-
+    - name: dataClassification
+      value: 'ucll'
 
     # Generated values
     - name: requestId
@@ -62,6 +64,7 @@ spec:
                   - user:sean.poulter@focisolutions.com
                   - user:sean.poulter@gcp.hc-sc.gc.ca
                 labels:
+                  classification: '($dataClassification)'
                   cost-centre: 'abc123456789'
                   vanity-name: '($projectName)'
 
@@ -92,6 +95,7 @@ spec:
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
                 labels:
+                  classification: '($dataClassification)'
                   cost-centre: 'abc123456789'
                   vanity-name: '($projectName)'
               spec:
