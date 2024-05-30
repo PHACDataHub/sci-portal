@@ -51,6 +51,8 @@ spec:
                       type: string
                     cost-centre-name:
                       type: string
+                    department:
+                      type: string
                     pricing-structure:
                       type: string
                     vanity-name:
@@ -61,6 +63,7 @@ spec:
                     - controlled-by
                     - cost-centre
                     - cost-centre-name
+                    - department
                     - pricing-structure
                     - vanity-name
               required:

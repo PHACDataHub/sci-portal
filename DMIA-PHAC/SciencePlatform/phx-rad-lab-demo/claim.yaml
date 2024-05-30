@@ -18,5 +18,6 @@ spec:
     controlled-by: 'science-portal'
     cost-centre: 'abc123456789'
     cost-centre-name: 'tps-reports'
+    department: 'hc'
     pricing-structure: 'subscription'
     vanity-name: 'phx-rad-lab-demo'
