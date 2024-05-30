@@ -1,0 +1,23 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabDataScienceClaim
+metadata:
+  name: phx-rad-lab-demo-eafc7344-87eb-4a03-a99a-0ed51d2f2724
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-rad-lab-demo
+  projectId: phx-01hz5wda281
+  projectEditors:
+    - user:sean.poulter@focisolutions.com
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+  projectViewers:
+    - user:sean.poulter@focisolutions.com
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'abc123456789'
+    cost-centre-name: 'tps-reports'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-rad-lab-demo'
