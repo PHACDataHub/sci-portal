@@ -149,6 +149,7 @@ spec:
       input:
         url: ./pull-request-changes
         values: ${{steps.ctx.output.template_values}}
+        templateFileExtension: .njk
 
     - id: debug-pull-request
       name: Debug Pull Request
