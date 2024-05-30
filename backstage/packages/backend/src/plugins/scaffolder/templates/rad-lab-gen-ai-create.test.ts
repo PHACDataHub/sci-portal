@@ -87,6 +87,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             { email: 'john.campbell@gcp.hc-sc.gc.ca' },
           ],
           catalogEntityOwner: 'user:default/jane.doe',
+          sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
         },
         mockDir,
       });
@@ -100,7 +101,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           name: <project-id>
           title: <project-name>
           annotations:
-            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/
+            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-id>/
             backstage.io/source-template: template:default/rad-lab-gen-ai-create
             cloud.google.com/project: <project-id>
         spec:
