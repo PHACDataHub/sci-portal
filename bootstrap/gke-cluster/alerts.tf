@@ -21,7 +21,7 @@ data "archive_file" "function_zip" {
 
 resource "google_storage_bucket_object" "budget_alerts_zip_object" {
   name   = "budget_alerts.zip"
-  bucket = google_storage_bucket.cloud_function_package_stuff.name
+  bucket = google_storage_bucket.budget_alert_cloud_function_package.name
   source = data.archive_file.function_zip.output_path
 }
 
