@@ -1,8 +1,8 @@
 resource "google_storage_bucket" "budget_alert_cloud_function_package" {
-  name          = "budget_alert_cloud_function_package"
-  location     = "northamerica-northeast2"
-  storage_class = "STANDARD"
-  force_destroy = true
+  name                        = "budget_alert_cloud_function_package"
+  location                    = "northamerica-northeast2"
+  storage_class               = "STANDARD"
+  force_destroy               = true
   uniform_bucket_level_access = true
 }
 
@@ -15,7 +15,7 @@ resource "google_pubsub_topic" "science_portal_budget_alert" {
 data "archive_file" "function_zip" {
   type        = "zip"
   source_dir  = "../../budget-alerts" # Path to your function code directory
-  output_path = "./budget_alerts.zip" 
+  output_path = "./budget_alerts.zip"
 }
 
 
@@ -29,8 +29,8 @@ resource "google_storage_bucket_object" "budget_alerts_zip_object" {
 resource "google_cloudfunctions_function" "science_portal_budget_alert_function" {
   name        = "science_portal_budget_alert_function"
   description = "Pub/Sub triggered function to initiate notifications based on budget alert"
-  runtime     = "nodejs20" 
-  region = "northamerica-northeast1"
+  runtime     = "nodejs20"
+  region      = "northamerica-northeast1"
 
   entry_point = "manageBudgetAlerts" # Entry point in index.js
 
@@ -44,12 +44,12 @@ resource "google_cloudfunctions_function" "science_portal_budget_alert_function"
 
 
   environment_variables = {
-    GC_NOTIFY_API_KEY = var.gc_notify_api_key
-    GC_NOTIFY_ALERT_TEMPLATE_ID = var.gc_notify_alert_template_id
-    GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID = var.gc_notify_over_budget_template_id
+    GC_NOTIFY_API_KEY                   = var.gc_notify_api_key
+    GC_NOTIFY_ALERT_TEMPLATE_ID         = var.gc_notify_alert_template_id
+    GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID   = var.gc_notify_over_budget_template_id
     BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN = var.backstage_budget_alert_events_token
-    GC_NOTIFY_URI = var.gc_notify_uri
-    BACKSTAGE_URI = var.backstage_uri
+    GC_NOTIFY_URI                       = var.gc_notify_uri
+    BACKSTAGE_URI                       = var.backstage_uri
   }
-  
+
 }
