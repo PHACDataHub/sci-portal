@@ -100,8 +100,8 @@ interface TemplateParameters extends JsonObject {
   department: 'hc' | 'ph';
   dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
-  editors?: string;
-  viewers?: string;
+  editors?: User[];
+  viewers?: User[];
 
   // Administration
   costCentre: string;
@@ -164,14 +164,14 @@ export const createProvisionTemplateAction = (config: Config) => {
               editors: {
                 title: 'Editors',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by a comma.',
-                type: 'string',
+                  'The users who should be able to edit this service.',
+                type: 'array',
               },
               viewers: {
                 title: 'Viewers',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to view this service, separated by a comma.',
-                type: 'string',
+                  'The users who should be able to view this service.',
+                type: 'array',
               },
 
               // Administration
@@ -246,11 +246,11 @@ export const createProvisionTemplateAction = (config: Config) => {
       let budgetAlertEmailRecipients = parseEmailInput(
         ctx.input.parameters.budgetAlertEmailRecipients,
       );
-      const editors = parseEmailInput(ctx.input.parameters.editors).map(toUser);
+      const editors = ctx.input.parameters.editors;
       const email = ctx.user?.entity?.spec.profile?.email;
       if (email) {
         budgetAlertEmailRecipients.unshift(email);
-        editors.unshift({ email, name: ctx.user?.entity?.metadata.name! });
+        editors!.unshift({ email, name: ctx.user?.entity?.metadata.name! });
       }
       // Unique email addresses
       budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];
@@ -276,7 +276,7 @@ export const createProvisionTemplateAction = (config: Config) => {
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
-          'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
+          'cost-centre-name': ctx.input.parameters.costCentreName?.toLowerCase(),
           department: ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
           'vanity-name': projectName.toLowerCase(),
@@ -294,7 +294,7 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Permissions
         editors,
-        viewers: parseEmailInput(ctx.input.parameters.viewers).map(toUser),
+        viewers: ctx.input.parameters.viewers,
 
         // Backstage
         catalogEntityOwner: ctx.user?.ref,
