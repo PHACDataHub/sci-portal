@@ -41,16 +41,6 @@ const validateConfig = (config: Config) => {
   getConfig(config);
 };
 
-interface User extends JsonObject {
-  name: string;
-  email: string;
-}
-
-const toUser = (email: string): User => ({
-  email,
-  name: email.split('@')[0],
-});
-
 /**
  * Returns a unique project ID based on the department and part of a ULID.
  */
@@ -83,6 +73,26 @@ export const parseEmailInput = (str?: string): string[] => {
   return Array.from(set);
 };
 
+const prepend = <T>(x: T, xs: T[]) => {
+  xs.unshift(x);
+  return xs;
+};
+
+const uniq = <T>(xs: T[]) => Array.from(new Set(xs));
+
+/**
+ * Returns the GCP accounts for each User.
+ */
+const toGoogleCloudEmailAddress = async (refs: string[]): Promise<string[]> => {
+  const result: string[] = [];
+  for (const ref of refs) {
+    const name = ref.replace(/^user:default[/]/, '');
+    const email = `${name}@gcp.hc-sc.gc.ca`;
+    result.push(email);
+  }
+  return result;
+};
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('en-CA', {
     style: 'currency',
@@ -100,8 +110,8 @@ interface TemplateParameters extends JsonObject {
   department: 'hc' | 'ph';
   dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
-  editors?: User[];
-  viewers?: User[];
+  editorRefs: string[];
+  viewerRefs: string[];
 
   // Administration
   costCentre: string;
@@ -161,17 +171,23 @@ export const createProvisionTemplateAction = (config: Config) => {
                 minLength: 1,
                 maxLength: 26,
               },
-              editors: {
+              editorRefs: {
                 title: 'Editors',
                 description:
                   'The users who should be able to edit this service.',
                 type: 'array',
+                items: {
+                  type: 'string',
+                },
               },
-              viewers: {
+              viewerRefs: {
                 title: 'Viewers',
                 description:
                   'The users who should be able to view this service.',
                 type: 'array',
+                items: {
+                  type: 'string',
+                },
               },
 
               // Administration
@@ -243,16 +259,25 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectId = createProjectId(ctx.input.parameters.department);
 
       // Add the current user as an editor and budget alert recipient
+      const email = ctx.user?.entity?.spec.profile?.email;
+      let editors = await toGoogleCloudEmailAddress(
+        ctx.input.parameters.editorRefs,
+      );
+      if (email) {
+        editors = uniq(prepend(email, editors));
+      }
+      const viewers = await toGoogleCloudEmailAddress(
+        ctx.input.parameters.viewerRefs,
+      );
+
       let budgetAlertEmailRecipients = parseEmailInput(
         ctx.input.parameters.budgetAlertEmailRecipients,
       );
-      const editors = ctx.input.parameters.editors;
-      const email = ctx.user?.entity?.spec.profile?.email;
       if (email) {
-        budgetAlertEmailRecipients.unshift(email);
-        editors!.unshift({ email, name: ctx.user?.entity?.metadata.name! });
+        budgetAlertEmailRecipients = uniq(
+          prepend(email, budgetAlertEmailRecipients),
+        );
       }
-      // Unique email addresses
       budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];
 
       // Set the template output directory
@@ -276,7 +301,8 @@ export const createProvisionTemplateAction = (config: Config) => {
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
-          'cost-centre-name': ctx.input.parameters.costCentreName?.toLowerCase(),
+          'cost-centre-name':
+            ctx.input.parameters.costCentreName?.toLowerCase(),
           department: ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
           'vanity-name': projectName.toLowerCase(),
@@ -294,7 +320,7 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Permissions
         editors,
-        viewers: ctx.input.parameters.viewers,
+        viewers,
 
         // Backstage
         catalogEntityOwner: ctx.user?.ref,

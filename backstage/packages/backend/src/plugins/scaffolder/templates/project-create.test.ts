@@ -15,9 +15,12 @@ export const projectParameters = {
   department: 'ph' as const,
   dataClassification: 'UCLL' as const,
   vanityName: 'test-42',
-  editors: 'john.doe@gcp.hc-sc.gc.ca',
-  viewers:
-    'samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
+  editorRefs: ['user:default/john.doe'],
+  viewerRefs: [
+    'user:default/samantha.jones',
+    'user:default/alex.mcdonald',
+    'user:default/john.campbell',
+  ],
   costCentre: 'ABC123456789',
   costCentreName: 'TPS Reports',
   section32ManagerEmail: 'alice.grady@gcp.hc-sc.gc.ca',
@@ -40,7 +43,7 @@ describe('project-create: fetch:template', () => {
       parameters: {
         ...projectParameters,
       },
-      user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca' }),
+      user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca', name: 'jane.doe' }),
       mockDir,
     });
 
@@ -97,14 +100,11 @@ describe('project-create: fetch:template', () => {
               'pricing-structure': 'subscription',
               'vanity-name': '<project-name>',
             },
-            editors: [
-              { email: 'jane.doe@gcp.hc-sc.gc.ca' },
-              { email: 'john.doe@gcp.hc-sc.gc.ca' },
-            ],
+            editors: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
             viewers: [
-              { email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-              { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
-              { email: 'john.campbell@gcp.hc-sc.gc.ca' },
+              'samantha.jones@gcp.hc-sc.gc.ca',
+              'alex.mcdonald@gcp.hc-sc.gc.ca',
+              'john.campbell@gcp.hc-sc.gc.ca',
             ],
             catalogEntityOwner: 'user:default/jane.doe',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',

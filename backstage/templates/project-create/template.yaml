@@ -66,18 +66,22 @@ spec:
           ui:widget: textarea
           ui:options:
             rows: 2
-        editors:
+        editorRefs:
           title: Editors
           ui:description: The users who should be able to edit this service.
           type: array
+          items:
+            type: string
           ui:field: MultiEntityPicker
           ui:options:
             catalogFilter:
               kind: User
-        viewers:
+        viewerRefs:
           title: Viewers
           ui:description: The users who should be able to view this service.
           type: array
+          items:
+            type: string
           ui:field: MultiEntityPicker
           ui:options:
             catalogFilter:

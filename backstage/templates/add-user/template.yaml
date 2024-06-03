@@ -29,6 +29,9 @@ spec:
         groups:
           title: Groups
           description: Add the user to existing Backstage Groups.
+          type: array
+          items:
+            type: string
           ui:field: MultiEntityPicker
           ui:options:
             catalogFilter:
