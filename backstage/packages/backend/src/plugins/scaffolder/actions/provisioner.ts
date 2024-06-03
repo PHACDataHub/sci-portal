@@ -1,6 +1,8 @@
 import * as path from 'path';
 
-import { resolvePackagePath } from '@backstage/backend-plugin-api';
+import { AuthService, resolvePackagePath } from '@backstage/backend-plugin-api';
+import { CatalogApi } from '@backstage/catalog-client';
+import { UserEntity } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
@@ -73,25 +75,39 @@ export const parseEmailInput = (str?: string): string[] => {
   return Array.from(set);
 };
 
+/**
+ * Returns the User's Google Cloud email address.
+ */
+const getGoogleCloudEmailsByRefs = async (
+  catalogApi: CatalogApi,
+  entityRefs: string[],
+  token: string,
+): Promise<string[]> => {
+  const { items } = await catalogApi.getEntitiesByRefs(
+    { entityRefs, fields: ['spec.profile.email'] },
+    { token },
+  );
+
+  const result = [];
+  for (const item of items) {
+    if (!item) {
+      continue;
+    }
+
+    const email = (item as UserEntity).spec.profile?.email;
+    if (email) {
+      result.push(email);
+    }
+  }
+  return result;
+};
+
 const prepend = <T>(x: T, xs: T[]) => {
   xs.unshift(x);
   return xs;
 };
 
 const uniq = <T>(xs: T[]) => Array.from(new Set(xs));
-
-/**
- * Returns the GCP accounts for each User.
- */
-const toGoogleCloudEmailAddress = async (refs: string[]): Promise<string[]> => {
-  const result: string[] = [];
-  for (const ref of refs) {
-    const name = ref.replace(/^user:default[/]/, '');
-    const email = `${name}@gcp.hc-sc.gc.ca`;
-    result.push(email);
-  }
-  return result;
-};
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('en-CA', {
@@ -124,7 +140,12 @@ interface TemplateParameters extends JsonObject {
   budgetAlertEmailRecipients?: string;
 }
 
-export const createProvisionTemplateAction = (config: Config) => {
+export const createProvisionTemplateAction = (options: {
+  auth: AuthService;
+  catalogApi: CatalogApi;
+  config: Config;
+}) => {
+  const { auth, config, catalogApi } = options;
   validateConfig(config);
 
   return createTemplateAction<{ parameters: TemplateParameters }>({
@@ -258,24 +279,37 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectName = `${ctx.input.parameters.department}${environment}-${ctx.input.parameters.vanityName}`;
       const projectId = createProjectId(ctx.input.parameters.department);
 
-      // Add the current user as an editor and budget alert recipient
-      const email = ctx.user?.entity?.spec.profile?.email;
-      let editors = await toGoogleCloudEmailAddress(
+      // Get the Catalog API token
+      const { token } = (await auth?.getPluginRequestToken({
+        onBehalfOf: await ctx.getInitiatorCredentials(),
+        targetPluginId: 'catalog',
+      })) ?? { token: ctx.secrets?.backstageToken };
+
+      // Transform the auto-complete "editors" entity refs into email addresses
+      let editors = await getGoogleCloudEmailsByRefs(
+        catalogApi,
         ctx.input.parameters.editorRefs,
+        token,
       );
-      if (email) {
-        editors = uniq(prepend(email, editors));
+      const googleCloudEmail = ctx.user?.entity?.spec.profile?.email;
+      if (googleCloudEmail) {
+        editors = uniq(prepend(googleCloudEmail, editors));
       }
-      const viewers = await toGoogleCloudEmailAddress(
+
+      // Transform the auto-complete "viewers" entity refs into email addresses
+      const viewers = await getGoogleCloudEmailsByRefs(
+        catalogApi,
         ctx.input.parameters.viewerRefs,
+        token,
       );
 
       let budgetAlertEmailRecipients = parseEmailInput(
         ctx.input.parameters.budgetAlertEmailRecipients,
       );
-      if (email) {
+      const phacEmail = ctx.user?.entity?.spec.profile?.email;
+      if (phacEmail) {
         budgetAlertEmailRecipients = uniq(
-          prepend(email, budgetAlertEmailRecipients),
+          prepend(phacEmail, budgetAlertEmailRecipients),
         );
       }
       budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];

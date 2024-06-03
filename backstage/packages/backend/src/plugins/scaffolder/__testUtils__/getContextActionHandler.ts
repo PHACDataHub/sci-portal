@@ -1,10 +1,12 @@
-import { MockDirectory, mockServices } from '@backstage/backend-test-utils';
-import { createProvisionTemplateAction } from '../actions/provisioner';
-import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
 import { RootConfigService } from '@backstage/backend-plugin-api';
-import { projectParameters } from '../templates/project-create.test';
+import { MockDirectory, mockServices } from '@backstage/backend-test-utils';
+import { CatalogApi } from '@backstage/catalog-client';
+import { Entity } from '@backstage/catalog-model';
 import { ActionContext } from '@backstage/plugin-scaffolder-node';
+import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
 import { JsonObject } from '@backstage/types';
+import { createProvisionTemplateAction } from '../actions/provisioner';
+import { projectParameters } from '../templates/project-create.test';
 
 const rootConfig = mockServices.rootConfig({
   data: {
@@ -22,6 +24,27 @@ const rootConfig = mockServices.rootConfig({
   },
 });
 
+/**
+ * Provide an implementation for catalogApi.getEntitiesByRefs that returns Users.
+ */
+const getEntitiesByRefs = ({ entityRefs }: { entityRefs: string[] }) => {
+  const items: Partial<Entity>[] = [];
+  for (const entityRef of entityRefs) {
+    if (entityRef.startsWith('user:')) {
+      const name = entityRef.replace(/^user:default[/]/, '');
+      items.push({
+        spec: {
+          profile: {
+            email: `${name}@gcp.hc-sc.gc.ca`,
+            altEmail: `${name}@phac-aspc.gc.ca`,
+          },
+        },
+      });
+    }
+  }
+  return Promise.resolve({ items });
+};
+
 export const getContextActionHandler = async ({
   template: { namespace = 'default', name, title },
   config = rootConfig,
@@ -37,7 +60,15 @@ export const getContextActionHandler = async ({
 }): Promise<{
   ctx: ActionContext<JsonObject> & { getOutput: (name: string) => any };
 }> => {
-  const action = createProvisionTemplateAction(config);
+  // The catalogApi is not available from the mockService. We'll hand-code it like the Backstage repo.
+  const catalogApi = { getEntitiesByRefs } as unknown as CatalogApi;
+
+  const action = createProvisionTemplateAction({
+    auth: mockServices.auth({ pluginId: 'catalog' }),
+    catalogApi,
+    config,
+  });
+
   const ctx = {
     ...createMockActionContext({
       input: {
