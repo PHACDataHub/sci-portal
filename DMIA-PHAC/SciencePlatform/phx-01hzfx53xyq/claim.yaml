@@ -1,0 +1,22 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-vedantthapa-d94c76ef-cd64-477c-8c67-23f2376a0be1
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-vedantthapa
+  projectId: phx-01hzfx53xyq
+  projectEditors:
+    - user:vedant.thapa@gcp.hc-sc.gc.ca
+    - user:vedant.thapa@gcp.hc-sc.gc.ca
+  projectViewers:
+    - user:vedant.thapa@gcp.hc-sc.gc.ca
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'cae0780549852'
+    cost-centre-name: 'test'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-vedantthapa'

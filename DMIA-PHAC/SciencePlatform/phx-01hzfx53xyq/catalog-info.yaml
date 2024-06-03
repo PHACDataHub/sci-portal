@@ -1,0 +1,14 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: phx-01hzfx53xyq
+  title: phx-vedantthapa
+  annotations:
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hzfx53xyq/
+    backstage.io/source-template: template:default/project-create
+    cloud.google.com/project: phx-01hzfx53xyq
+    data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: vedant.thapa@gcp.hc-sc.gc.ca,vedant.thapa@phac-aspc.gc.ca
+spec:
+  type: project
+  owner: user:default/vedant.thapa
