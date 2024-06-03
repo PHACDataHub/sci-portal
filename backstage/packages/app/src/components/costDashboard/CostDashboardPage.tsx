@@ -20,10 +20,10 @@ export const CostDashboardPage = () => {
         <iframe
           width="100%"
           height="100%"
-          src="https://lookerstudio.google.com/embed/reporting/912a9bd1-7a2b-485a-a95f-6f88fb892d4a/page/p_jrb8c72wsc"
+          src="https://lookerstudio.google.com/embed/reporting/80ca1952-ecbf-4823-a470-cd1768b4c667/page/p_l3qef1s8rc"
           allowFullScreen
           sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-        ></iframe>
+          ></iframe>
       </Grid>
     </Page>
   );
