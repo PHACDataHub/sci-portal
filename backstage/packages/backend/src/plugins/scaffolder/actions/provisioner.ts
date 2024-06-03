@@ -103,8 +103,9 @@ const getGoogleCloudEmailsByRefs = async (
 };
 
 const prepend = <T>(x: T, xs: T[]) => {
-  xs.unshift(x);
-  return xs;
+  const result = Array.from(xs);
+  result.unshift(x);
+  return result;
 };
 
 const uniq = <T>(xs: T[]) => Array.from(new Set(xs));
@@ -138,6 +139,14 @@ interface TemplateParameters extends JsonObject {
   // Budget
   budgetAmount: number;
   budgetAlertEmailRecipients?: string;
+}
+
+interface CustomUserEntity extends UserEntity {
+  spec: UserEntity['spec'] & {
+    profile: UserEntity['spec']['profile'] & {
+      altEmail?: string;
+    };
+  };
 }
 
 export const createProvisionTemplateAction = (options: {
@@ -251,6 +260,9 @@ export const createProvisionTemplateAction = (options: {
       },
     },
     async handler(ctx) {
+      if (!ctx.user || !ctx.user.ref) {
+        throw new InputError(`Invalid user: ${ctx.user}`);
+      }
       if (!ctx?.templateInfo?.entity) {
         throw new InputError('Invalid templateInfo provided in the request');
       }
@@ -285,34 +297,33 @@ export const createProvisionTemplateAction = (options: {
         targetPluginId: 'catalog',
       })) ?? { token: ctx.secrets?.backstageToken };
 
-      // Transform the auto-complete "editors" entity refs into email addresses
-      let editors = await getGoogleCloudEmailsByRefs(
+      // Transform the auto-complete "editors" entity refs into email addresses.
+      const editors = await getGoogleCloudEmailsByRefs(
         catalogApi,
-        ctx.input.parameters.editorRefs,
+        uniq(prepend(ctx.user.ref, ctx.input.parameters.editorRefs)),
         token,
       );
-      const googleCloudEmail = ctx.user?.entity?.spec.profile?.email;
-      if (googleCloudEmail) {
-        editors = uniq(prepend(googleCloudEmail, editors));
-      }
 
-      // Transform the auto-complete "viewers" entity refs into email addresses
+      // Transform the auto-complete "viewers" entity refs into email addresses.
       const viewers = await getGoogleCloudEmailsByRefs(
         catalogApi,
-        ctx.input.parameters.viewerRefs,
+        uniq(ctx.input.parameters.viewerRefs),
         token,
       );
 
       let budgetAlertEmailRecipients = parseEmailInput(
         ctx.input.parameters.budgetAlertEmailRecipients,
       );
-      const phacEmail = ctx.user?.entity?.spec.profile?.email;
-      if (phacEmail) {
-        budgetAlertEmailRecipients = uniq(
-          prepend(phacEmail, budgetAlertEmailRecipients),
+      const budgetAlertEmail =
+        (ctx.user.entity as CustomUserEntity)?.spec.profile?.altEmail ||
+        ctx.user?.entity?.spec.profile?.email;
+      if (budgetAlertEmail) {
+        budgetAlertEmailRecipients = prepend(
+          budgetAlertEmail,
+          budgetAlertEmailRecipients,
         );
       }
-      budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];
+      budgetAlertEmailRecipients = uniq(budgetAlertEmailRecipients);
 
       // Set the template output directory
       const sourceLocation = `DMIA-PHAC/SciencePlatform/${projectId}/`;
@@ -357,7 +368,7 @@ export const createProvisionTemplateAction = (options: {
         viewers,
 
         // Backstage
-        catalogEntityOwner: ctx.user?.ref,
+        catalogEntityOwner: ctx.user.ref,
         sourceLocation,
       };
       ctx.output('template_values', templateValues);

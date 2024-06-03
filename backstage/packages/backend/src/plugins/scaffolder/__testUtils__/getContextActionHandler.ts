@@ -5,6 +5,7 @@ import { Entity } from '@backstage/catalog-model';
 import { ActionContext } from '@backstage/plugin-scaffolder-node';
 import { createMockActionContext } from '@backstage/plugin-scaffolder-node-test-utils';
 import { JsonObject } from '@backstage/types';
+import { createUser } from './createUser';
 import { createProvisionTemplateAction } from '../actions/provisioner';
 import { projectParameters } from '../templates/project-create.test';
 
@@ -49,7 +50,7 @@ export const getContextActionHandler = async ({
   template: { namespace = 'default', name, title },
   config = rootConfig,
   parameters,
-  user,
+  user = createUser({ email: 'default.test-user@gcp.hc-sc.gc.ca' }),
   mockDir,
 }: {
   template: { namespace?: string; name: string; title?: string };
