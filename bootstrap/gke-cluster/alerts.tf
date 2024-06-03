@@ -32,7 +32,7 @@ resource "google_cloudfunctions_function" "science_portal_budget_alert_function"
   runtime     = "nodejs20"
   region      = "northamerica-northeast1"
 
-  entry_point = "manageBudgetAlerts" # Entry point in index.js
+  entry_point = "sendBudgetAlerts" # Entry point in index.js
 
   source_archive_bucket = google_storage_bucket_object.budget_alerts_zip_object.bucket
   source_archive_object = google_storage_bucket_object.budget_alerts_zip_object.name

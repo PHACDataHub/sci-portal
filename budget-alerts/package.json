@@ -1,14 +1,15 @@
 {
   "name": "budget-alerts",
   "version": "1.0.0",
-  "description": "Cloud function manages Google Cloud Budget alerts and sends notification emails using GC Notify",
+  "description": "This Cloud Function handles Google Cloud Budget Alerts and sends emails using GC Notify",
   "main": "./src/index.js",
   "scripts": {
     "test": "jest",
     "prettier:check": "prettier --check ."
   },
-  "author": "",
-  "license": "",
+  "contributors": [
+    "Rajan Subedi <rajan.subedi@focisolutions.com>"
+  ],
   "dependencies": {
     "@google-cloud/functions-framework": "^3.4.0",
     "@google-cloud/pubsub": "^4.4.0",

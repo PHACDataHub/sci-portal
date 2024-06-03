@@ -1,11 +1,17 @@
+const { describe, expect, test } = require('@jest/globals');
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 
 const { sendNotifications } = require('../gc_notify');
 
 describe('sendNotifications', () => {
+  beforeAll(() => {
+    process.env.GC_NOTIFY_API_KEY = 'api-key';
+    process.env.GC_NOTIFY_URI = 'https://api.notification.canada.ca';
+  });
+
   test('should mock send notifications to all recipients', async () => {
-    const recipients = 'test1@example.com,test2@example.com';
+    const recipients = ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'];
     const templateId = 'template-id';
     const personalisation = { data: 'data' };
 
@@ -17,11 +23,20 @@ describe('sendNotifications', () => {
         status: 200,
       });
 
-    await sendNotifications(recipients, templateId, personalisation);
+    const result = await sendNotifications(
+      recipients,
+      templateId,
+      personalisation,
+    );
+
+    expect(result).toEqual([
+      { status: 'fulfilled', value: undefined },
+      { status: 'fulfilled', value: undefined },
+    ]);
   });
 
   test('should mock send notifications to recipients and throw error if any fail', async () => {
-    const recipients = 'test1@example.com,test2@example.com';
+    const recipients = ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'];
     const templateId = 'template-id';
     const personalisation = { data: 'data' };
 
@@ -32,8 +47,21 @@ describe('sendNotifications', () => {
         status: 500,
       });
 
-    expect(
-      sendNotifications(recipients, templateId, personalisation),
-    ).rejects.toThrow();
+    const result = await sendNotifications(
+      recipients,
+      templateId,
+      personalisation,
+    );
+
+    expect(result).toEqual([
+      {
+        reason: new Error('Unable to send email to jane.doe@gcp.hc-sc.gc.ca'),
+        status: 'rejected',
+      },
+      {
+        reason: new Error('Unable to send email to john.doe@gcp.hc-sc.gc.ca'),
+        status: 'rejected',
+      },
+    ]);
   });
 });

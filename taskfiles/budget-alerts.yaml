@@ -1,28 +1,28 @@
 version: "3"
 tasks:
   dev:
-    desc: Start budget-alerts cloud function in dev mode
+    desc: Start budget-alerts Cloud Function in dev mode
     dir: budget-alerts
     cmds:
-      - npx @google-cloud/functions-framework --target=manageBudgetAlerts
+      - npx @google-cloud/functions-framework --target=sendBudgetAlerts
   tests:
     desc: Run budget-alerts tests
     dir: budget-alerts
     cmds:
       - npm run test
-  
+
   emulator:
     desc: Start local pubsub emulator
     dir: budget-alerts
     cmds:
-      - gcloud beta emulators pubsub start --project=abc --host-port='localhost:8043'
-    
+      - gcloud beta emulators pubsub start --project=local-pubsub --host-port='localhost:8043'
+
   register:
     desc: Register pubsub topic and subscription
     dir: budget-alerts
     cmds:
-      - curl -s -X PUT 'http://localhost:8043/v1/projects/abc/topics/mytopic'
-      - curl -s -X PUT 'http://localhost:8043/v1/projects/abc/subscriptions/mysub' -H 'Content-Type:"application/json"' --data '{"topic":"projects/abc/topics/mytopic","pushConfig":{"pushEndpoint":"http://localhost:8080/projects/abc/topics/mytopic"}}'
+      - curl -s -X PUT 'http://localhost:8043/v1/projects/local-pubsub/topics/mytopic'
+      - curl -s -X PUT 'http://localhost:8043/v1/projects/local-pubsub/subscriptions/mysub' -H 'Content-Type:"application/json"' --data '{"topic":"projects/local-pubsub/topics/mytopic","pushConfig":{"pushEndpoint":"http://localhost:8080/projects/local-pubsub/topics/mytopic"}}'
 
   publish:
     desc: Publishes a message to pubsub topic
@@ -30,6 +30,6 @@ tasks:
     cmds:
       - |
         base64_content=$(base64 message.json | tr -d '\n')
-        curl -s -X POST 'http://localhost:8043/v1/projects/abc/topics/mytopic:publish' \
+        curl -s -X POST 'http://localhost:8043/v1/projects/local-pubsub/topics/mytopic:publish' \
           -H 'Content-Type: application/json' \
           --data "{\"messages\":[{\"data\":\"$base64_content\"}]}"

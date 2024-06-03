@@ -1,18 +1,14 @@
 # Budget Alerts
 
-This cloud function is designed to manage Google Cloud Budget alerts and send notification emails using the GC Notify service.
-
-## Overview
-
-The `manageBudgetAlerts` cloud function listens for budget alert events from Google Cloud Pub/Sub, processes these events, and sends notifications to specified recipients using the GC Notify service. This function helps in monitoring budget thresholds and alerting stakeholders when budgets are exceeded.
+The `sendBudgetAlerts` Cloud Function listens for budget alert events from Google Cloud Pub/Sub, processes these events, and sends emails to specified recipients using the GC Notify service. This function helps in monitoring budget thresholds and alerting stakeholders when budgets are exceeded.
 
 ## Prerequisites
 
-Ensure you have the following prerequisites set up before deploying and running the cloud function:
+Ensure you have the following prerequisites set up before deploying and running the Cloud Function:
 
 - A Google Cloud Platform project with Pub/Sub enabled.
 - GC Notify account with the required API key and templates.
-- Backstage platform set up with the necessary API keys and URIs.
+- Backstage platform set up with the necessary API key and URIs.
 
 ## Environment Variables
 
@@ -27,9 +23,9 @@ Ensure the following environment variables are set:
 
 ## Local Development
 
-To serve the cloud function locally for development:
+To serve the Cloud Function locally for development:
 
-1. Ensure you have Node.js and npm installed.
+1. Ensure you have Node.js v20 and npm installed.
 
 2. Install the required dependencies:
    ```sh
@@ -42,7 +38,7 @@ To serve the cloud function locally for development:
 
 ## Testing
 
-To ensure the cloud function works as expected, it’s important to run tests both locally and in the cloud environment. Here are the steps:
+To ensure the Cloud Function works as expected, it’s important to run tests both locally and in the cloud environment. Here are the steps:
 
 1. Start the local Pub/Sub emulator:
    ```sh

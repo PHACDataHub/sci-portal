@@ -5,5 +5,5 @@
   "costIntervalStart": "2024-05-01T07:00:00Z",
   "budgetAmount": 100.0,
   "budgetAmountType": "SPECIFIED_AMOUNT",
-  "currencyCode": "USD"
+  "currencyCode": "CAD"
 }

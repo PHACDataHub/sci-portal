@@ -1,61 +1,50 @@
 const functions = require('@google-cloud/functions-framework');
 
-const {
-  parseMessage,
-  fetchProjectData,
-  getRecipients,
-} = require('./backstage');
-
+const { getBudgetAlertRecipients } = require('./backstage');
+const { parseMessage } = require('./cloud_events');
 const { sendNotifications } = require('./gc_notify');
 
-const {
-  GC_NOTIFY_ALERT_TEMPLATE_ID,
-  GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID,
-  BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN,
-  BACKSTAGE_URI,
-} = process.env;
+const { GC_NOTIFY_ALERT_TEMPLATE_ID, GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID } = process.env;
 
 /**
- * Handles a budget alert by parsing the CloudEvent message, retrieving project data,
- * determining the notification template ID, and sending notifications to recipients.
+ * Sends Budget Alert emails using GC Notify.
  *
  * @param {Object} cloudEvent - The CloudEvent object containing the budget alert message.
  * @return {Promise<void>} A Promise that resolves when the budget alert is handled successfully,
  * or rejects with an error if any step fails.
  */
-async function handleBudgetAlert(cloudEvent) {
-  const jsonMessage = parseMessage(cloudEvent);
-  if (!jsonMessage) return;
+async function sendBudgetAlerts(cloudEvent) {
+  const message = parseMessage(cloudEvent);
+  if (!message) {
+    return;
+  }
 
   const {
-    budgetDisplayName: projectId,
+    budgetDisplayName: project_id,
     costAmount: amount,
-    budgetAmount,
-    alertThresholdExceeded: thresholdExceeded,
-    currencyCode,
-  } = jsonMessage;
-  const templateId =
-    thresholdExceeded < 1
-      ? GC_NOTIFY_ALERT_TEMPLATE_ID
-      : GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID;
+    budgetAmount: budget_amount,
+    alertThresholdExceeded: threshold,
+    currencyCode: currency_code,
+  } = message;
 
   try {
-    const data = await fetchProjectData(
-      projectId,
-      BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN,
-      BACKSTAGE_URI,
-    );
-    const recipients = getRecipients(data);
-    if (!recipients) return;
+    const recipients = await getBudgetAlertRecipients(project_id);
+    if (!recipients) {
+      return;
+    }
 
     const personalisation = {
-      threshold: thresholdExceeded * 100,
-      project_id: projectId,
+      threshold: (threshold * 100).toFixed(1), // The alert sends a value from 0-1, which we convert to a percentage.
+      project_id,
       amount,
-      currency_code: currencyCode,
-      budget_amount: budgetAmount,
+      currency_code,
+      budget_amount,
     };
 
+    const templateId =
+      thresholdExceeded < 1
+        ? GC_NOTIFY_ALERT_TEMPLATE_ID
+        : GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID;
     await sendNotifications(recipients, templateId, personalisation);
   } catch (error) {
     console.error(
@@ -65,4 +54,4 @@ async function handleBudgetAlert(cloudEvent) {
   }
 }
 
-functions.cloudEvent('manageBudgetAlerts', handleBudgetAlert);
+functions.cloudEvent('sendBudgetAlerts', sendBudgetAlerts);
