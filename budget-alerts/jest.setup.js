@@ -1,14 +1,21 @@
-const { describe, expect, test, beforeAll, afterEach, afterAll } = require('@jest/globals');
-const { server } = require('./mocks/node')
+const {
+  describe,
+  expect,
+  test,
+  beforeAll,
+  afterEach,
+  afterAll,
+} = require('@jest/globals');
+const { server } = require('./mocks/node');
 
 beforeAll(() => {
-    server.listen()
-})
+  server.listen();
+});
 
 afterEach(() => {
-    server.resetHandlers()
-})
+  server.resetHandlers();
+});
 
 afterAll(() => {
-    server.close()
-})
+  server.close();
+});

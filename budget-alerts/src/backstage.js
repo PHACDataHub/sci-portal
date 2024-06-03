@@ -5,11 +5,11 @@
  * @return {Object|undefined} The parsed JSON object if the message is valid, undefined otherwise.
  */
 function parseMessage(cloudEvent) {
-    const message_base64 = cloudEvent.data.message.data;
-    if (!message_base64) return undefined;
+  const message_base64 = cloudEvent.data.message.data;
+  if (!message_base64) return undefined;
 
-    const message = Buffer.from(message_base64, 'base64').toString();
-    return JSON.parse(message);
+  const message = Buffer.from(message_base64, 'base64').toString();
+  return JSON.parse(message);
 }
 
 /**
@@ -22,18 +22,20 @@ function parseMessage(cloudEvent) {
  * @throws {Error} If the API request fails or returns a non-2xx status code.
  */
 async function fetchProjectData(projectId, bearerToken, backstageUri) {
-    const url = `${backstageUri}/api/catalog/entities/by-name/component/default/${projectId}`;
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${bearerToken}`,
-    };
+  const url = `${backstageUri}/api/catalog/entities/by-name/component/default/${projectId}`;
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${bearerToken}`,
+  };
 
-    const response = await fetch(url, { method: 'GET', headers });
-    if (!response.ok) {
-        throw new Error(`Status:${response.status} - Failed to fetch project data for project ${projectId}`);
-    }
+  const response = await fetch(url, { method: 'GET', headers });
+  if (!response.ok) {
+    throw new Error(
+      `Status:${response.status} - Failed to fetch project data for project ${projectId}`,
+    );
+  }
 
-    return response.json();
+  return response.json();
 }
 
 /**
@@ -43,11 +45,13 @@ async function fetchProjectData(projectId, bearerToken, backstageUri) {
  * @return {string|undefined} The recipients for budget alerts, or undefined if not found.
  */
 function getRecipients(data) {
-    return data.metadata.annotations['data-science-portal.phac-aspc.gc.ca/budget-alert-recipients'];
+  return data.metadata.annotations[
+    'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients'
+  ];
 }
 
 module.exports = {
-    parseMessage,
-    fetchProjectData,
-    getRecipients,
+  parseMessage,
+  fetchProjectData,
+  getRecipients,
 };

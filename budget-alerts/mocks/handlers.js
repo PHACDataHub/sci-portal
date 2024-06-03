@@ -1,2 +1,2 @@
 const Handlers = [];
-module.exports = { Handlers }
+module.exports = { Handlers };

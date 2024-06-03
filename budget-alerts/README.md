@@ -32,30 +32,30 @@ To serve the cloud function locally for development:
 1. Ensure you have Node.js and npm installed.
 
 2. Install the required dependencies:
-    ```sh
-    npm install
-    ```
+   ```sh
+   npm install
+   ```
 3. Run the function locally:
-    ```sh
-    task budget-alerts:dev
-    ```
+   ```sh
+   task budget-alerts:dev
+   ```
 
 ## Testing
 
 To ensure the cloud function works as expected, it’s important to run tests both locally and in the cloud environment. Here are the steps:
 
 1. Start the local Pub/Sub emulator:
-    ```sh
-    task budget-alerts:emulator
-    ```
+   ```sh
+   task budget-alerts:emulator
+   ```
 2. Register the topic and subscription:
-    ```sh
-    task budget-alerts:register
-    ```
+   ```sh
+   task budget-alerts:register
+   ```
 3. Publish a test message using the predefined message in `message.json`:
-    ```sh
-    task budget-alerts:publish
-    ```
+   ```sh
+   task budget-alerts:publish
+   ```
 
 ### Integration Testing
 

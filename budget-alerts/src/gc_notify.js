@@ -1,10 +1,6 @@
 const NotifyClient = require('notifications-node-client').NotifyClient;
 
-const {
-    GC_NOTIFY_API_KEY,
-    GC_NOTIFY_URI,
-} = process.env;
-
+const { GC_NOTIFY_API_KEY, GC_NOTIFY_URI } = process.env;
 
 const notifyClient = new NotifyClient(GC_NOTIFY_URI, GC_NOTIFY_API_KEY);
 
@@ -18,19 +14,21 @@ const notifyClient = new NotifyClient(GC_NOTIFY_URI, GC_NOTIFY_API_KEY);
  * @throws {Error} If there was an error sending any of the notifications.
  */
 async function sendNotifications(recipients, templateId, personalisation) {
-    const recipientList = recipients.split(',');
-    const sendPromises = recipientList.map(async recipient => {
-        try {
-            await notifyClient.sendEmail(templateId, recipient, { personalisation });
-        } catch (error) {
-            throw new Error(`Unable to send email to ${recipient}:`, error.response.data);
-        }
-    });
+  const recipientList = recipients.split(',');
+  const sendPromises = recipientList.map(async recipient => {
+    try {
+      await notifyClient.sendEmail(templateId, recipient, { personalisation });
+    } catch (error) {
+      throw new Error(
+        `Unable to send email to ${recipient}:`,
+        error.response.data,
+      );
+    }
+  });
 
-    return Promise.all(sendPromises);
+  return Promise.all(sendPromises);
 }
 
-
 module.exports = {
-    sendNotifications,
+  sendNotifications,
 };
