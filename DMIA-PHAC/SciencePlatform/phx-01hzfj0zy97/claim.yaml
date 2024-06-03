@@ -1,0 +1,24 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-test-bf9269e5-aef4-4a17-93f2-9d516d5df4f4
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-test
+  projectId: phx-01hzfj0zy97
+  projectEditors:
+    - user:kendra.dezenosky@focisolutions.com
+    - user:sean.poulter@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+  projectViewers:
+    - user:kendra.dezenosky@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+    - user:sean.poulter@focisolutions.com
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: '123'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-test'
