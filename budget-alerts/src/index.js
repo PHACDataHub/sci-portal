@@ -32,7 +32,7 @@ async function sendNotifications(recipients, templateId, personalisation) {
     const recipientList = recipients.split(',');
     const sendPromises = recipientList.map(async recipient => {
         try {
-            // await notifyClient.sendEmail(templateId, recipient, { personalisation });
+            await notifyClient.sendEmail(templateId, recipient, { personalisation });
         } catch (error) {
             throw new Error(`Unable to send email to ${recipient}:`, error.response.data);
         }
