@@ -29,7 +29,6 @@ async function fetchProjectData(projectId, bearerToken, backstageUri) {
     };
 
     const response = await fetch(url, { method: 'GET', headers });
-    console.log(response);
     if (!response.ok) {
         throw new Error(`Status:${response.status} - Failed to fetch project data for project ${projectId}`);
     }
