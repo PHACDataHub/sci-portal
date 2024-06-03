@@ -26,7 +26,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
         ...projectParameters,
         machineSize: 'Medium',
       },
-      user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca' }),
+      user: createUser({ email: 'jane.doe@gcp.hc-sc.gc.ca', name: 'jane.doe' }),
       mockDir,
     });
 
@@ -87,14 +87,11 @@ describe('rad-lab-data-science-create: fetch:template', () => {
               'pricing-structure': 'subscription',
               'vanity-name': '<project-name>',
             },
-            editors: [
-              { email: 'jane.doe@gcp.hc-sc.gc.ca' },
-              { email: 'john.doe@gcp.hc-sc.gc.ca' },
-            ],
+            editors: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
             viewers: [
-              { email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-              { email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
-              { email: 'john.campbell@gcp.hc-sc.gc.ca' },
+              'samantha.jones@gcp.hc-sc.gc.ca',
+              'alex.mcdonald@gcp.hc-sc.gc.ca',
+              'john.campbell@gcp.hc-sc.gc.ca',
             ],
             catalogEntityOwner: 'user:default/jane.doe',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',

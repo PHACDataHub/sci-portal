@@ -9,11 +9,11 @@ spec:
   projectId: ${{values.projectId}}
   projectEditors:
   {%- for editor in values.editors %}
-    - user:${{editor.email}}
+    - user:${{editor}}
   {%- endfor %}
   projectViewers:
   {%- for viewer in values.viewers %}
-    - user:${{viewer.email}}
+    - user:${{viewer}}
   {%- endfor %}
   labels:
   {%- for key, value in values.projectLabels %}

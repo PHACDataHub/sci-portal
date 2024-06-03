@@ -3,6 +3,7 @@ import {
   coreServices,
   createBackendModule,
 } from '@backstage/backend-plugin-api';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
 
@@ -59,11 +60,15 @@ backend.add(
     register(env) {
       env.registerInit({
         deps: {
-          scaffolder: scaffolderActionsExtensionPoint,
+          auth: coreServices.auth,
+          catalogApi: catalogServiceRef,
           config: coreServices.rootConfig,
+          scaffolder: scaffolderActionsExtensionPoint,
         },
-        async init({ scaffolder, config }) {
-          scaffolder.addActions(createProvisionTemplateAction(config));
+        async init({ auth, catalogApi, config, scaffolder }) {
+          scaffolder.addActions(
+            createProvisionTemplateAction({ auth, config, catalogApi }),
+          );
           scaffolder.addActions(createDebugWorkspaceAction());
         },
       });

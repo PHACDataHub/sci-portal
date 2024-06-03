@@ -42,6 +42,7 @@ spec:
           description: The resource display name. The name must less than 26 characters. The name will be used to create a GCP Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
           type: string
           maxLength: 26
+
     - title: Administration
       required:
         - costCentre
@@ -66,22 +67,29 @@ spec:
           ui:widget: textarea
           ui:options:
             rows: 2
-        editors:
+        editorRefs:
           title: Editors
-          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by a comma.
-          type: string
-          ui:widget: textarea
+          ui:description: The users who should be able to edit this service.
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          ui:field: MultiEntityPicker
           ui:options:
-            rows: 2
-          ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
-        viewers:
+            catalogFilter:
+              kind: User
+        viewerRefs:
           title: Viewers
-          ui:description: The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to view this service, separated by a comma.
-          type: string
-          ui:widget: textarea
+          ui:description: The users who should be able to view this service.
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          ui:field: MultiEntityPicker
           ui:options:
-            rows: 2
-          ui:placeholder: jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
+            catalogFilter:
+              kind: User
+
     - title: Billing
       required:
         - budgetAmount

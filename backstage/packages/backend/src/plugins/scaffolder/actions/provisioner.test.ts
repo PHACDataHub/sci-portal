@@ -148,10 +148,14 @@ describe('provisioner', () => {
           budgetAmount: 12345,
           budgetAlertEmailRecipients:
             'samantha.jones@phac-aspc.gc.ca, alex.mcdonald@phac-aspc.gc.ca',
-          editors:
-            '   ,,, , jeanne.smith@phac-aspc.gc.ca,karen.schumacher@phac-aspc.gc.ca,,',
-          viewers:
-            ' samantha.jones@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca',
+          editorRefs: [
+            'user:default/jeanne.smith',
+            'user:default/karen.schumacher',
+          ],
+          viewerRefs: [
+            'user:default/samantha.jones',
+            'user:default/john.campbell',
+          ],
 
           additionalProperty: 'OK',
         },
@@ -203,17 +207,22 @@ describe('provisioner', () => {
         ],
 
         // Permissions
+        editorRefs: [
+          'user:default/jeanne.smith',
+          'user:default/karen.schumacher',
+        ],
         editors: [
-          { name: 'jane.doe', email: 'jane.doe@gcp.hc-sc.gc.ca' },
-          { name: 'jeanne.smith', email: 'jeanne.smith@phac-aspc.gc.ca' },
-          {
-            name: 'karen.schumacher',
-            email: 'karen.schumacher@phac-aspc.gc.ca',
-          },
+          'jane.doe@gcp.hc-sc.gc.ca',
+          'jeanne.smith@gcp.hc-sc.gc.ca',
+          'karen.schumacher@gcp.hc-sc.gc.ca',
+        ],
+        viewerRefs: [
+          'user:default/samantha.jones',
+          'user:default/john.campbell',
         ],
         viewers: [
-          { name: 'samantha.jones', email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-          { name: 'john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
+          'samantha.jones@gcp.hc-sc.gc.ca',
+          'john.campbell@gcp.hc-sc.gc.ca',
         ],
 
         // Backstage

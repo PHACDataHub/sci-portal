@@ -1,6 +1,8 @@
 import * as path from 'path';
 
-import { resolvePackagePath } from '@backstage/backend-plugin-api';
+import { AuthService, resolvePackagePath } from '@backstage/backend-plugin-api';
+import { CatalogApi } from '@backstage/catalog-client';
+import { UserEntity } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { InputError } from '@backstage/errors';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
@@ -41,16 +43,6 @@ const validateConfig = (config: Config) => {
   getConfig(config);
 };
 
-interface User extends JsonObject {
-  name: string;
-  email: string;
-}
-
-const toUser = (email: string): User => ({
-  email,
-  name: email.split('@')[0],
-});
-
 /**
  * Returns a unique project ID based on the department and part of a ULID.
  */
@@ -83,6 +75,41 @@ export const parseEmailInput = (str?: string): string[] => {
   return Array.from(set);
 };
 
+/**
+ * Returns the User's Google Cloud email address.
+ */
+const getGoogleCloudEmailsByRefs = async (
+  catalogApi: CatalogApi,
+  entityRefs: string[],
+  token: string,
+): Promise<string[]> => {
+  const { items } = await catalogApi.getEntitiesByRefs(
+    { entityRefs, fields: ['spec.profile.email'] },
+    { token },
+  );
+
+  const result = [];
+  for (const item of items) {
+    if (!item) {
+      continue;
+    }
+
+    const email = (item as UserEntity).spec.profile?.email;
+    if (email) {
+      result.push(email);
+    }
+  }
+  return result;
+};
+
+const prepend = <T>(x: T, xs: T[]) => {
+  const result = Array.from(xs);
+  result.unshift(x);
+  return result;
+};
+
+const uniq = <T>(xs: T[]) => Array.from(new Set(xs));
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('en-CA', {
     style: 'currency',
@@ -100,8 +127,8 @@ interface TemplateParameters extends JsonObject {
   department: 'hc' | 'ph';
   dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
-  editors?: string;
-  viewers?: string;
+  editorRefs: string[];
+  viewerRefs: string[];
 
   // Administration
   costCentre: string;
@@ -114,7 +141,20 @@ interface TemplateParameters extends JsonObject {
   budgetAlertEmailRecipients?: string;
 }
 
-export const createProvisionTemplateAction = (config: Config) => {
+interface CustomUserEntity extends UserEntity {
+  spec: UserEntity['spec'] & {
+    profile: UserEntity['spec']['profile'] & {
+      altEmail?: string;
+    };
+  };
+}
+
+export const createProvisionTemplateAction = (options: {
+  auth: AuthService;
+  catalogApi: CatalogApi;
+  config: Config;
+}) => {
+  const { auth, config, catalogApi } = options;
   validateConfig(config);
 
   return createTemplateAction<{ parameters: TemplateParameters }>({
@@ -161,17 +201,23 @@ export const createProvisionTemplateAction = (config: Config) => {
                 minLength: 1,
                 maxLength: 26,
               },
-              editors: {
+              editorRefs: {
                 title: 'Editors',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to edit this service, separated by a comma.',
-                type: 'string',
+                  'The users who should be able to edit this service.',
+                type: 'array',
+                items: {
+                  type: 'string',
+                },
               },
-              viewers: {
+              viewerRefs: {
                 title: 'Viewers',
                 description:
-                  'The `@gcp.hc-sc.gc.ca` email addresses of users who should be able to view this service, separated by a comma.',
-                type: 'string',
+                  'The users who should be able to view this service.',
+                type: 'array',
+                items: {
+                  type: 'string',
+                },
               },
 
               // Administration
@@ -214,6 +260,9 @@ export const createProvisionTemplateAction = (config: Config) => {
       },
     },
     async handler(ctx) {
+      if (!ctx.user || !ctx.user.ref) {
+        throw new InputError(`Invalid user: ${ctx.user}`);
+      }
       if (!ctx?.templateInfo?.entity) {
         throw new InputError('Invalid templateInfo provided in the request');
       }
@@ -242,18 +291,39 @@ export const createProvisionTemplateAction = (config: Config) => {
       const projectName = `${ctx.input.parameters.department}${environment}-${ctx.input.parameters.vanityName}`;
       const projectId = createProjectId(ctx.input.parameters.department);
 
-      // Add the current user as an editor and budget alert recipient
+      // Get the Catalog API token
+      const { token } = (await auth?.getPluginRequestToken({
+        onBehalfOf: await ctx.getInitiatorCredentials(),
+        targetPluginId: 'catalog',
+      })) ?? { token: ctx.secrets?.backstageToken };
+
+      // Transform the auto-complete "editors" entity refs into email addresses.
+      const editors = await getGoogleCloudEmailsByRefs(
+        catalogApi,
+        uniq(prepend(ctx.user.ref, ctx.input.parameters.editorRefs)),
+        token,
+      );
+
+      // Transform the auto-complete "viewers" entity refs into email addresses.
+      const viewers = await getGoogleCloudEmailsByRefs(
+        catalogApi,
+        uniq(ctx.input.parameters.viewerRefs),
+        token,
+      );
+
       let budgetAlertEmailRecipients = parseEmailInput(
         ctx.input.parameters.budgetAlertEmailRecipients,
       );
-      const editors = parseEmailInput(ctx.input.parameters.editors).map(toUser);
-      const email = ctx.user?.entity?.spec.profile?.email;
-      if (email) {
-        budgetAlertEmailRecipients.unshift(email);
-        editors.unshift({ email, name: ctx.user?.entity?.metadata.name! });
+      const budgetAlertEmail =
+        (ctx.user.entity as CustomUserEntity)?.spec.profile?.altEmail ||
+        ctx.user?.entity?.spec.profile?.email;
+      if (budgetAlertEmail) {
+        budgetAlertEmailRecipients = prepend(
+          budgetAlertEmail,
+          budgetAlertEmailRecipients,
+        );
       }
-      // Unique email addresses
-      budgetAlertEmailRecipients = [...new Set(budgetAlertEmailRecipients)];
+      budgetAlertEmailRecipients = uniq(budgetAlertEmailRecipients);
 
       // Set the template output directory
       const sourceLocation = `DMIA-PHAC/SciencePlatform/${projectId}/`;
@@ -276,7 +346,8 @@ export const createProvisionTemplateAction = (config: Config) => {
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
-          'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
+          'cost-centre-name':
+            ctx.input.parameters.costCentreName?.toLowerCase(),
           department: ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
           'vanity-name': projectName.toLowerCase(),
@@ -294,10 +365,10 @@ export const createProvisionTemplateAction = (config: Config) => {
 
         // Permissions
         editors,
-        viewers: parseEmailInput(ctx.input.parameters.viewers).map(toUser),
+        viewers,
 
         // Backstage
-        catalogEntityOwner: ctx.user?.ref,
+        catalogEntityOwner: ctx.user.ref,
         sourceLocation,
       };
       ctx.output('template_values', templateValues);
