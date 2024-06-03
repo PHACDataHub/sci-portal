@@ -1,0 +1,36 @@
+{
+  "name": "budget-alerts",
+  "version": "1.0.0",
+  "description": "This Cloud Function handles Google Cloud Budget Alerts and sends emails using GC Notify",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "jest",
+    "prettier:check": "prettier --check ."
+  },
+  "contributors": [
+    "Rajan Subedi <rajan.subedi@focisolutions.com>"
+  ],
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "@google-cloud/pubsub": "^4.4.0",
+    "@spotify/prettier-config": "^12.0.0",
+    "axios": "^1.7.2",
+    "notifications-node-client": "8.0.0"
+  },
+  "devDependencies": {
+    "axios-mock-adapter": "^1.22.0",
+    "jest": "^29.7.0",
+    "msw": "^2.3.0",
+    "prettier": "^2.8.8"
+  },
+  "prettier": "@spotify/prettier-config",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}

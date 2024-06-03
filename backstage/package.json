@@ -24,6 +24,11 @@
     "prettier:check": "prettier --check .",
     "new": "backstage-cli new --scope internal"
   },
+  "contributors": [
+    "Kendra Dezenosky <kendra.dezenosky@focisolutions.com>",
+    "Rajan Subedi <rajan.subedi@focisolutions.com>",
+    "Sean Poulter <sean.poulter@focisolutions.com>"
+  ],
   "workspaces": {
     "packages": [
       "packages/*",

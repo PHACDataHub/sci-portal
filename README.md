@@ -120,3 +120,4 @@ With these prerequisites installed, you're ready to proceed with the installatio
 - [backstage](./backstage/README.md): Module for managing infrastructure tooling, services, and documentation
 - [bootstrap](./bootstrap/README.md): Module for bootstrapping Google Kubernetes Engine (GKE) cluster
 - [root-sync](./bootstrap/README.md): Module for Config Sync to manage root-level resources in Google Kubernetes Engine (GKE) cluster
+- [budget-alerts](./budget-alerts/README.md): Module for managing Google Cloud Budget alerts

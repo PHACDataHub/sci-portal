@@ -1,5 +1,7 @@
 *.env
 *.nix
+*.zip
+*/node_modules/
 
 bootstrap/.env
 bootstrap/crossplane/providers/**/*.yaml
