@@ -6,7 +6,7 @@ tasks:
     cmds:
       - npx @google-cloud/functions-framework --target=manageBudgetAlerts
   tests:
-    desc: Start budget-alerts cloud function tests
+    desc: Run budget-alerts tests
     dir: budget-alerts
     cmds:
       - npm run test
