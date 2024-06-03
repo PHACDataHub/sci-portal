@@ -209,6 +209,9 @@ spec:
                     spendBasis: "CURRENT_SPEND"
                   - thresholdPercent: 1.00
                     spendBasis: "CURRENT_SPEND"
+                allUpdatesRule:
+                  pubsubTopicRef:
+                      external: "TO BE PATCHED"
           references:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
@@ -248,6 +251,13 @@ spec:
                 fmt: "budget-%s"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
+        - fromFieldPath: "spec.projectId"
+          toFieldPath: "spec.forProvider.manifest.spec.allUpdatesRule.pubsubTopicRef.external"
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: "projects/%s/topics/science_portal_budget_alert"
       readinessChecks:
         - type: NonEmpty
           fieldPath: status.atProvider.manifest
