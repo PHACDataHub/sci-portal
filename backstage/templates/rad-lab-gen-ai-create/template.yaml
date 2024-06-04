@@ -12,70 +12,8 @@ spec:
   type: service
   parameters:
     - $yaml: ../project-create/template.parameters.project.yaml
-
-    - title: Administration
-      required:
-        - costCentre
-        - section32ManagerEmail
-        - justification
-      properties:
-        costCentre:
-          title: Cost Centre
-          type: string
-        costCentreName:
-          title: Cost Centre Name
-          description: The human-readable name for the Cost Centre.
-          type: string
-        section32ManagerEmail:
-          title: Section 32 Manager Email Address
-          type: string
-          format: email
-        justification:
-          title: Justification
-          ui:description: Provide a brief explanation of what the project will be used for.
-          type: string
-          ui:widget: textarea
-          ui:options:
-            rows: 2
-        editorRefs:
-          title: Editors
-          ui:description: The users who should be able to edit this service.
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          ui:field: MultiEntityPicker
-          ui:options:
-            catalogFilter:
-              kind: User
-        viewerRefs:
-          title: Viewers
-          ui:description: The users who should be able to view this service.
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          ui:field: MultiEntityPicker
-          ui:options:
-            catalogFilter:
-              kind: User
-
-    - title: Billing
-      required:
-        - budgetAmount
-      properties:
-        budgetAmount:
-          title: Annual Budget Amount (CAD)
-          type: number
-          default: 2000
-        budgetAlertEmailRecipients:
-          title: Budget Alert Email Recipients
-          ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
-          type: string
-          ui:widget: textarea
-          ui:options:
-            rows: 2
-          ui:placeholder: jane.doe@phac-aspc.gc.ca, john.doe@phac-aspc.gc.ca, steve.smith@phac-aspc.gc.ca
+    - $yaml: ../project-create/template.parameters.administration.yaml
+    - $yaml: ../project-create/template.parameters.billing.yaml
 
     - title: RAD Lab GenAI
       required:
@@ -95,67 +33,10 @@ spec:
             - Medium
             - Large
 
-    - title: Pull Request
-      backstage:permissions:
-        tags:
-          - template-developer
-      properties:
-        pullRequestAction:
-          title: Pull Request Action
-          type: string
-          default: Diff Only
-          enum:
-            - Diff Only
-            - Publish and Close Pull Request
-            - Publish Pull Request
+    - $yaml: ../project-create/template.parameters.pr.yaml
 
   steps:
-    - id: ctx
-      name: Get Context
-      action: data-science-portal:template:get-context
-      input:
-        # Pass the parameters as an input to include all user inputs.
-        parameters: ${{parameters}}
-
-    - id: prepare-pull-request
-      name: Prepare Pull Request
-      action: fetch:template
-      input:
-        url: ./pull-request-changes
-        values: ${{steps.ctx.output.template_values}}
-        targetPath: ./${{steps.ctx.output.source_location}}
-        templateFileExtension: .njk
-
-    - id: debug-pull-request
-      name: Debug Pull Request
-      action: debug:workspace
-      if: ${{ parameters.pullRequestAction == 'Diff Only' }}
-      backstage:permissions:
-        tags:
-          - template-developer
-      input:
-        command: diff
-        workingDirectory: . # the workspacePath
-
-    - id: publish-pull-request
-      name: Submit Pull Request
-      action: publish:github:pull-request
-      if: ${{ parameters.pullRequestAction != 'Diff Only' }}
-      input:
-        repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
-        branchName: ${{steps.ctx.output.branch}}
-        title: ${{steps.ctx.output.pr_title}}
-        description: ${{steps.ctx.output.pr_description}}
-
-    - id: label-pull-request
-      name: Add Pull Request Labels
-      action: github:issues:label
-      if: ${{ parameters.pullRequestAction != 'Diff Only' }}
-      input:
-        repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
-        number: ${{steps['publish-pull-request'].output.pullRequestNumber}}
-        labels:
-          - from-template
+    $yaml: ../project-create/template.steps.yaml
 
   output:
     links:
