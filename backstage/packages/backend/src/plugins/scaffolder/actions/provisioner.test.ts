@@ -133,6 +133,20 @@ describe('provisioner', () => {
       );
     });
 
+    it('should set the path and resource for the Kustomization file', async () => {
+      const { ctx } = await getContextActionHandler({
+        template: { name: 'project-create' },
+        mockDir,
+      });
+
+      expect(ctx.getOutput('kustomization_path')).toBe(
+        'DMIA-PHAC/kustomization.yaml',
+      );
+      expect(ctx.getOutput('kustomization_resource')).toBe(
+        'SciencePlatform/phx-01an4z07by7/',
+      );
+    });
+
     it('should set the template values in the output', async () => {
       const { ctx } = await getContextActionHandler({
         template: { name: 'project-create' },

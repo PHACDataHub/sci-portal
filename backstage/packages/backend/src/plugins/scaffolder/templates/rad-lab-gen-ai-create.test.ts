@@ -124,7 +124,8 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
         spec:
           type: rad-lab-module
           owner: user:default/jane.doe
-          lifecycle: experimental",
+          lifecycle: experimental
+        ",
                 "claim.yaml": "---
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
         kind: RadLabGenAIClaim
@@ -149,6 +150,12 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             department: '<department>'
             pricing-structure: 'subscription'
             vanity-name: '<project-name>'
+        ",
+                "kustomization.yaml": "---
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+          - claim.yaml
         ",
               },
             },
