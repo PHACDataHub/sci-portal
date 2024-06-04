@@ -216,7 +216,7 @@ kubectl create secret generic -n config-management-system sci-portal-users-git-c
 ```
 
 > [!IMPORTANT]  
-> You must add the generated public key as an SSH key or a deploy key on GitHub. https://github.com/PHACDataHub/sci-portal-users/settings/keys
+> Follow [the docs](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#set-up-deploy-keys) to add the SSH key to the GitHub repository as a read-only **Deploy Key**. 
 
 ### Configure Backstage Plugin-to-Plugin Auth
 
