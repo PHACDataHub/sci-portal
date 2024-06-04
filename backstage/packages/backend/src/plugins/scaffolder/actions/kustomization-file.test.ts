@@ -9,8 +9,10 @@ describe('addResource', () => {
     mockDir.remove();
   });
 
-  it('should write create the Kustomization file if the file does not exist', async () => {
+  it('should create the Kustomization file if the file does not exist', async () => {
+    // DMIA-PHAC/kustomization.yaml does not exist.
     mockDir.setContent({});
+
     const ctx = createMockActionContext({
       input: {
         path: 'DMIA-PHAC/kustomization.yaml',
@@ -18,7 +20,6 @@ describe('addResource', () => {
       },
       workspacePath: mockDir.resolve(),
     });
-
     await insertResource(ctx);
 
     expect(mockDir.content()).toMatchInlineSnapshot(`
@@ -35,7 +36,7 @@ describe('addResource', () => {
     `);
   });
 
-  it('should throw if the "resources" is an unexpected type', async () => {
+  it('should throw if the "resources" are an unexpected type', async () => {
     mockDir.setContent({
       'DMIA-PHAC': {
         'kustomization.yaml': `---
@@ -45,6 +46,7 @@ resources: 42
 `,
       },
     });
+
     const ctx = createMockActionContext({
       input: {
         path: 'DMIA-PHAC/kustomization.yaml',
@@ -64,7 +66,6 @@ resources: 42
         'kustomization.yaml': `---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources: []
 `,
       },
     });
@@ -92,7 +93,7 @@ resources: []
     `);
   });
 
-  it('should add the directory to the resources, sorted alphabetically', async () => {
+  it('should sort the resources alphabetically and preserve comments', async () => {
     mockDir.setContent({
       'DMIA-PHAC': {
         'kustomization.yaml': `---
@@ -134,7 +135,7 @@ resources:
     `);
   });
 
-  it('should support modifying existing projects and not add a duplicate entry', async () => {
+  it('should not add a duplicate entry to support modifying existing projects', async () => {
     mockDir.setContent({
       'DMIA-PHAC': {
         'kustomization.yaml': `---
