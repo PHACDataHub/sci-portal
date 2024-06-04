@@ -1,6 +1,90 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "binutils@2.41": {
+      "last_modified": "2024-05-22T06:18:38Z",
+      "resolved": "github:NixOS/nixpkgs/3f316d2a50699a78afe5e77ca486ad553169061e#binutils",
+      "source": "devbox-search",
+      "version": "2.41",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b287j6p3b139mx01k9azprs7sbs2hnwa-binutils-wrapper-2.41",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/f36584i0d63586kab1w15g1i665ci3kj-binutils-wrapper-2.41-man",
+              "default": true
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/vg7618yk6ngsw4y3swg49cmr2i8ahdzk-binutils-wrapper-2.41-info"
+            }
+          ],
+          "store_path": "/nix/store/b287j6p3b139mx01k9azprs7sbs2hnwa-binutils-wrapper-2.41"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5pfllkhmmdrwi5z1da1009lx128kfbbq-binutils-wrapper-2.41",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/23b8b7ghpr8a6frkqp5ljgbczw04avik-binutils-wrapper-2.41-man",
+              "default": true
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/il1zh9wspnm6wwdhpchrjvvr49nmj01i-binutils-wrapper-2.41-info"
+            }
+          ],
+          "store_path": "/nix/store/5pfllkhmmdrwi5z1da1009lx128kfbbq-binutils-wrapper-2.41"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/rgssl5lri7qvz4yb8r19ws79g5j8kf9p-binutils-wrapper-2.41",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/58xl3bzl6797n38y5alyhrhvf3cr6l09-binutils-wrapper-2.41-man",
+              "default": true
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/ygwgdnbkn9cbqc0p8ripzbjzvj8n6d0x-binutils-wrapper-2.41-info"
+            }
+          ],
+          "store_path": "/nix/store/rgssl5lri7qvz4yb8r19ws79g5j8kf9p-binutils-wrapper-2.41"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/kln7kinji3b7sz8r50h4gn9yy6k1js9a-binutils-wrapper-2.41",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/i9a5m5xd9bpsyydnfqphh51s71bgmd3l-binutils-wrapper-2.41-man",
+              "default": true
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/yf95j2n3b1mpipi3087a1a9rmnap58cs-binutils-wrapper-2.41-info"
+            }
+          ],
+          "store_path": "/nix/store/kln7kinji3b7sz8r50h4gn9yy6k1js9a-binutils-wrapper-2.41"
+        }
+      }
+    },
     "crossplane-cli@1.15.2": {
       "last_modified": "2024-04-19T17:36:04-04:00",
       "resolved": "github:NixOS/nixpkgs/92d295f588631b0db2da509f381b4fb1e74173c5#crossplane-cli",
@@ -142,6 +226,42 @@
             }
           ],
           "store_path": "/nix/store/g1chzl549g4jzjpaqc1i2d0hbazkhx5l-go-task-3.36.0"
+        }
+      }
+    },
+    "jdk@21+35": {
+      "last_modified": "2024-05-22T06:18:38Z",
+      "resolved": "github:NixOS/nixpkgs/3f316d2a50699a78afe5e77ca486ad553169061e#jdk",
+      "source": "devbox-search",
+      "version": "21+35",
+      "systems": {
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/c048zjd49vn3a8q47iah4d0yqfm7g8nk-openjdk-21+35",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/xpm018m6h9fx386lhk8m9j0r3krvy12i-openjdk-21+35-debug"
+            }
+          ],
+          "store_path": "/nix/store/c048zjd49vn3a8q47iah4d0yqfm7g8nk-openjdk-21+35"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2vwkssqpzykk37r996cafq7x63imf4sp-openjdk-21+35",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/fpw20ws7m7j3wfg80wl7gbvh071d04h0-openjdk-21+35-debug"
+            }
+          ],
+          "store_path": "/nix/store/2vwkssqpzykk37r996cafq7x63imf4sp-openjdk-21+35"
         }
       }
     },

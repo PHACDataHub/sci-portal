@@ -1,9 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.10.5/.schema/devbox.schema.json",
   "packages": [
+    "binutils@2.41",
     "crossplane-cli@1.15.2",
     "gh@2.48.0",
     "go-task@3.36.0",
+    "jdk@21+35",
     "k9s@0.32.4",
     "kubeconform@0.6.4",
     "kubectl@1.29.4",
