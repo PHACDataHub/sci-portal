@@ -11,6 +11,7 @@ import { googleAuthWithCustomSignInResolver } from './plugins/auth/module';
 import { CustomPermissionPolicy } from './plugins/permissions';
 import { createProvisionTemplateAction } from './plugins/scaffolder/actions/provisioner';
 import { createDebugWorkspaceAction } from './plugins/scaffolder/actions/debug-workspace';
+import { createKustomizationAction } from './plugins/scaffolder/actions/kustomization-file';
 
 const backend = createBackend();
 
@@ -70,6 +71,7 @@ backend.add(
             createProvisionTemplateAction({ auth, config, catalogApi }),
           );
           scaffolder.addActions(createDebugWorkspaceAction());
+          scaffolder.addActions(createKustomizationAction());
         },
       });
     },

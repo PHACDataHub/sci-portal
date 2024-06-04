@@ -326,6 +326,8 @@ export const createProvisionTemplateAction = (options: {
       budgetAlertEmailRecipients = uniq(budgetAlertEmailRecipients);
 
       // Set the template output directory
+      ctx.output('kustomization_path', 'DMIA-PHAC/kustomization.yaml');
+      ctx.output('kustomization_resource', `SciencePlatform/${projectId}/`);
       const sourceLocation = `DMIA-PHAC/SciencePlatform/${projectId}/`;
 
       // Populate the template values

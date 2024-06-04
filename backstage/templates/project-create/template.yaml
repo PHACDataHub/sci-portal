@@ -128,6 +128,20 @@ spec:
         # Pass the parameters as an input to include all user inputs.
         parameters: ${{parameters}}
 
+    - id: fetch-kustomization
+      name: Fetch Kustomization File
+      action: fetch:plain:file
+      input:
+        url: https://github.com/${{steps.ctx.output.repo_owner}}/${{steps.ctx.output.repo_name}}/tree/main/${{steps.ctx.output.kustomization_path}}
+        targetPath: ${{steps.ctx.output.kustomization_path}}
+
+    - id: update-kustomization
+      name: Update Kustomization File
+      action: data-science-portal:kustomization:add-resource
+      input:
+        path: ${{steps.ctx.output.kustomization_path}}
+        resource: ${{steps.ctx.output.kustomization_resource}}
+
     - id: prepare-pull-request
       name: Prepare Pull Request
       action: fetch:template
