@@ -1,3 +1,6 @@
+const BUDGET_ALERT_RECIPIENTS_ANNOTATION =
+  'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients';
+
 /**
  * Fetches project data for a given project ID from the backstage API and returns a list of email recipients for a given project.
  *
@@ -6,12 +9,13 @@
  * @throws {Error} If the API request fails or returns a non-2xx status code.
  */
 async function getBudgetAlertRecipients(projectId) {
-  const {
-    BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN,
-    BACKSTAGE_URI,
-  } = process.env;
+  const { BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN, BACKSTAGE_URI } = process.env;
 
-  const url = `${BACKSTAGE_URI}/api/catalog/entities/by-name/component/default/${projectId}`;
+  const params = new URLSearchParams({
+    filter: `metadata.annotations.cloud.google.com/project=${projectId}`,
+    fields: `metadata.annotations.${BUDGET_ALERT_RECIPIENTS_ANNOTATION}`,
+  });
+  const url = `${BACKSTAGE_URI}/api/catalog/entities/by-query?${params}`;
   const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN}`,
@@ -24,13 +28,17 @@ async function getBudgetAlertRecipients(projectId) {
     );
   }
 
-  const data = await response.json();
+  const body = await response.json();
 
-  const recipients = data.metadata.annotations[
-    'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients'
-  ].split(',').map(email => email.trim());
-
-  return recipients;
+  const uniqueRecipients = new Set();
+  for (const item of body.items) {
+    const recipients =
+      item.metadata.annotations[BUDGET_ALERT_RECIPIENTS_ANNOTATION].split(',');
+    for (const recipient of recipients) {
+      uniqueRecipients.add(recipient.trim());
+    }
+  }
+  return Array.from(uniqueRecipients);
 }
 
 module.exports = {

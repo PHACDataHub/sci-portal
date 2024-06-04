@@ -2,9 +2,9 @@ const { describe, expect, test } = require('@jest/globals');
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 
-const { sendNotifications } = require('../gc_notify');
+const { sendEmail } = require('../gc_notify');
 
-describe('sendNotifications', () => {
+describe('sendEmail', () => {
   beforeAll(() => {
     process.env.GC_NOTIFY_API_KEY = 'api-key';
     process.env.GC_NOTIFY_URI = 'https://api.notification.canada.ca';
@@ -23,9 +23,9 @@ describe('sendNotifications', () => {
         status: 200,
       });
 
-    const result = await sendNotifications(
-      recipients,
+    const result = await sendEmail(
       templateId,
+      recipients,
       personalisation,
     );
 
@@ -47,9 +47,9 @@ describe('sendNotifications', () => {
         status: 500,
       });
 
-    const result = await sendNotifications(
-      recipients,
+    const result = await sendEmail(
       templateId,
+      recipients,
       personalisation,
     );
 

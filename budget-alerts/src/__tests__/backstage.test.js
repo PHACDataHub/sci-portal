@@ -14,7 +14,7 @@ describe('getBudgetAlertRecipients', () => {
   beforeAll(() => {
     server.listen();
     process.env.BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN = 'api-key';
-    process.env.BACKSTAGE_URI = 'https://backstage.alpha.phac-aspc.gc.ca';
+    process.env.BACKSTAGE_URI = 'https://backstage.test.phac-aspc.gc.ca';
   });
 
   afterEach(() => server.resetHandlers());
@@ -22,55 +22,51 @@ describe('getBudgetAlertRecipients', () => {
   afterAll(() => server.close());
 
   test('fetchProjectData successfully returns project data', async () => {
-    const backstageUri = 'https://backstage.alpha.phac-aspc.gc.ca';
-    const projectId = 'phx-01hz5f5jjef';
+    const baseUrl = 'https://backstage.test.phac-aspc.gc.ca';
     server.use(
-      http.get(
-        `${backstageUri}/api/catalog/entities/by-name/component/default/${projectId}`,
-        () => {
-          return HttpResponse.json({
-            apiVersion: 'backstage.io/v1alpha1',
-            kind: 'Component',
-            metadata: {
-              name: 'phx-01hz5f5jjef',
-              title: 'phx-rad-lab-demo',
-              annotations: {
-                'backstage.io/source-template':
-                  'template:default/rad-lab-gen-ai-create',
-                'cloud.google.com/project': 'phx-01hz5f5jjef',
-                'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients':
-                'jane.doe@gcp.hc-sc.gc.ca,john.doe@gcp.hc-sc.gc.ca',
+      http.get(`${baseUrl}/api/catalog/entities/by-query`, () => {
+        return HttpResponse.json({
+          items: [
+            {
+              metadata: {
+                annotations: {
+                  // 'cloud.google.com/project': 'phx-01hz5f5jjef',
+                  'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients':
+                    'jane.doe@gcp.hc-sc.gc.ca,john.doe@gcp.hc-sc.gc.ca',
+                },
               },
             },
-            spec: {
-              type: 'rad-lab-module',
-              owner: 'user:default/hello.world',
-              lifecycle: 'experimental',
+            {
+              metadata: {
+                annotations: {
+                  // 'cloud.google.com/project': 'phx-01hz5f5jjef',
+                  'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients':
+                    'jane.doe@gcp.hc-sc.gc.ca,john.doe@gcp.hc-sc.gc.ca',
+                },
+              },
             },
-          });
-        },
-      ),
+          ],
+        });
+      }),
     );
 
+    const projectId = 'phx-01hz5f5jjef';
     const actual = await getBudgetAlertRecipients(projectId);
-    const expected = ['jane.doe@gcp.hc-sc.gc.ca','john.doe@gcp.hc-sc.gc.ca'];
+    const expected = ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'];
 
     expect(actual).toEqual(expected);
   });
 
   test('fetchProjectData fails to return project data', async () => {
-    const backstageUri = 'https://backstage.alpha.phac-aspc.gc.ca';
-    const projectId = 'phx-01hz5f5jjef';
+    const baseUrl = 'https://backstage.test.phac-aspc.gc.ca';
 
     server.use(
-      http.get(
-        `${backstageUri}/api/catalog/entities/by-name/component/default/${projectId}`,
-        () => {
-          return HttpResponse.status(500);
-        },
-      ),
+      http.get(`${baseUrl}/api/catalog/entities/by-query`, () => {
+        return HttpResponse.status(500);
+      }),
     );
 
+    const projectId = 'phx-01hz5f5jjef';
     await expect(getBudgetAlertRecipients(projectId)).rejects.toThrow();
   });
 });

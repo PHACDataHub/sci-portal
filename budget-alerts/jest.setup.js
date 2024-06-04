@@ -1,8 +1,4 @@
-const {
-  beforeAll,
-  afterEach,
-  afterAll,
-} = require('@jest/globals');
+const { beforeAll, afterEach, afterAll } = require('@jest/globals');
 const { server } = require('./mocks/node');
 
 beforeAll(() => {
