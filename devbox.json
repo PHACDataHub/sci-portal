@@ -11,6 +11,7 @@
     "kyverno-chainsaw@0.2.2",
     "shellcheck@0.10.0",
     "terraform@1.7.5",
+    "yamllint@1.35.1",
 
     "path:./.devbox/flakes/google-cloud-sdk#google-cloud-sdk"
   ],
