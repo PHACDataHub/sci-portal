@@ -1,0 +1,16 @@
+title: Billing
+required:
+  - budgetAmount
+properties:
+  budgetAmount:
+    title: Annual Budget Amount (CAD)
+    type: number
+    default: 2000
+  budgetAlertEmailRecipients:
+    title: Budget Alert Email Recipients
+    ui:description: The `@phac-aspc.gc.ca` email addresses of users who should be notified of budget alerts, separated by a comma.
+    type: string
+    ui:widget: textarea
+    ui:options:
+      rows: 2
+    ui:placeholder: jane.doe@phac-aspc.gc.ca, john.doe@phac-aspc.gc.ca, steve.smith@phac-aspc.gc.ca
