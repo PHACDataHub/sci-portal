@@ -9,7 +9,7 @@ spec:
   owner: platform-team
   type: project
   parameters:
-    - $yaml: ./project.yaml
+    - $yaml: ./parameters/project.yaml
 
     - title: Administration
       required:
