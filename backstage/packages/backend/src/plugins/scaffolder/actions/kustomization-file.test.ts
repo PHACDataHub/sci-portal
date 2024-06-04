@@ -55,8 +55,9 @@ resources: 42
       workspacePath: mockDir.resolve(),
     });
 
+    const sep = process.platform === 'win32' ? '\\' : '\/';
     await expect(() => insertResource(ctx)).rejects.toThrow(
-      /The "resources" key is not a Sequence in ".*\/DMIA-PHAC\/kustomization.yaml"/,
+      new RegExp(`The "resources" key is not a Sequence in ".*${sep}DMIA-PHAC${sep}kustomization.yaml"`),
     );
   });
 
