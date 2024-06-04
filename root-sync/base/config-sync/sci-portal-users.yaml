@@ -1,0 +1,16 @@
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: root-sci-portal-users
+  namespace: config-management-system
+spec:
+  sourceType: git
+  sourceFormat: unstructured
+  git:
+    repo: git@github.com:PHACDataHub/sci-portal-users.git
+    branch: main
+    dir: DMIA-PHAC
+    auth: ssh
+    secretRef:
+      name: sci-portal-users-git-creds
+    period: 30s

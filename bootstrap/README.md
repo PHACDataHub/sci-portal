@@ -207,6 +207,17 @@ Create a Secret for the integration using the GitHub App:
 kubectl create secret generic -n backstage backstage-github-app --from-file=github-app-integration-credentials.yaml
 ```
 
+### Configure sci-portal-users repo sync
+
+[Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key) a new SSH key and add the private key as a secret in your cluster. Config Sync will use this secret to access sci-portal-users when syncing.
+
+```
+kubectl create secret generic -n config-management-system sci-portal-users-git-creds --from-file=ssh=./<private-key>
+```
+
+> [!IMPORTANT]  
+> Follow [the docs](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#set-up-deploy-keys) to add the SSH key to the GitHub repository as a read-only **Deploy Key**. 
+
 ### Configure Backstage Plugin-to-Plugin Auth
 
 Follow [the documentation](https://backstage.io/docs/auth/service-to-service-auth) to create a token:
