@@ -133,4 +133,43 @@ resources:
       }
     `);
   });
+
+  it('should support modifying existing projects and not add a duplicate entry', async () => {
+    mockDir.setContent({
+      'DMIA-PHAC': {
+        'kustomization.yaml': `---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- SciencePlatform/phx-covid-surveillance
+- SciencePlatform/phx-measles-surveillance
+- SciencePlatform/phx-tb-surveillance
+`,
+      },
+    });
+    const ctx = createMockActionContext({
+      input: {
+        path: 'DMIA-PHAC/kustomization.yaml',
+        resource: 'SciencePlatform/phx-measles-surveillance',
+      },
+      workspacePath: mockDir.resolve(),
+    });
+
+    await insertResource(ctx);
+
+    expect(mockDir.content()).toMatchInlineSnapshot(`
+      {
+        "DMIA-PHAC": {
+          "kustomization.yaml": "---
+      apiVersion: kustomize.config.k8s.io/v1beta1
+      kind: Kustomization
+      resources:
+        - SciencePlatform/phx-covid-surveillance
+        - SciencePlatform/phx-measles-surveillance
+        - SciencePlatform/phx-tb-surveillance
+      ",
+        },
+      }
+    `);
+  });
 });

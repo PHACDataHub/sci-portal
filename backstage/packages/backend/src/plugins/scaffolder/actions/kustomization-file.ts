@@ -20,9 +20,6 @@ const readFile = async (path: string): Promise<yaml.Document> => {
     if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
       throw err;
     }
-
-    await fs.mkdir(dirname(path), { recursive: true });
-
     source = `
         apiVersion: kustomize.config.k8s.io/v1beta1
         kind: Kustomization
@@ -68,8 +65,10 @@ export const insertResource = async (
     resources = new yaml.YAMLSeq();
   }
 
-  // Add the new resource
-  resources.add(new yaml.Scalar(ctx.input.resource));
+  // Add the new resource if it is not already there
+  if (!resources.items.find((item) => yaml.isScalar(item) && item.value === ctx.input.resource)) {
+    resources.add(new yaml.Scalar(ctx.input.resource));
+  }
 
   // Sort when every item is a string
   if (
@@ -82,8 +81,11 @@ export const insertResource = async (
     );
   }
 
-  // Output the file
+  // Update the YAML document
   doc.setIn(['resources'], resources);
+
+  // Output the file
+  await fs.mkdir(dirname(path), { recursive: true });
   await fs.writeFile(
     path,
     doc.toString({
