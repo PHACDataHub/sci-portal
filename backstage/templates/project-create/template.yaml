@@ -9,39 +9,7 @@ spec:
   owner: platform-team
   type: project
   parameters:
-    - title: Project
-      required:
-        - department
-        - dataClassification
-        - vanityName
-      properties:
-        department:
-          title: Department
-          description: The department ID.
-          type: string
-          default: ph
-          enum:
-            - ph
-            - hc
-          enumNames:
-            - PHAC
-            - Health Canada
-        dataClassification:
-          title: Data Classification
-          description: The level of security for the project information and assets.
-          type: string
-          default: UCLL
-          enum:
-            - UCLL
-            - PBMM
-          enumNames:
-            - Unclassified
-            - Protected B
-        vanityName:
-          title: Vanity Name
-          description: The resource display name. The name must less than 26 characters. The name will be used to create a GCP Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
-          type: string
-          maxLength: 26
+    - $yaml: ./project.yaml
 
     - title: Administration
       required:
