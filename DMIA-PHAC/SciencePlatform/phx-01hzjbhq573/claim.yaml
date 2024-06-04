@@ -1,0 +1,21 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-rad-lab-demo-017c005e-9ad2-41b1-96cb-7adc71d1e6ef
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-rad-lab-demo
+  projectId: phx-01hzjbhq573
+  projectEditors:
+    - user:sean.poulter@focisolutions.com
+  projectViewers:
+    - user:asma.bahamyirou@gcp.hc-sc.gc.ca
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'abc123456789'
+    cost-centre-name: 'tps-reports'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-rad-lab-demo'
