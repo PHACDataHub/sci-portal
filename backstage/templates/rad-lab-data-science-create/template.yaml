@@ -11,7 +11,7 @@ spec:
   owner: platform-team
   type: service
   parameters:
-    - $yaml: ../project-create/parameters/project.yaml
+    - $yaml: ../project-create/template.parameters.project.yaml
 
     - title: Administration
       required:

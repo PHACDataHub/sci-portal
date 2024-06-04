@@ -1,0 +1,60 @@
+- id: ctx
+  name: Get Context
+  action: data-science-portal:template:get-context
+  input:
+    # Pass the parameters as an input to include all user inputs.
+    parameters: ${{parameters}}
+
+- id: fetch-kustomization
+  name: Fetch Kustomization File
+  action: fetch:plain:file
+  input:
+    url: https://github.com/${{steps.ctx.output.repo_owner}}/${{steps.ctx.output.repo_name}}/tree/main/${{steps.ctx.output.kustomization_path}}
+    targetPath: ${{steps.ctx.output.kustomization_path}}
+
+- id: update-kustomization
+  name: Update Kustomization File
+  action: data-science-portal:kustomization:add-resource
+  input:
+    path: ${{steps.ctx.output.kustomization_path}}
+    resource: ${{steps.ctx.output.kustomization_resource}}
+
+- id: prepare-pull-request
+  name: Prepare Pull Request
+  action: fetch:template
+  input:
+    url: ./pull-request-changes
+    values: ${{steps.ctx.output.template_values}}
+    targetPath: ./${{steps.ctx.output.source_location}}
+    templateFileExtension: .njk
+
+- id: debug-pull-request
+  name: Debug Pull Request
+  action: debug:workspace
+  if: ${{ parameters.pullRequestAction == 'Diff Only' }}
+  backstage:permissions:
+    tags:
+      - template-developer
+  input:
+    command: diff
+    workingDirectory: . # the workspacePath
+
+- id: publish-pull-request
+  name: Submit Pull Request
+  action: publish:github:pull-request
+  if: ${{ parameters.pullRequestAction != 'Diff Only' }}
+  input:
+    repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
+    branchName: ${{steps.ctx.output.branch}}
+    title: ${{steps.ctx.output.pr_title}}
+    description: ${{steps.ctx.output.pr_description}}
+
+- id: label-pull-request
+  name: Add Pull Request Labels
+  action: github:issues:label
+  if: ${{ parameters.pullRequestAction != 'Diff Only' }}
+  input:
+    repoUrl: github.com?owner=${{steps.ctx.output.repo_owner}}&repo=${{steps.ctx.output.repo_name}}
+    number: ${{steps['publish-pull-request'].output.pullRequestNumber}}
+    labels:
+      - from-template
