@@ -215,6 +215,10 @@ kubectl create secret generic -n backstage backstage-github-app --from-file=gith
 kubectl create secret generic -n config-management-system sci-portal-users-git-creds --from-file=ssh=./<private-key>
 ```
 
+> [!IMPORTANT]  
+> You must add the generated public key as an SSH key or a deploy key on GitHub.
+
+
 ### Configure Backstage Plugin-to-Plugin Auth
 
 Follow [the documentation](https://backstage.io/docs/auth/service-to-service-auth) to create a token:
