@@ -8,11 +8,6 @@ for var in GCP_PROJECT_ID GCP_REGION KCC_SERVICEACCOUNT KCC_SERVICEACCOUNT_EMAIL
     fi
 done
 
-# Create manifests for the GCP provider from templates
-envsubst < ./crossplane/templates/gcp/controller-config.yaml > ./crossplane/providers/gcp/controller-config.yaml
-envsubst < ./crossplane/templates/gcp/provider.yaml > ./crossplane/providers/gcp/provider.yaml
-envsubst < ./crossplane/templates/gcp/provider-config.yaml > ./crossplane/providers/gcp/config/provider-config.yaml
-
 # Create manifests for the Terraform provider from templates
 envsubst < ./crossplane/templates/terrafrom/deployment-runtime-config.yaml > ./crossplane/providers/terraform/deployment-runtime-config.yaml
 envsubst < ./crossplane/templates/terrafrom/provider.yaml > ./crossplane/providers/terraform/provider.yaml
@@ -37,7 +32,6 @@ kubectl apply -f crossplane/providers/terraform
 
 # Wait for the Providers to be ready
 kubectl wait --for=condition=ready pod -l pkg.crossplane.io/provider=provider-terraform -n crossplane-system --timeout=300s
-kubectl wait --for=condition=ready pod -l pkg.crossplane.io/provider=provider-gcp-storage -n crossplane-system --timeout=300s
 
 # Configure Crossplane providers
 # Note: Providres CRDS are required to successfully apply the configurations

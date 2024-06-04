@@ -1,8 +1,0 @@
-apiVersion: pkg.crossplane.io/v1alpha1
-kind: ControllerConfig
-metadata:
-  name: gcp-controller-config
-  annotations:    
-    iam.gke.io/gcp-service-account: ${KCC_SERVICEACCOUNT_EMAIL}
-spec:
-  serviceAccountName: ${KCC_SERVICEACCOUNT}
