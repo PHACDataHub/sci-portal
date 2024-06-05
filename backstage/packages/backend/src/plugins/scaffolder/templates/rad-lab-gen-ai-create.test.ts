@@ -78,6 +78,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             rootFolderId: '<root-folder-id>',
             projectName: '<project-name>',
             projectId: '<project-id>',
+            budgetAmount: 12_345,
             projectLabels: {
               branch: '<branch>',
               classification: '<classification>',
@@ -137,6 +138,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           rootFolderId: '<root-folder-id>'
           projectName: <project-name>
           projectId: <project-id>
+          budget: 12345
           labels:
             branch: '<branch>'
             classification: '<classification>'
