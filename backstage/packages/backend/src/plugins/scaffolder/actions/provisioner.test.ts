@@ -152,6 +152,7 @@ describe('provisioner', () => {
         template: { name: 'project-create' },
         parameters: {
           department: 'hc',
+          branch: 'digital-transformation-branch',
           vanityName: 'test-case',
           dataClassification: 'PBMM',
           costCentre: 'JBU987654321',
@@ -184,6 +185,7 @@ describe('provisioner', () => {
       expect(ctx.getOutput('template_values')).toEqual({
         // User Input
         department: 'hc',
+        branch: 'digital-transformation-branch',
         vanityName: 'test-case',
         dataClassification: 'PBMM',
         costCentre: 'JBU987654321',
@@ -202,6 +204,7 @@ describe('provisioner', () => {
         projectName: 'hcx-test-case',
         projectId: 'hcx-01an4z07by7',
         projectLabels: {
+          branch: 'digital-transformation-branch',
           classification: 'pbmm',
           'controlled-by': 'science-portal',
           'cost-centre': 'jbu987654321',

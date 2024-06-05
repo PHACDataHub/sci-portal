@@ -12,6 +12,7 @@ jest.mock('uuid', () => ({
 }));
 
 export const projectParameters = {
+  branch: 'digital-transformation-branch' as const,
   department: 'ph' as const,
   dataClassification: 'UCLL' as const,
   vanityName: 'test-42',
@@ -92,6 +93,7 @@ describe('project-create: fetch:template', () => {
             projectName: '<project-name>',
             projectId: '<project-id>',
             projectLabels: {
+              branch: '<branch>',
               classification: '<classification>',
               'controlled-by': 'science-portal',
               'cost-centre': '<cost-centre>',
@@ -155,6 +157,7 @@ describe('project-create: fetch:template', () => {
             - user:alex.mcdonald@gcp.hc-sc.gc.ca
             - user:john.campbell@gcp.hc-sc.gc.ca
           labels:
+            branch: '<branch>'
             classification: '<classification>'
             controlled-by: 'science-portal'
             cost-centre: '<cost-centre>'
