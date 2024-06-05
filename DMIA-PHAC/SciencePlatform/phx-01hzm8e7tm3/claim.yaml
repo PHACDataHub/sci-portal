@@ -1,0 +1,24 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: RadLabGenAIClaim
+metadata:
+  name: phx-rad-lab-genai-demo-01-6cbe79dd-3633-4fe9-8cd4-7e920d0d9499
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-rad-lab-genai-demo-01
+  projectId: phx-01hzm8e7tm3
+  projectEditors:
+    - user:sean.poulter@focisolutions.com
+    - user:rajan.subedi@focisolutions.com
+    - user:kendra.dezenosky@focisolutions.com
+  projectViewers:
+    - user:keith.young@gcp.hc-sc.gc.ca
+    - user:vedant.thapa@gcp.hc-sc.gc.ca
+  labels:
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: 'abc123456789'
+    cost-centre-name: 'tps-reports'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-rad-lab-genai-demo-01'
