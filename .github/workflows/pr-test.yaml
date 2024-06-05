@@ -11,13 +11,16 @@ jobs:
     if: ${{ startsWith( github.event.pull_request.title, '[Test] ') }}
     runs-on: ubuntu-latest
     steps:
+      # We need to checkout main to use `gh pr close`.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: main
+
       - name: Close PR
         run: |
+          git checkout ${{ github.head_ref }}
           gh pr close "$PR_URL"
-          git push origin :${{ github.head_ref }}
+          # git push origin :${{ github.head_ref }}
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           PR_URL: ${{github.event.pull_request.html_url}}
