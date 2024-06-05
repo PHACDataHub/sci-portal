@@ -137,13 +137,6 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           rootFolderId: '<root-folder-id>'
           projectName: <project-name>
           projectId: <project-id>
-          projectEditors:
-            - user:jane.doe@gcp.hc-sc.gc.ca
-            - user:john.doe@gcp.hc-sc.gc.ca
-          projectViewers:
-            - user:samantha.jones@gcp.hc-sc.gc.ca
-            - user:alex.mcdonald@gcp.hc-sc.gc.ca
-            - user:john.campbell@gcp.hc-sc.gc.ca
           labels:
             branch: '<branch>'
             classification: '<classification>'
@@ -154,6 +147,13 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             pricing-structure: 'subscription'
             team-name: '<team-name>'
             vanity-name: '<project-name>'
+          projectEditors:
+            - user:jane.doe@gcp.hc-sc.gc.ca
+            - user:john.doe@gcp.hc-sc.gc.ca
+          projectViewers:
+            - user:samantha.jones@gcp.hc-sc.gc.ca
+            - user:alex.mcdonald@gcp.hc-sc.gc.ca
+            - user:john.campbell@gcp.hc-sc.gc.ca
         ",
                 "kustomization.yaml": "---
         apiVersion: kustomize.config.k8s.io/v1beta1
