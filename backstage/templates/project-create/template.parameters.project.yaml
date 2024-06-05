@@ -3,6 +3,7 @@ required:
   - department
   - dataClassification
   - vanityName
+  - teamName
 properties:
   department:
     title: Department
@@ -15,6 +16,10 @@ properties:
     enumNames:
       - PHAC
       - Health Canada
+  teamName: 
+    title: Team Name
+    description: The team name associated with the project.
+    type: string
   dataClassification:
     title: Data Classification
     description: The level of security for the project information and assets.
