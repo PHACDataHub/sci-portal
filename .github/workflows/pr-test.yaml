@@ -16,8 +16,8 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Close PR
         run: |
-          pwd
-          gh pr close --delete-branch "$PR_URL"
+          gh pr close "$PR_URL"
+          git push origin :${{ github.head_ref }}
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           PR_URL: ${{github.event.pull_request.html_url}}
