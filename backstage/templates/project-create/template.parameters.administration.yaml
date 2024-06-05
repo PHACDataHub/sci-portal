@@ -7,7 +7,7 @@ required:
   - section32ManagerEmail
   - justification
 properties:
- department:
+  department:
     title: Department
     description: The department ID.
     type: string
