@@ -1,9 +1,31 @@
 title: Administration
 required:
+  - department
+  - branch
+  - teamName
   - costCentre
   - section32ManagerEmail
   - justification
 properties:
+ department:
+    title: Department
+    description: The department ID.
+    type: string
+    default: ph
+    enum:
+      - ph
+      - hc
+    enumNames:
+      - PHAC
+      - Health Canada
+  branch:
+    title: Branch
+    description: The branch within your department.
+    type: string
+  teamName: 
+    title: Team Name
+    description: The team name associated with the project.
+    type: string
   costCentre:
     title: Cost Centre
     type: string
@@ -22,25 +44,3 @@ properties:
     ui:widget: textarea
     ui:options:
       rows: 2
-  editorRefs:
-    title: Editors
-    ui:description: The users who should be able to edit this service.
-    type: array
-    items:
-      type: string
-    uniqueItems: true
-    ui:field: MultiEntityPicker
-    ui:options:
-      catalogFilter:
-        kind: User
-  viewerRefs:
-    title: Viewers
-    ui:description: The users who should be able to view this service.
-    type: array
-    items:
-      type: string
-    uniqueItems: true
-    ui:field: MultiEntityPicker
-    ui:options:
-      catalogFilter:
-        kind: User
