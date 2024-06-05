@@ -98,13 +98,13 @@ Backstage uses Yarn v1. It can be installed globally using corepack:
 
 ```bash
 corepack enable
-corepack prepare yarn@1.22.19 --activate
+corepack prepare yarn@1.22.22 --activate
 ```
 
 or installed globally:
 
 ```
-npm install --global yarn@1.22.19
+npm install --global yarn@1.22.22
 ```
 
 Verify the installation by checking the Yarn version:
