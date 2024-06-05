@@ -7,6 +7,10 @@ spec:
   rootFolderId: '${{values.rootFolderId}}'
   projectName: ${{values.projectName}}
   projectId: ${{values.projectId}}
+  labels:
+  {%- for key, value in values.projectLabels %}
+    ${{ key }}: '${{ value }}'
+  {%- endfor %}
   projectEditors:
   {%- for editor in values.editors %}
     - user:${{editor}}
@@ -14,8 +18,4 @@ spec:
   projectViewers:
   {%- for viewer in values.viewers %}
     - user:${{viewer}}
-  {%- endfor %}
-  labels:
-  {%- for key, value in values.projectLabels %}
-    ${{ key }}: '${{ value }}'
   {%- endfor %}
