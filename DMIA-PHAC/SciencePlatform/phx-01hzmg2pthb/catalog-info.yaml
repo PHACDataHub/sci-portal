@@ -1,0 +1,14 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: phx-01hzmg2pthb
+  title: phx-test
+  annotations:
+    backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/phx-01hzmg2pthb/
+    backstage.io/source-template: template:default/project-create
+    cloud.google.com/project: phx-01hzmg2pthb
+    data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: kendra.dezenosky@focisolutions.com
+spec:
+  type: project
+  owner: user:default/kendra.dezenosky

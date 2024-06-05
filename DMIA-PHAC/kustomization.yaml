@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - SciencePlatform/phx-01hzjep5af6/
   - SciencePlatform/phx-01hzm8e7tm3/
+  - SciencePlatform/phx-01hzmg2pthb/

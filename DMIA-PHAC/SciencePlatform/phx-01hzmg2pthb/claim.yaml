@@ -1,0 +1,20 @@
+---
+apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
+kind: ProjectClaim
+metadata:
+  name: phx-test-17cb5d32-be8b-4990-950e-b994fb0f6645
+spec:
+  rootFolderId: '108494461414'
+  projectName: phx-test
+  projectId: phx-01hzmg2pthb
+  projectEditors:
+    - user:kendra.dezenosky@focisolutions.com
+  projectViewers:
+  labels:
+    branch: 'test'
+    classification: 'ucll'
+    controlled-by: 'science-portal'
+    cost-centre: '1'
+    department: 'ph'
+    pricing-structure: 'subscription'
+    vanity-name: 'phx-test'
