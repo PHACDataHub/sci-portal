@@ -6,7 +6,7 @@ required:
   - vanityName
 properties:
   department:
-    title: Department123
+    title: Department
     description: The department ID.
     type: string
     default: ph
