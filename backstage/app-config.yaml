@@ -116,7 +116,7 @@ catalog:
         organization: 'PHACDataHub'
         filters:
           repository: '^sci-portal$'
-          branch: 'main'
+          branch: 'reorganize-template-inputs'
         catalogPath: '/backstage/templates/*/template.yaml'
         schedule:
           frequency: { minutes: 30 }

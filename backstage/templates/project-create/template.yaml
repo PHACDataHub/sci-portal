@@ -10,8 +10,9 @@ spec:
   type: project
   parameters:
     - $yaml: ./template.parameters.project.yaml
+    - $yaml: ./template.parameters.team.yaml
     - $yaml: ./template.parameters.administration.yaml
-    - $yaml: ./template.parameters.billing.yaml
+    - $yaml: ./template.parameters.budget.yaml
     - $yaml: ./template.parameters.pr.yaml
 
   steps:

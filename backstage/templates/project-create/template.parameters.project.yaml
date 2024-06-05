@@ -1,30 +1,8 @@
 title: Project
 required:
-  - department
-  - branch
   - dataClassification
   - vanityName
-  - teamName
 properties:
-  department:
-    title: Department
-    description: The department ID.
-    type: string
-    default: ph
-    enum:
-      - ph
-      - hc
-    enumNames:
-      - PHAC
-      - Health Canada
-  branch:
-    title: Branch
-    description: The branch within your department.
-    type: string
-  teamName: 
-    title: Team Name
-    description: The team name associated with the project.
-    type: string
   dataClassification:
     title: Data Classification
     description: The level of security for the project information and assets.

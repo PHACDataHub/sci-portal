@@ -1,0 +1,25 @@
+title: Team
+required:
+  - department
+  - branch
+  - teamName
+properties:
+  department:
+    title: Department
+    description: The department ID.
+    type: string
+    default: ph
+    enum:
+      - ph
+      - hc
+    enumNames:
+      - PHAC
+      - Health Canada
+  branch:
+    title: Branch
+    description: The branch within your department.
+    type: string
+  teamName: 
+    title: Team Name
+    description: The team name associated with the project.
+    type: string
