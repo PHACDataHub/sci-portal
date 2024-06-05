@@ -3,8 +3,6 @@ apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
 kind: ProjectClaim
 metadata:
   name: phx-vedantthapa-1e5a67ec-7012-46cf-8a30-ef198c71ad88
-  annotations:
-    backstage.io/kubernetes-id: phx-01hzjep5af6
 spec:
   rootFolderId: '108494461414'
   projectName: phx-vedantthapa
