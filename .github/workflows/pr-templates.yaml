@@ -28,7 +28,7 @@ jobs:
 
       - name: Check format
         run: terraform fmt -check -recursive
-      
+
       - name: Validate
         working-directory: ./templates
         run: |
