@@ -90,4 +90,3 @@ jobs:
       - name: Check Config Connector resources
         run: nomos vet --clusters "" --no-api-server-check --source-format unstructured
         # Refer to the docs https://cloud.google.com/anthos-config-management/docs/how-to/nomos-command#vet
-
