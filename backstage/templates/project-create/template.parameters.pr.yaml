@@ -1,0 +1,13 @@
+title: Pull Request
+backstage:permissions:
+  tags:
+    - template-developer
+properties:
+  pullRequestAction:
+    title: Pull Request Action
+    type: string
+    default: Diff Only
+    enum:
+      - Diff Only
+      - Publish and Close Pull Request
+      - Publish Pull Request
