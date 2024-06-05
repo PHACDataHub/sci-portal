@@ -119,7 +119,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           name: <project-id>
           title: <project-name>
           annotations:
-            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal/DMIA-PHAC/SciencePlatform/<project-id>/
+            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal-users/DMIA-PHAC/SciencePlatform/<project-id>/
             backstage.io/source-template: template:default/rad-lab-gen-ai-create
             cloud.google.com/project: <project-id>
             data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
