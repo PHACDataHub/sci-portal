@@ -21,4 +21,5 @@ spec:
     cost-centre-name: 'tps-reports'
     department: 'ph'
     pricing-structure: 'subscription'
+    team-name: 'team-abc'
     vanity-name: 'phx-rad-lab-genai-demo-01'

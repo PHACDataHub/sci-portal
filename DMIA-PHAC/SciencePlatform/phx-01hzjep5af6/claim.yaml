@@ -20,4 +20,5 @@ spec:
     cost-centre-name: 'test'
     department: 'ph'
     pricing-structure: 'subscription'
+    team-name: 'team-abc'
     vanity-name: 'phx-vedantthapa'

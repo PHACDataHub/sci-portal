@@ -85,6 +85,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
               'cost-centre-name': '<cost-centre-name>',
               department: '<department>',
               'pricing-structure': 'subscription',
+              'team-name': '<team-name>',
               'vanity-name': '<project-name>',
             },
             editors: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
@@ -149,6 +150,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             cost-centre-name: '<cost-centre-name>'
             department: '<department>'
             pricing-structure: 'subscription'
+            team-name: '<team-name>'
             vanity-name: '<project-name>'
         ",
                 "kustomization.yaml": "---
