@@ -15,6 +15,7 @@ spec:
     - user:keith.young@gcp.hc-sc.gc.ca
     - user:vedant.thapa@gcp.hc-sc.gc.ca
   labels:
+    branch: 'digital-transformation-branch'
     classification: 'ucll'
     controlled-by: 'science-portal'
     cost-centre: 'abc123456789'
