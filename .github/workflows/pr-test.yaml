@@ -20,8 +20,7 @@ jobs:
         run: |
           git fetch origin/${{ github.head_ref }}
           git checkout ${{ github.head_ref }}
-
-          gh pr close "$PR_URL"
+          gh pr close --delete-branch "$PR_URL"
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           PR_URL: ${{github.event.pull_request.html_url}}
