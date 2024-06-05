@@ -3,6 +3,7 @@ required:
   - department
   - dataClassification
   - vanityName
+  - teamName
 properties:
   department:
     title: Department
