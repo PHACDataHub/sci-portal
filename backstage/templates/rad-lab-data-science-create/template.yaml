@@ -12,8 +12,9 @@ spec:
   type: service
   parameters:
     - $yaml: ../project-create/template.parameters.project.yaml
+    - $yaml: ../project-create/template.parameters.team.yaml
     - $yaml: ../project-create/template.parameters.administration.yaml
-    - $yaml: ../project-create/template.parameters.billing.yaml
+    - $yaml: ../project-create/template.parameters.budget.yaml
 
     - title: RAD Lab Data Science
       required:

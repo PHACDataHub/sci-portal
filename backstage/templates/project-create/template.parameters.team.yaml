@@ -1,0 +1,24 @@
+title: Team
+properties:
+  editorRefs:
+    title: Editors
+    ui:description: The users who should be able to edit this service.
+    type: array
+    items:
+      type: string
+    uniqueItems: true
+    ui:field: MultiEntityPicker
+    ui:options:
+      catalogFilter:
+        kind: User
+  viewerRefs:
+    title: Viewers
+    ui:description: The users who should be able to view this service.
+    type: array
+    items:
+      type: string
+    uniqueItems: true
+    ui:field: MultiEntityPicker
+    ui:options:
+      catalogFilter:
+        kind: User
