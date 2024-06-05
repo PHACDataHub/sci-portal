@@ -4,6 +4,7 @@ required:
   - branch
   - dataClassification
   - vanityName
+  - teamName
 properties:
   department:
     title: Department
@@ -19,6 +20,10 @@ properties:
   branch:
     title: Branch
     description: The branch within your department.
+    type: string
+  teamName: 
+    title: Team Name
+    description: The team name associated with the project.
     type: string
   dataClassification:
     title: Data Classification

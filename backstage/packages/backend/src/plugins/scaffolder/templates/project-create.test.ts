@@ -25,6 +25,7 @@ export const projectParameters = {
   costCentre: 'ABC123456789',
   costCentreName: 'TPS Reports',
   section32ManagerEmail: 'alice.grady@gcp.hc-sc.gc.ca',
+  teamName: 'team-abc' as const,
   justification: 'This project will be used for testing our custom action.',
   budgetAmount: 2_000,
   budgetAlertEmailRecipients:
@@ -100,6 +101,7 @@ describe('project-create: fetch:template', () => {
               'cost-centre-name': '<cost-centre-name>',
               department: '<department>',
               'pricing-structure': 'subscription',
+              'team-name': '<team-name>',
               'vanity-name': '<project-name>',
             },
             editors: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
@@ -164,6 +166,7 @@ describe('project-create: fetch:template', () => {
             cost-centre-name: '<cost-centre-name>'
             department: '<department>'
             pricing-structure: 'subscription'
+            team-name: '<team-name>'
             vanity-name: '<project-name>'
         ",
                 "kustomization.yaml": "---

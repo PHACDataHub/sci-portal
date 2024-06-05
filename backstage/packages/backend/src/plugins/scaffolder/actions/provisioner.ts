@@ -130,6 +130,7 @@ interface TemplateParameters extends JsonObject {
   vanityName: string;
   editorRefs: string[];
   viewerRefs: string[];
+  teamName: string;
 
   // Administration
   costCentre: string;
@@ -173,6 +174,7 @@ export const createProvisionTemplateAction = (options: {
               'department',
               'dataClassification',
               'vanityName',
+              'teamName',
 
               // Administration
               'costCentre',
@@ -199,6 +201,11 @@ export const createProvisionTemplateAction = (options: {
                 description:
                   'The level of security for the project information and assets.',
                 enum: ['UCLL', 'PBMM'],
+              },
+              teamName: {
+                title: 'Team Name',
+                description: 'The team name associated with the project.',
+                type: 'string',
               },
               vanityName: {
                 title: 'Vanity Name',
@@ -360,6 +367,7 @@ export const createProvisionTemplateAction = (options: {
             ctx.input.parameters.costCentreName?.toLowerCase(),
           department: ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
+          'team-name': ctx.input.parameters.teamName.toLowerCase(),
           'vanity-name': projectName.toLowerCase(),
         },
 

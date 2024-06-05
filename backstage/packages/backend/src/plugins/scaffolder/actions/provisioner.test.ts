@@ -157,6 +157,7 @@ describe('provisioner', () => {
           dataClassification: 'PBMM',
           costCentre: 'JBU987654321',
           costCentreName: 'ACME',
+          teamName: 'team-abc',
           section32ManagerEmail: 'michael.williamson@phac-aspc.gc.ca',
           justification:
             'We need a test GCP Project to unit test the get-context action.',
@@ -190,6 +191,7 @@ describe('provisioner', () => {
         dataClassification: 'PBMM',
         costCentre: 'JBU987654321',
         costCentreName: 'ACME',
+        teamName: 'team-abc',
         section32ManagerEmail: 'michael.williamson@phac-aspc.gc.ca',
         justification:
           'We need a test GCP Project to unit test the get-context action.',
@@ -211,6 +213,7 @@ describe('provisioner', () => {
           'cost-centre-name': 'acme',
           department: 'hc',
           'pricing-structure': 'subscription',
+          'team-name': 'team-abc',
           'vanity-name': 'hcx-test-case',
         },
         dataClassificationTitle: 'Protected B',

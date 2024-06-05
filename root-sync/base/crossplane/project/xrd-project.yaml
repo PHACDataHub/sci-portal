@@ -56,6 +56,8 @@ spec:
                       type: string
                     pricing-structure:
                       type: string
+                    team-name:
+                      type: string
                     vanity-name:
                       type: string
                     # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
@@ -67,6 +69,7 @@ spec:
                     - cost-centre-name
                     - department
                     - pricing-structure
+                    - team-name
                     - vanity-name
               required:
                 - rootFolderId
