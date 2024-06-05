@@ -64,7 +64,6 @@ spec:
             profile:
               displayName: '${{parameters.displayName}}'
               email: ${{parameters.email}}
-              # picture:
             memberOf: ${{parameters.groups}}
 
     - id: debug-pull-request
@@ -76,7 +75,7 @@ spec:
           - template-developer
       input:
         command: diff
-        workingDirectory: . # the workspacePath
+        workingDirectory: .  # the workspacePath
 
     - id: publish-pull-request
       name: Submit Pull Request

@@ -85,7 +85,7 @@ jobs:
           cache-dependency-path: "backstage/yarn.lock"
 
       - name: Use Yarn v1
-        if: ${{ false }} # Skip on Windows
+        if: ${{ false }}  # Skip on Windows
         run: |
           corepack enable
           corepack prepare yarn@1.22.22 --activate

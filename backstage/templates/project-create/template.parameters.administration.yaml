@@ -1,3 +1,4 @@
+---
 title: Administration
 required:
   - department
@@ -22,7 +23,7 @@ properties:
     title: Branch
     description: The branch within your department.
     type: string
-  teamName: 
+  teamName:
     title: Team Name
     description: The team name associated with the project.
     type: string
