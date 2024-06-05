@@ -42,6 +42,8 @@ spec:
                   x-kubernetes-preserve-unknown-fields: true
                   type: object
                   properties:
+                    branch:
+                      type: string
                     classification:
                       type: string
                     controlled-by:
@@ -60,6 +62,7 @@ spec:
                       type: string
                     # Additional user-defined labels are allowed. See https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#controlling-pruning.
                   required:
+                    - branch
                     - classification
                     - controlled-by
                     - cost-centre

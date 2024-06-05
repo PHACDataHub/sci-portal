@@ -124,6 +124,7 @@ const dataClassificationTitle = {
 
 interface TemplateParameters extends JsonObject {
   // Project
+  branch: string;
   department: 'hc' | 'ph';
   dataClassification: 'UCLL' | 'PBMM';
   vanityName: string;
@@ -169,6 +170,7 @@ export const createProvisionTemplateAction = (options: {
             type: 'object',
             required: [
               // Project
+              'branch',
               'department',
               'dataClassification',
               'vanityName',
@@ -184,6 +186,11 @@ export const createProvisionTemplateAction = (options: {
             ],
             properties: {
               // Project
+              branch: {
+                title: 'Branch',
+                description: 'The branch within your department.',
+                type: 'string',
+              },
               department: {
                 title: 'Department',
                 description: 'The department ID.',
@@ -352,6 +359,7 @@ export const createProvisionTemplateAction = (options: {
         projectId,
         projectLabels: {
           // Only hyphens (-), underscores (_), lowercase characters, and numbers are allowed. International characters are allowed.
+          branch: ctx.input.parameters.branch.toLowerCase(),
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
