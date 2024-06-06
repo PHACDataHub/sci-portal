@@ -18,9 +18,10 @@ spec:
           rootFolderId: "TO BE PATCHED"
           projectName: "TO BE PATCHED"
           projectId: "TO BE PATCHED"
+          budget: "TO BE PATCHED"
+          labels: "TO BE PATCHED"
           projectEditors: ["TO BE PATCHED"]
           projectViewers: ["TO BE PATCHED"]
-          labels: "TO BE PATCHED"
 
       patches:
         - fromFieldPath: "spec.projectName"
@@ -29,12 +30,14 @@ spec:
           toFieldPath: "spec.rootFolderId"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.projectId"
+        - fromFieldPath: "spec.budget"
+          toFieldPath: "spec.budget"
+        - fromFieldPath: "spec.labels"
+          toFieldPath: "spec.labels"
         - fromFieldPath: "spec.projectEditors"
           toFieldPath: "spec.projectEditors"
         - fromFieldPath: "spec.projectViewers"
           toFieldPath: "spec.projectViewers"
-        - fromFieldPath: "spec.labels"
-          toFieldPath: "spec.labels"
 
     - name: TERRAFORM-CONFIG
       base:
