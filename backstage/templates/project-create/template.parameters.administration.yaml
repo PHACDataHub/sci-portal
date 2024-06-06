@@ -5,6 +5,7 @@ required:
   - branch
   - teamName
   - costCentre
+  - costCentreName
   - section32ManagerEmail
   - justification
 properties:
