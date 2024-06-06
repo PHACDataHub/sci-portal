@@ -14,9 +14,9 @@ spec:
   {%- endfor %}
   projectEditors:
   {%- for editor in values.editors %}
-    - user:${{editor}}
+    - user:${{editor.email}}
   {%- endfor %}
   projectViewers:
   {%- for viewer in values.viewers %}
-    - user:${{viewer}}
+    - user:${{viewer.email}}
   {%- endfor %}

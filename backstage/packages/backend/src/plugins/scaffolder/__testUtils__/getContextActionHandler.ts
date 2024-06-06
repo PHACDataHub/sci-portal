@@ -34,10 +34,12 @@ const getEntitiesByRefs = ({ entityRefs }: { entityRefs: string[] }) => {
     if (entityRef.startsWith('user:')) {
       const name = entityRef.replace(/^user:default[/]/, '');
       items.push({
+        metadata: {
+          name,
+        },
         spec: {
           profile: {
             email: `${name}@gcp.hc-sc.gc.ca`,
-            altEmail: `${name}@phac-aspc.gc.ca`,
           },
         },
       });

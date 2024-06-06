@@ -111,11 +111,14 @@ describe('project-create: fetch:template', () => {
               'team-name': '<team-name>',
               'vanity-name': '<project-name>',
             },
-            editors: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
+            editors: [
+              { ref: 'user:default/jane.doe', email: 'jane.doe@gcp.hc-sc.gc.ca' },
+              { ref: 'user:default/john.doe', email: 'john.doe@gcp.hc-sc.gc.ca' },
+            ],
             viewers: [
-              'samantha.jones@gcp.hc-sc.gc.ca',
-              'alex.mcdonald@gcp.hc-sc.gc.ca',
-              'john.campbell@gcp.hc-sc.gc.ca',
+              { ref: 'user:default/samantha.jones', email: 'samantha.jones@gcp.hc-sc.gc.ca' },
+              { ref: 'user:default/alex.mcdonald', email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
+              { ref: 'user:default/john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
             ],
             catalogEntityOwner: 'user:default/jane.doe',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
@@ -148,6 +151,17 @@ describe('project-create: fetch:template', () => {
         spec:
           type: project
           owner: user:default/jane.doe
+
+        ---
+        apiVersion: backstage.io/v1alpha1
+        kind: Group
+        metadata:
+          name: <project-id>-editors
+          title: <project-name> Editors
+        spec:
+          members:
+            - user:default/jane.doe
+            - user:default/john.doe
         ",
                 "claim.yaml": "---
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1

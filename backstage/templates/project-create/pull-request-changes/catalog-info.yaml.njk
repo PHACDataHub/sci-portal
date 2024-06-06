@@ -12,3 +12,15 @@ metadata:
 spec:
   type: project
   owner: ${{values.catalogEntityOwner}}
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ${{values.projectId}}-editors
+  title: ${{values.projectName}} Editors
+spec:
+  members:
+    {%- for member in values.editors %}
+    - ${{member.ref}}
+    {%- endfor %}
