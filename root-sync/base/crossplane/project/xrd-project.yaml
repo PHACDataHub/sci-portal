@@ -30,14 +30,8 @@ spec:
                   type: string
                 projectId:
                   type: string
-                projectEditors:
-                  type: array
-                  items:
-                    type: string
-                projectViewers:
-                  type: array
-                  items:
-                    type: string
+                budget:
+                  type: number
                 labels:
                   x-kubernetes-preserve-unknown-fields: true
                   type: object
@@ -71,10 +65,19 @@ spec:
                     - pricing-structure
                     - team-name
                     - vanity-name
+                projectEditors:
+                  type: array
+                  items:
+                    type: string
+                projectViewers:
+                  type: array
+                  items:
+                    type: string
               required:
                 - rootFolderId
                 - projectName
                 - projectId
+                - budget
+                - labels
                 - projectEditors
                 - projectViewers
-                - labels
