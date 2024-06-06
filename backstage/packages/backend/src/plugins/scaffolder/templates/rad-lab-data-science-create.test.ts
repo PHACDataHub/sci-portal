@@ -32,7 +32,7 @@ describe('rad-lab-data-science-create: fetch:template', () => {
 
     expect(ctx.getOutput('pr_description')).toMatchInlineSnapshot(`
       "This PR was created using Backstage.
-      
+
       **Request ID:** \`6bedd76d-4259-44dd-81d1-1052cfd3fed3\`
       **Requested By:** jane.doe@gcp.hc-sc.gc.ca
 
@@ -42,14 +42,20 @@ describe('rad-lab-data-science-create: fetch:template', () => {
       **Project ID:** phx-01an4z07by7
       **Data Classification:** Unclassified
 
-      ### Administrative Details
+      ### Team
 
-      **Cost Centre:** ABC123456789
-      **Cost Centre Name:** TPS Reports
-      **Justification:** This project will be used for testing our custom action.
-      **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
       **Editors:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca
       **Viewers:** samantha.jones@gcp.hc-sc.gc.ca, alex.mcdonald@gcp.hc-sc.gc.ca, john.campbell@gcp.hc-sc.gc.ca
+
+      ### Administrative Details
+
+      **Department:** ph
+      **Branch:** digital-transformation-branch
+      **Team Name:** team-abc
+      **Cost Centre:** ABC123456789
+      **Cost Centre Name:** TPS Reports
+      **Section 32 Manager Email:** alice.grady@gcp.hc-sc.gc.ca
+      **Justification:** This project will be used for testing our custom action.
 
       ### Budget
 
