@@ -56,11 +56,7 @@ spec:
                 rootFolderId: ($folderId)
                 projectName: ($projectName)
                 projectId: ($projectId)
-                projectEditors:
-                  - user:sean.poulter@focisolutions.com
-                projectViewers:
-                  - user:sean.poulter@focisolutions.com
-                  - user:sean.poulter@gcp.hc-sc.gc.ca
+                budget: 12345
                 labels:
                   branch: 'digital-transformation-branch'
                   classification: 'ucll'
@@ -71,6 +67,11 @@ spec:
                   pricing-structure: 'subscription'
                   team-name: 'team-abc'
                   vanity-name: '($projectName)'
+                projectEditors:
+                  - user:sean.poulter@focisolutions.com
+                projectViewers:
+                  - user:sean.poulter@focisolutions.com
+                  - user:sean.poulter@gcp.hc-sc.gc.ca
 
         - description: Assert the ProjectClaim has been created
           assert:
@@ -150,10 +151,15 @@ spec:
                 namespace: default
                 name: (join('-', ['budget', $projectName]))
               spec:
-                displayName: (join('-', ['budget', $projectName]))
+                amount:
+                  specifiedAmount:
+                    currencyCode: CAD
+                    units: 12345
                 budgetFilter:
+                  calendarPeriod: YEAR
                   projects:
                     - name: ($projectName)
+                displayName: (join('-', ['budget', $projectName]))
 
         - description: Assert the Dataplex API has been enabled with Config Connector
           assert:

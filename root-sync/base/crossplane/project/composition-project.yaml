@@ -195,7 +195,7 @@ spec:
                 amount:
                   specifiedAmount:
                     currencyCode: "CAD"
-                    units: 3000  # Placeholder
+                    units: "TO BE PATCHED"
                 thresholdRules:
                   - thresholdPercent: 0.25
                     spendBasis: "CURRENT_SPEND"
@@ -242,6 +242,8 @@ spec:
               string:
                 type: Format
                 fmt: "budget-%s"
+        - fromFieldPath: "spec.budget"
+          toFieldPath: "spec.forProvider.manifest.spec.amount.specifiedAmount.units"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
           transforms:
