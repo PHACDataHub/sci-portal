@@ -19,6 +19,8 @@ kind: Group
 metadata:
   name: ${{values.projectId}}-editors
   title: ${{values.projectName}} Editors
+  annotations:
+    cloud.google.com/project: ${{values.projectId}}
 spec:
   members:
     {%- for member in values.editors %}

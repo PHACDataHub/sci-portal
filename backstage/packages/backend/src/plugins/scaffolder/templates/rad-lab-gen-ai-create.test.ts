@@ -147,6 +147,8 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
         metadata:
           name: <project-id>-editors
           title: <project-name> Editors
+          annotations:
+            cloud.google.com/project: <project-id>
         spec:
           members:
             - user:default/jane.doe
