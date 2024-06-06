@@ -10,6 +10,22 @@ resource "google_artifact_registry_repository" "ph_backstage_repo" {
   repository_id = "ph-backstage"
   description   = "Backstage docker repository"
   format        = "DOCKER"
+
+  cleanup_policy_dry_run = false
+  cleanup_policies {
+    id     = "delete-older-than-30-days"
+    action = "DELETE"
+    condition {
+      older_than = "30d"
+    }
+  }
+  cleanup_policies {
+    id     = "keep-5-recent-versions"
+    action = "KEEP"
+    most_recent_versions {
+      keep_count = 5
+    }
+  }
 }
 
 resource "google_cloudbuildv2_repository" "data_science_portal" {
