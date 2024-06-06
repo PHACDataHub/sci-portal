@@ -21,12 +21,12 @@ properties:
       - PHAC
       - Health Canada
   branch:
-    title: Branch
-    description: The branch within your department.
+    title: Branch Acronym
+    description: The branch within your department. The acronym must be lowercase with hyphens as separators.
     type: string
   teamName:
     title: Team Name
-    description: The team name associated with the project.
+    description: The team name associated with the project. The name must be lowercase with hyphens as separators.
     type: string
   costCentre:
     title: Cost Centre

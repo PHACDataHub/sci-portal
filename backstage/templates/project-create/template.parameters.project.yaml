@@ -1,9 +1,14 @@
 ---
 title: Project
 required:
-  - dataClassification
   - vanityName
+  - dataClassification
 properties:
+  vanityName:
+    title: Vanity Name
+    description: The resource display name. The name must be less than 26 characters. The name will be used to create a GCP Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
+    type: string
+    maxLength: 26
   dataClassification:
     title: Data Classification
     description: The level of security for the project information and assets.
@@ -15,8 +20,3 @@ properties:
     enumNames:
       - Unclassified
       - Protected B
-  vanityName:
-    title: Vanity Name
-    description: The resource display name. The name must less than 26 characters. The name will be used to create a GCP Project named `<department>-<vanity-name>` in [HC-DMIA > DMIA-PHAC > SciencePlatform](https://console.cloud.google.com/cloud-resource-manager?folder=108494461414).
-    type: string
-    maxLength: 26
