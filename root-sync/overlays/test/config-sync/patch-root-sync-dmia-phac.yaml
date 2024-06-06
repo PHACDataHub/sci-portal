@@ -1,9 +1,0 @@
----
-apiVersion: configsync.gke.io/v1beta1
-kind: RootSync
-metadata:
-  name: root-sync-dmia-phac
-  namespace: config-management-system
-spec:
-  git:
-    repo: git@github.com:PHACDataHub/sci-portal.git

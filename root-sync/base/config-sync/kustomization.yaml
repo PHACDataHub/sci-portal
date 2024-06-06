@@ -2,5 +2,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - root-sync-dmia-phac.yaml
   - sci-portal-users.yaml

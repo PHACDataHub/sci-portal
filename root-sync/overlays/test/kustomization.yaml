@@ -9,11 +9,6 @@ patches:
       kind: ConfigConnector
       name: configconnector.core.cnrm.cloud.google.com
 
-  - path: ./config-sync/patch-root-sync-dmia-phac.yaml
-    target:
-      kind: RootSync
-      name: root-sync-dmia-phac
-
   - path: ./backstage/patch-backstage-sa.yaml
     target:
       kind: ServiceAccount
