@@ -27,7 +27,7 @@ async function sendBudgetAlerts(cloudEvent) {
   }
 
   try {
-    const recipients = await getBudgetAlertRecipients(project_id);
+    const recipients = await getBudgetAlertRecipients(message.budgetDisplayName);
     if (!recipients) {
       return;
     }
