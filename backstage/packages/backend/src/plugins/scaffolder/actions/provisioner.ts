@@ -385,7 +385,7 @@ export const createProvisionTemplateAction = (options: {
         viewers,
 
         // Backstage
-        catalogEntityOwner: ctx.user.ref,
+        catalogEntityOwner: `group:default/${projectId}-editors`,
         sourceLocation,
       };
       ctx.output('template_values', templateValues);

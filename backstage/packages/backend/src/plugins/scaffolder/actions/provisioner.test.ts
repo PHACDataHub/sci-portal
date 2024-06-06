@@ -246,7 +246,7 @@ describe('provisioner', () => {
         ],
 
         // Backstage
-        catalogEntityOwner: 'user:default/jane.doe',
+        catalogEntityOwner: 'group:default/hcx-01an4z07by7-editors',
         sourceLocation: 'DMIA-PHAC/SciencePlatform/hcx-01an4z07by7/',
 
         // Additional properties that are not in the input schema are included in the output.

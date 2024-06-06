@@ -105,7 +105,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
               { ref: 'user:default/alex.mcdonald', email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
               { ref: 'user:default/john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
             ],
-            catalogEntityOwner: 'user:default/jane.doe',
+            catalogEntityOwner: 'group:default/<project-id>-editors',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
             budgetAlertEmailRecipients: [
               'jane.doe@gcp.hc-sc.gc.ca',
@@ -138,7 +138,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
               url: https://console.cloud.google.com/vertex-ai/workbench/managed?project=<project-id>
         spec:
           type: rad-lab-module
-          owner: user:default/jane.doe
+          owner: group:default/<project-id>-editors
           lifecycle: experimental
 
         ---

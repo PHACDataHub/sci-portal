@@ -120,7 +120,7 @@ describe('project-create: fetch:template', () => {
               { ref: 'user:default/alex.mcdonald', email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
               { ref: 'user:default/john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
             ],
-            catalogEntityOwner: 'user:default/jane.doe',
+            catalogEntityOwner: 'group:default/<project-id>-editors',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
             budgetAlertEmailRecipients: [
               'jane.doe@gcp.hc-sc.gc.ca',
@@ -150,7 +150,7 @@ describe('project-create: fetch:template', () => {
             data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
         spec:
           type: project
-          owner: user:default/jane.doe
+          owner: group:default/<project-id>-editors
 
         ---
         apiVersion: backstage.io/v1alpha1
