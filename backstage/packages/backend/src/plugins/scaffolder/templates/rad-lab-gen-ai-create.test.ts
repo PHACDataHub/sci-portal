@@ -123,6 +123,9 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
             backstage.io/source-template: template:default/rad-lab-gen-ai-create
             cloud.google.com/project: <project-id>
             data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
+          links:
+            - title: View Managed Notebooks on Google Cloud
+              url: https://console.cloud.google.com/vertex-ai/workbench/managed?project=<project-id>
         spec:
           type: rad-lab-module
           owner: user:default/jane.doe

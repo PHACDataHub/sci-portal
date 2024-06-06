@@ -9,6 +9,9 @@ metadata:
     backstage.io/source-template: template:default/rad-lab-gen-ai-create
     cloud.google.com/project: ${{values.projectId}}
     data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: ${{values.budgetAlertEmailRecipients | join(',')}}
+  links:
+    - title: View Managed Notebooks on Google Cloud
+      url: https://console.cloud.google.com/vertex-ai/workbench/managed?project=${{values.projectId}}
 spec:
   type: rad-lab-module
   owner: ${{values.catalogEntityOwner}}
