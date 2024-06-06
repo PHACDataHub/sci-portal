@@ -66,7 +66,11 @@ export const insertResource = async (
   }
 
   // Add the new resource if it is not already there
-  if (!resources.items.find((item) => yaml.isScalar(item) && item.value === ctx.input.resource)) {
+  if (
+    !resources.items.find(
+      item => yaml.isScalar(item) && item.value === ctx.input.resource,
+    )
+  ) {
     resources.add(new yaml.Scalar(ctx.input.resource));
   }
 

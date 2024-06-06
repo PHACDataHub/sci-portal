@@ -363,8 +363,7 @@ export const createProvisionTemplateAction = (options: {
           classification: ctx.input.parameters.dataClassification.toLowerCase(),
           'controlled-by': 'science-portal',
           'cost-centre': ctx.input.parameters.costCentre.toLowerCase(),
-          'cost-centre-name':
-            ctx.input.parameters.costCentreName.toLowerCase(),
+          'cost-centre-name': ctx.input.parameters.costCentreName.toLowerCase(),
           department: ctx.input.parameters.department.toLowerCase(),
           'pricing-structure': 'subscription',
           'team-name': ctx.input.parameters.teamName.toLowerCase(),
