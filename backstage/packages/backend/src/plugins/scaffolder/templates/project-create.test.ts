@@ -176,6 +176,7 @@ describe('project-create: fetch:template', () => {
           annotations:
             cloud.google.com/project: <project-id>
         spec:
+          children: []
           members:
             - user:default/jane.doe
             - user:default/john.doe
