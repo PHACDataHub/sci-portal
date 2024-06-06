@@ -83,3 +83,15 @@ resource "google_project_service" "cloudbilling_api" {
 
   disable_dependent_services = true
 }
+
+resource "google_project_service" "cloudfunction_api" {
+  project = var.project_id
+  service = "cloudfunctions.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
