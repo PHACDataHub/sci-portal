@@ -26,6 +26,7 @@ metadata:
   annotations:
     cloud.google.com/project: ${{values.projectId}}
 spec:
+  type: team
   children: []
   members:
     {%- for member in values.editors %}

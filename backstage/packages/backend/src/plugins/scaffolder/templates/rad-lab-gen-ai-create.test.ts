@@ -165,6 +165,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           annotations:
             cloud.google.com/project: <project-id>
         spec:
+          type: team
           children: []
           members:
             - user:default/jane.doe
