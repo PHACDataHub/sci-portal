@@ -47,7 +47,6 @@ catalog:
     - allow: [Component, System, API, Resource, Location, User, Group, Template]
   providers:
     github:
-
       # Include the following directories from PHACDataHub/sci-portal-users:
       #   ├── DMIA-PHAC/**/catalog-info.yaml
       #   ├── groups/**/*.yaml

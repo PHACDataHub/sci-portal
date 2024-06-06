@@ -38,7 +38,7 @@
       - template-developer
   input:
     command: diff
-    workingDirectory: .  # the workspacePath
+    workingDirectory: . # the workspacePath
 
 - id: publish-pull-request
   name: Submit Pull Request
