@@ -82,9 +82,9 @@ const getGoogleCloudEmailsByRefs = async (
   catalogApi: CatalogApi,
   entityRefs: string[],
   token: string,
-): Promise<string[]> => {
+) => {
   const { items } = await catalogApi.getEntitiesByRefs(
-    { entityRefs, fields: ['spec.profile.email'] },
+    { entityRefs, fields: ['metadata.namespace', 'metadata.name', 'spec.profile.email'] },
     { token },
   );
 
@@ -94,10 +94,12 @@ const getGoogleCloudEmailsByRefs = async (
       continue;
     }
 
-    const email = (item as UserEntity).spec.profile?.email;
-    if (email) {
-      result.push(email);
-    }
+    const ref = `user:${item.metadata.namespace ?? 'default'}/${
+      item.metadata.name
+    }`;
+    const email = (item as CustomUserEntity).spec.profile.email;
+
+    result.push({ ref, email });
   }
   return result;
 };
@@ -385,7 +387,7 @@ export const createProvisionTemplateAction = (options: {
         viewers,
 
         // Backstage
-        catalogEntityOwner: ctx.user.ref,
+        catalogEntityOwner: `group:default/${projectId}-editors`,
         sourceLocation,
       };
       ctx.output('template_values', templateValues);

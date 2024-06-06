@@ -12,3 +12,19 @@ metadata:
 spec:
   type: project
   owner: ${{values.catalogEntityOwner}}
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ${{values.projectId}}-editors
+  title: ${{values.projectName}} Editors
+  annotations:
+    cloud.google.com/project: ${{values.projectId}}
+spec:
+  type: team
+  children: []
+  members:
+    {%- for member in values.editors %}
+    - ${{member.ref}}
+    {%- endfor %}

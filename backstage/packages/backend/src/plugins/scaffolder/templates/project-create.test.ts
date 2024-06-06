@@ -111,13 +111,31 @@ describe('project-create: fetch:template', () => {
               'team-name': '<team-name>',
               'vanity-name': '<project-name>',
             },
-            editors: ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'],
-            viewers: [
-              'samantha.jones@gcp.hc-sc.gc.ca',
-              'alex.mcdonald@gcp.hc-sc.gc.ca',
-              'john.campbell@gcp.hc-sc.gc.ca',
+            editors: [
+              {
+                ref: 'user:default/jane.doe',
+                email: 'jane.doe@gcp.hc-sc.gc.ca',
+              },
+              {
+                ref: 'user:default/john.doe',
+                email: 'john.doe@gcp.hc-sc.gc.ca',
+              },
             ],
-            catalogEntityOwner: 'user:default/jane.doe',
+            viewers: [
+              {
+                ref: 'user:default/samantha.jones',
+                email: 'samantha.jones@gcp.hc-sc.gc.ca',
+              },
+              {
+                ref: 'user:default/alex.mcdonald',
+                email: 'alex.mcdonald@gcp.hc-sc.gc.ca',
+              },
+              {
+                ref: 'user:default/john.campbell',
+                email: 'john.campbell@gcp.hc-sc.gc.ca',
+              },
+            ],
+            catalogEntityOwner: 'group:default/<project-id>-editors',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
             budgetAlertEmailRecipients: [
               'jane.doe@gcp.hc-sc.gc.ca',
@@ -147,7 +165,22 @@ describe('project-create: fetch:template', () => {
             data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
         spec:
           type: project
-          owner: user:default/jane.doe
+          owner: group:default/<project-id>-editors
+
+        ---
+        apiVersion: backstage.io/v1alpha1
+        kind: Group
+        metadata:
+          name: <project-id>-editors
+          title: <project-name> Editors
+          annotations:
+            cloud.google.com/project: <project-id>
+        spec:
+          type: team
+          children: []
+          members:
+            - user:default/jane.doe
+            - user:default/john.doe
         ",
                 "claim.yaml": "---
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1

@@ -232,21 +232,33 @@ describe('provisioner', () => {
           'user:default/karen.schumacher',
         ],
         editors: [
-          'jane.doe@gcp.hc-sc.gc.ca',
-          'jeanne.smith@gcp.hc-sc.gc.ca',
-          'karen.schumacher@gcp.hc-sc.gc.ca',
+          { ref: 'user:default/jane.doe', email: 'jane.doe@gcp.hc-sc.gc.ca' },
+          {
+            ref: 'user:default/jeanne.smith',
+            email: 'jeanne.smith@gcp.hc-sc.gc.ca',
+          },
+          {
+            ref: 'user:default/karen.schumacher',
+            email: 'karen.schumacher@gcp.hc-sc.gc.ca',
+          },
         ],
         viewerRefs: [
           'user:default/samantha.jones',
           'user:default/john.campbell',
         ],
         viewers: [
-          'samantha.jones@gcp.hc-sc.gc.ca',
-          'john.campbell@gcp.hc-sc.gc.ca',
+          {
+            ref: 'user:default/samantha.jones',
+            email: 'samantha.jones@gcp.hc-sc.gc.ca',
+          },
+          {
+            ref: 'user:default/john.campbell',
+            email: 'john.campbell@gcp.hc-sc.gc.ca',
+          },
         ],
 
         // Backstage
-        catalogEntityOwner: 'user:default/jane.doe',
+        catalogEntityOwner: 'group:default/hcx-01an4z07by7-editors',
         sourceLocation: 'DMIA-PHAC/SciencePlatform/hcx-01an4z07by7/',
 
         // Additional properties that are not in the input schema are included in the output.
