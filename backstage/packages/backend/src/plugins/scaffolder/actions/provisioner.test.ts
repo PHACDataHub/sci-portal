@@ -233,16 +233,28 @@ describe('provisioner', () => {
         ],
         editors: [
           { ref: 'user:default/jane.doe', email: 'jane.doe@gcp.hc-sc.gc.ca' },
-          { ref: 'user:default/jeanne.smith', email: 'jeanne.smith@gcp.hc-sc.gc.ca' },
-          { ref: 'user:default/karen.schumacher', email: 'karen.schumacher@gcp.hc-sc.gc.ca' },
+          {
+            ref: 'user:default/jeanne.smith',
+            email: 'jeanne.smith@gcp.hc-sc.gc.ca',
+          },
+          {
+            ref: 'user:default/karen.schumacher',
+            email: 'karen.schumacher@gcp.hc-sc.gc.ca',
+          },
         ],
         viewerRefs: [
           'user:default/samantha.jones',
           'user:default/john.campbell',
         ],
         viewers: [
-          { ref: 'user:default/samantha.jones', email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-          { ref: 'user:default/john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
+          {
+            ref: 'user:default/samantha.jones',
+            email: 'samantha.jones@gcp.hc-sc.gc.ca',
+          },
+          {
+            ref: 'user:default/john.campbell',
+            email: 'john.campbell@gcp.hc-sc.gc.ca',
+          },
         ],
 
         // Backstage

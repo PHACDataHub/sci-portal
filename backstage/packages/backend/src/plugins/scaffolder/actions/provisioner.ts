@@ -94,7 +94,9 @@ const getGoogleCloudEmailsByRefs = async (
       continue;
     }
 
-    const ref = `user:${item.metadata.namespace ?? 'default'}/${item.metadata.name}`;
+    const ref = `user:${item.metadata.namespace ?? 'default'}/${
+      item.metadata.name
+    }`;
     const email = (item as CustomUserEntity).spec.profile.email;
 
     result.push({ ref, email });

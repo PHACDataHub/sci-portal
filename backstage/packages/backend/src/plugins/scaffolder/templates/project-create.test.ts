@@ -112,13 +112,28 @@ describe('project-create: fetch:template', () => {
               'vanity-name': '<project-name>',
             },
             editors: [
-              { ref: 'user:default/jane.doe', email: 'jane.doe@gcp.hc-sc.gc.ca' },
-              { ref: 'user:default/john.doe', email: 'john.doe@gcp.hc-sc.gc.ca' },
+              {
+                ref: 'user:default/jane.doe',
+                email: 'jane.doe@gcp.hc-sc.gc.ca',
+              },
+              {
+                ref: 'user:default/john.doe',
+                email: 'john.doe@gcp.hc-sc.gc.ca',
+              },
             ],
             viewers: [
-              { ref: 'user:default/samantha.jones', email: 'samantha.jones@gcp.hc-sc.gc.ca' },
-              { ref: 'user:default/alex.mcdonald', email: 'alex.mcdonald@gcp.hc-sc.gc.ca' },
-              { ref: 'user:default/john.campbell', email: 'john.campbell@gcp.hc-sc.gc.ca' },
+              {
+                ref: 'user:default/samantha.jones',
+                email: 'samantha.jones@gcp.hc-sc.gc.ca',
+              },
+              {
+                ref: 'user:default/alex.mcdonald',
+                email: 'alex.mcdonald@gcp.hc-sc.gc.ca',
+              },
+              {
+                ref: 'user:default/john.campbell',
+                email: 'john.campbell@gcp.hc-sc.gc.ca',
+              },
             ],
             catalogEntityOwner: 'group:default/<project-id>-editors',
             sourceLocation: 'DMIA-PHAC/SciencePlatform/<project-id>/',
