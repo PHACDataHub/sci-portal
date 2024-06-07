@@ -202,7 +202,9 @@ describe('project-create: fetch:template', () => {
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
         kind: ProjectClaim
         metadata:
-          name: <project-name>-<uuid>
+          name: <project-name>
+          annotations: 
+            requestId: <uuid>
         spec:
           rootFolderId: '<root-folder-id>'
           projectName: <project-name>
