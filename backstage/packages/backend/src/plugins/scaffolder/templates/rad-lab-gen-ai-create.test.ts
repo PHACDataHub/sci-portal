@@ -191,7 +191,9 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
         kind: RadLabGenAIClaim
         metadata:
-          name: <project-name>-<uuid>
+          name: <project-name>
+          annotations: 
+            requestId: <uuid>
         spec:
           rootFolderId: '<root-folder-id>'
           projectName: <project-name>

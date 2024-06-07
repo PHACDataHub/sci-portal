@@ -2,7 +2,9 @@
 apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
 kind: RadLabDataScienceClaim
 metadata:
-  name: ${{values.projectName}}-${{values.requestId}}
+  name: ${{values.projectName}}
+  annotations: 
+    requestId: ${{values.requestId}}
 spec:
   rootFolderId: '${{values.rootFolderId}}'
   projectName: ${{values.projectName}}
