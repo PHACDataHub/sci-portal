@@ -44,7 +44,11 @@ metadata:
 spec:
   type: team
   children: []
+  {%- if (values.viewers | length) == 0 %}
+  members: []
+  {%- else %}
   members:
     {%- for member in values.viewers %}
     - ${{member.ref}}
     {%- endfor %}
+  {%- endif %}
