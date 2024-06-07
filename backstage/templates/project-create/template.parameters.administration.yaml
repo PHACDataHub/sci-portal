@@ -24,17 +24,25 @@ properties:
     title: Branch Acronym
     description: The branch within your department. The acronym must be lowercase with hyphens as separators.
     type: string
+    maxLength: 63
+    pattern: '([a-z0-9\-]+)'
   teamName:
     title: Team Name
     description: The team name associated with the project. The name must be lowercase with hyphens as separators.
     type: string
+    maxLength: 63
+    pattern: '([a-z0-9\-\_]+)'
   costCentre:
     title: Cost Centre
     type: string
+    maxLength: 63
+    pattern: '([a-z0-9\-\_]+)'
   costCentreName:
     title: Cost Centre Name
     description: The human-readable name for the Cost Centre.
     type: string
+    maxLength: 63
+    pattern: '([a-z0-9\-\_]+)'
   section32ManagerEmail:
     title: Section 32 Manager Email Address
     type: string
