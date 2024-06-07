@@ -185,7 +185,8 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           members:
             - user:default/samantha.jones
             - user:default/alex.mcdonald
-            - user:default/john.campbell",
+            - user:default/john.campbell
+        ",
                 "claim.yaml": "---
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
         kind: RadLabDataScienceClaim
