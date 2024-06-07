@@ -28,3 +28,23 @@ spec:
     {%- for member in values.editors %}
     - ${{member.ref}}
     {%- endfor %}
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ${{values.projectId}}-viewers
+  title: ${{values.projectName}} Viewers
+  annotations:
+    cloud.google.com/project: ${{values.projectId}}
+spec:
+  type: team
+  children: []
+  {%- if (values.viewers | length) == 0 %}
+  members: []
+  {%- else %}
+  members:
+    {%- for member in values.viewers %}
+    - ${{member.ref}}
+    {%- endfor %}
+  {%- endif %}

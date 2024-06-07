@@ -181,6 +181,22 @@ describe('project-create: fetch:template', () => {
           members:
             - user:default/jane.doe
             - user:default/john.doe
+
+        ---
+        apiVersion: backstage.io/v1alpha1
+        kind: Group
+        metadata:
+          name: <project-id>-viewers
+          title: <project-name> Viewers
+          annotations:
+            cloud.google.com/project: <project-id>
+        spec:
+          type: team
+          children: []
+          members:
+            - user:default/samantha.jones
+            - user:default/alex.mcdonald
+            - user:default/john.campbell
         ",
                 "claim.yaml": "---
         apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
