@@ -16,7 +16,11 @@ spec:
   {%- for editor in values.editors %}
     - user:${{editor.email}}
   {%- endfor %}
+  {%- if (values.viewers | length) == 0 %}
+  projectViewers: []
+  {%- else %}
   projectViewers:
   {%- for viewer in values.viewers %}
     - user:${{viewer.email}}
   {%- endfor %}
+  {%- endif %}
