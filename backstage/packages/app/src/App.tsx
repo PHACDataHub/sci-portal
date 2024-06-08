@@ -7,6 +7,7 @@ import {
   catalogPlugin,
   CatalogTable,
   CatalogTableColumnsFunc,
+  CatalogTableRow,
 } from '@backstage/plugin-catalog';
 import {
   CatalogImportPage,
@@ -33,7 +34,6 @@ import { HomePage } from './components/home/HomePage';
 import {
   AlertDisplay,
   OAuthRequestDialog,
-  OverflowTooltip,
   SignInPage,
 } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
@@ -48,6 +48,9 @@ import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
 import { DefaultFilters } from '@backstage/plugin-catalog-react';
+import BudgetUsage from './components/budget/BudgetUsage';
+import { DataLoaderProvider } from './loaders/DataLoader';
+import BudgetLimit from './components/budget/BudgetLimit';
 
 const customCatalogColumnsFunc: CatalogTableColumnsFunc = entityListContext => {
   return [
@@ -55,15 +58,17 @@ const customCatalogColumnsFunc: CatalogTableColumnsFunc = entityListContext => {
     {
       title: '% Budget',
       field: 'entity.metadata.budget',
-      render: ({}) => (
-        <OverflowTooltip text={'Test'} placement="bottom-start" />
-      ),
+      render: (data: CatalogTableRow) => {
+        return (
+          <BudgetUsage projectId={data.entity.metadata.name}></BudgetUsage>
+        )
+      },
     },
     {
       title: 'Cost',
       field: 'entity.metadata.cost',
-      render: ({}) => (
-        <OverflowTooltip text={'Test'} placement="bottom-start" />
+      render: (data: CatalogTableRow) => (
+        <BudgetLimit projectId={data.entity.metadata.name}></BudgetLimit>
       ),
     },
   ];
@@ -124,18 +129,20 @@ const routes = (
     <Route
       path="/catalog"
       element={
-        <CatalogIndexPage
-          columns={customCatalogColumnsFunc}
-          filters={
-            <>
-              <DefaultFilters
-                initialKind="Resource"
-                initiallySelectedFilter="owned"
-                ownerPickerMode="all"
-              />
-            </>
-          }
-        />
+        <DataLoaderProvider>
+          <CatalogIndexPage
+            columns={customCatalogColumnsFunc}
+            filters={
+              <>
+                <DefaultFilters
+                  initialKind="Resource"
+                  initiallySelectedFilter="owned"
+                  ownerPickerMode="all"
+                />
+              </>
+            }
+          />
+        </DataLoaderProvider>
       }
     />
     <Route

@@ -16,3 +16,9 @@ tasks:
     dir: backstage
     cmds:
       - yarn dev
+
+  budget-backend-dev:
+    desc: Start budget-backend backstage plugin in dev mode
+    dir: backstage/plugins/budget-usage-backend
+    cmds:
+      - yarn start
