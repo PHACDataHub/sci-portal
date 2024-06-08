@@ -23,7 +23,9 @@ locals {
     sa_account_id   = "crossplane-sa"
     sa_display_name = "crossplane-sa"
     project_roles = [
-      "roles/storage.admin"
+      "roles/storage.admin",
+      "roles/bigquery.dataOwner",
+      "roles/bigquery.jobUser"
     ]
     folder_roles = [
       "roles/resourcemanager.projectCreator",
