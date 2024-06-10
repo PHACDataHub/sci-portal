@@ -80,5 +80,5 @@ backend.add(
 
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
-
+backend.add(import('@internal/backstage-plugin-budget-usage-backend'));
 backend.start();
