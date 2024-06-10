@@ -23,12 +23,15 @@ const isUnderBudget = notification => notification.alertThresholdExceeded < 1.0;
 async function sendBudgetAlerts(cloudEvent) {
   const message = parseMessage(cloudEvent);
   if (!message) {
+    console.log('The message did not contain the expected data');
+    console.log('Exiting with no message to process.');
     return;
   }
 
   try {
     const recipients = await getBudgetAlertRecipients(message.budgetDisplayName);
     if (!recipients) {
+      console.log('Existing with no recipients to notify');
       return;
     }
 
@@ -45,8 +48,8 @@ async function sendBudgetAlerts(cloudEvent) {
       // The display name is the project ID, by convention.
       project_id: message.budgetDisplayName,
 
-      // Transform the threshold from 0 to 1 to a percentage.
-      threshold: (message.alertThresholdExceeded * 100).toFixed(1),
+      // Transform the threshold from 0 to 1 to a percentage to a whole number.
+      threshold: (message.alertThresholdExceeded * 100).toFixed(0),
 
       // Costs accrued.
       amount: message.costAmount,
@@ -58,6 +61,7 @@ async function sendBudgetAlerts(cloudEvent) {
     };
 
     await sendEmail(templateId, recipients, personalisation);
+    console.log(`Exiting after notifying ${recipients.length} recipients that ${personalisation.project_id} has reached ${personalisation.threshold}% of the budget (${personalisation.amount}$ ${personalisation.currency_code})`);
   } catch (error) {
     console.error(
       `Error processing budget alert for project ${projectId}:`,

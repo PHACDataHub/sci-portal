@@ -16,11 +16,18 @@ async function sendEmail(templateId, recipients, personalisation) {
   if (!client) {
     const { GC_NOTIFY_API_KEY, GC_NOTIFY_URI } = process.env;
     client = new NotifyClient(GC_NOTIFY_URI, GC_NOTIFY_API_KEY);
+    if (!GC_NOTIFY_API_KEY) {
+      console.error('GC_NOTIFY_API_KEY has not been set');
+    }
+    if (!GC_NOTIFY_URI) {
+      console.error('GC_NOTIFY_URI has not been set');
+    }
   }
 
   const sendPromises = recipients.map(async recipient => {
     try {
-      await client.sendEmail(templateId, recipient, { personalisation });
+      const response = await client.sendEmail(templateId, recipient, { personalisation });
+      console.log(`An email has been sent to ${recipient}. Inspect the notification at ${response?.uri}.`);
     } catch (error) {
       throw new Error(
         `Unable to send email to ${recipient}`,
