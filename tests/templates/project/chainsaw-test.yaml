@@ -54,7 +54,7 @@ spec:
               kind: ProjectClaim
               metadata:
                 namespace: default
-                name: (join('-', [$projectName, $requestId]))
+                name: (join('', [$projectName, '-', $requestId]))
               spec:
                 rootFolderId: ($folderId)
                 projectName: ($projectName)
@@ -86,7 +86,7 @@ spec:
               kind: ProjectClaim
               metadata:
                 namespace: default
-                name: (join('-', [$projectName, $requestId]))
+                name: (join('', [$projectName, '-', $requestId]))
               status:
                 (conditions[?type == 'Synced']):
                   - status: "True"
@@ -130,7 +130,7 @@ spec:
               kind: IAMPolicy
               metadata:
                 namespace: default
-                name: (join('-', ['iampolicy', $projectName]))
+                name: (join('', ['iampolicy-', $projectName]))
               spec:
                 resourceRef:
                   kind: Project
@@ -154,7 +154,7 @@ spec:
               kind: BillingBudgetsBudget
               metadata:
                 namespace: default
-                name: (join('-', ['budget', $projectName]))
+                name: (join('', ['budget-', $projectName]))
               spec:
                 amount:
                   specifiedAmount:
@@ -164,7 +164,7 @@ spec:
                   calendarPeriod: YEAR
                   projects:
                     - name: ($projectName)
-                displayName: (join('-', ['budget', $projectName]))
+                displayName: (join('', ['budget-', $projectId]))
               status:
                 (conditions[?type == 'Ready' && reason == 'UpToDate']):
                   - status: "True"
@@ -176,7 +176,7 @@ spec:
               kind: Service
               metadata:
                 namespace: default
-                name: (join('-', ['dataplex', $projectName]))
+                name: (join('', ['dataplex-', $projectName]))
               spec:
                 projectRef:
                   name: ($projectName)

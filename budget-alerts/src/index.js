@@ -29,7 +29,7 @@ async function sendBudgetAlerts(cloudEvent) {
   }
 
   try {
-    const recipients = await getBudgetAlertRecipients(message.budgetDisplayName);
+    const recipients = await getBudgetAlertRecipients(message.projectId);
     if (!recipients) {
       console.log('Existing with no recipients to notify');
       return;

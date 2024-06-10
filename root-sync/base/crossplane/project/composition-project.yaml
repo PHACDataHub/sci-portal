@@ -245,7 +245,7 @@ spec:
                 fmt: "budget-%s"
         - fromFieldPath: "spec.budget"
           toFieldPath: "spec.forProvider.manifest.spec.amount.specifiedAmount.units"
-        - fromFieldPath: "spec.projectName"
+        - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
           transforms:
             - type: string
