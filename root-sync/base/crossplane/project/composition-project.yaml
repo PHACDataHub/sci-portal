@@ -28,8 +28,8 @@ spec:
               apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
               kind: Project
               metadata:
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
                 annotations:
                   cnrm.cloud.google.com/auto-create-network: "false"
                 labels: "TO BE PATCHED"
@@ -84,8 +84,8 @@ spec:
               apiVersion: iam.cnrm.cloud.google.com/v1beta1
               kind: IAMPolicy
               metadata:
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
               spec:
                 resourceRef:
                   kind: Project
@@ -106,8 +106,8 @@ spec:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "metadata.name"
@@ -182,8 +182,8 @@ spec:
               apiVersion: billingbudgets.cnrm.cloud.google.com/v1beta1
               kind: BillingBudgetsBudget
               metadata:
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
               spec:
                 billingAccountRef:
                   external: "TO BE PATCHED"
@@ -212,13 +212,13 @@ spec:
                 allUpdatesRule:
                   schemaVersion: "1.0"
                   pubsubTopicRef:
-                      external: "projects/pht-01hsv4d2m0n/topics/science_portal_budget_alert"
+                    external: "projects/pht-01hsv4d2m0n/topics/science_portal_budget_alert"
           references:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
             - patchesFrom:
                 apiVersion: v1
                 kind: ConfigMap
@@ -314,8 +314,8 @@ spec:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "metadata.name"
@@ -367,4 +367,3 @@ spec:
               string:
                 type: Format
                 fmt: "%s-api-dataplex"
-

@@ -127,6 +127,8 @@ describe('rad-lab-data-science-create: fetch:template', () => {
               'samantha.jones@phac-aspc.gc.ca',
               'alex.mcdonald@phac-aspc.gc.ca',
             ],
+
+            machineSize: 'small',
           },
         },
         mockDir,
@@ -216,6 +218,11 @@ describe('rad-lab-data-science-create: fetch:template', () => {
             - user:samantha.jones@gcp.hc-sc.gc.ca
             - user:alex.mcdonald@gcp.hc-sc.gc.ca
             - user:john.campbell@gcp.hc-sc.gc.ca
+
+          notebookEditors:
+            - jane.doe@gcp.hc-sc.gc.ca
+            - john.doe@gcp.hc-sc.gc.ca
+          machineSize: small
         ",
                 "kustomization.yaml": "---
         apiVersion: kustomize.config.k8s.io/v1beta1

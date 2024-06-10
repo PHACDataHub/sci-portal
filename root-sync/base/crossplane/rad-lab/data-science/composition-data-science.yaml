@@ -53,16 +53,16 @@ spec:
               apiVersion: tf.upbound.io/v1beta1
               kind: ProviderConfig
               metadata:
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
               spec:
                 configuration: "TO BE PATCHED"
           references:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
       patches:
         - fromFieldPath: "spec.projectName"
           toFieldPath: "metadata.name"
@@ -104,92 +104,65 @@ spec:
             name: kubernetes-provider
           forProvider:
             manifest:
-                apiVersion: tf.upbound.io/v1beta1
-                kind: Workspace
-                metadata:
+              apiVersion: tf.upbound.io/v1beta1
+              kind: Workspace
+              metadata:
+                namespace: default
+                name: "TO BE PATCHED"
+              spec:
+                providerConfigRef:
                   name: "TO BE PATCHED"
-                  namespace: default
-                spec:
-                  providerConfigRef:
-                    name: "TO BE PATCHED"
-                  forProvider:
-                    module: git::https://github.com/PHACDataHub/sci-portal.git//templates/rad-lab/data-science?ref=main
-                    source: Remote
-                    vars:
-                      ##
-                      # Project
-                      ##
-                      - key: billing_account_id
-                        value: "TO BE PATCHED"
-                      - key: folder_id
-                        value: "TO BE PATCHED"
-                      - key: project_id_prefix
-                        value: "TO BE PATCHED"
+                forProvider:
+                  source: Remote
+                  module: git::https://github.com/PHACDataHub/sci-portal.git//templates/rad-lab/data-science?ref=main
+                  varmap:
+                    # Project:
+                    billing_account_id: "TO BE PATCHED"
+                    folder_id: "TO BE PATCHED"
+                    zone: "northamerica-northeast1-a"
+                    create_project: "false"
+                    project_id_prefix: "TO BE PATCHED"
 
+                    # Security Controls:
+                    set_domain_restricted_sharing_policy: "false"
+                    set_external_ip_policy: "false"
 
+                    # Notebook:
+                    create_usermanaged_notebook: "false"
+                    trusted_users: []
 
-                      ##
-                      # Permissions
-                      ##
+                    # (Option) Machine Type
+                    machine_type: "TO BE PATCHED"
 
-                      - key: create_project
-                        value: "false"
-                      - key: zone
-                        value: "northamerica-northeast1-a"
+                    # (Option) Deep Learning VM Image
+                    #
+                    # See https://cloud.google.com/deep-learning-vm/docs/images.
+                    # This may affect the machine type and GPU acceleration.
+                    # image_family: ""
 
-                      ##
-                      # Security Controls
-                      ##
-                      - key: set_domain_restricted_sharing_policy
-                        value: "false"
-                      - key: set_external_ip_policy
-                        value: "false"
+                    # (Option) GPU Acceleration
+                    enable_gpu_driver: "false"
+                    # gpu_accelerator_type: "false"
+                    # gpu_accelerator_core_count: "false"
 
-                      ##
-                      # (Option) Deep Learning VM Image
-                      #
-                      # See https://cloud.google.com/deep-learning-vm/docs/images.
-                      # This may affect the machine type and GPU acceleration.
-                      ##
-                      # - key: image_family
-                      #   value: ""
-
-                      ##
-                      # (Option) Machine Type
-                      ##
-                      - key: machine_type
-                        value: n1-standard-1
-
-                      ##
-                      # (Option) GPU Acceleration
-                      ##
-                      - key: enable_gpu_driver
-                        value: "false"
-                      # - key: gpu_accelerator_type
-                      #   value: "false"
-                      # - key: gpu_accelerator_core_count
-                      #   value: "false"
-
-                      - key: create_usermanaged_notebook
-                        value: "false"
           references:
             - dependsOn:
                 apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
                 kind: Project
-                name: "TO BE PATCHED"
                 namespace: default
-            - dependsOn: # Custom ProviderConfig for storing terraform state
+                name: "TO BE PATCHED"
+            - dependsOn:  # Custom ProviderConfig for storing terraform state
                 apiVersion: tf.upbound.io/v1beta1
                 kind: ProviderConfig
-                name: "TO BE PATCHED"
                 namespace: default
+                name: "TO BE PATCHED"
             - patchesFrom:
                 apiVersion: v1
                 kind: ConfigMap
                 namespace: backstage
                 name: backstage-config
                 fieldPath: data.GCP_BILLING_ACCOUNT_ID
-              toFieldPath: "spec.forProvider.spec.forProvider.vars[0].value"
+              toFieldPath: "spec.forProvider.varmap.billing_account_id"
 
       patches:
         - fromFieldPath: "spec.projectName"
@@ -208,9 +181,19 @@ spec:
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.providerConfigRef.name"
         - fromFieldPath: "spec.rootFolderId"
-          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[1].value"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.varmap.folder_id"
         - fromFieldPath: "spec.projectId"
-          toFieldPath: "spec.forProvider.manifest.spec.forProvider.vars[2].value"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.varmap.project_id_prefix"
+        - fromFieldPath: "spec.notebookEditors"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.varmap.trusted_users"
+        - fromFieldPath: "spec.machineSize"
+          toFieldPath: "spec.forProvider.manifest.spec.forProvider.varmap.machine_type"
+          transforms:
+            - type: map
+              map:
+                "small": "n1-standard-2"
+                "medium": "n1-standard-16"
+                "large": "n1-standard-64"
 
     - name: PROVIDER-CONFIG-USES-PROJECT
       base:

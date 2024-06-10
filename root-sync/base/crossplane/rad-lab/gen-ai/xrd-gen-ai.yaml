@@ -24,7 +24,7 @@ spec:
             spec:
               type: object
               properties:
-                # Base Properties
+                # Project Properties
                 rootFolderId:
                   type: string
                 projectName:
@@ -74,8 +74,17 @@ spec:
                   type: array
                   items:
                     type: string
+
+                # Rad Lab Properties
+                notebookEditors:
+                  type: array
+                  items:
+                    type: string
+                machineSize:
+                  type: string
+                  enum: ["small", "medium", "large"]
               required:
-                # Base Properties
+                # Project Properties
                 - rootFolderId
                 - projectName
                 - projectId
@@ -83,3 +92,7 @@ spec:
                 - labels
                 - projectEditors
                 - projectViewers
+
+                # Rad Lab Properties
+                - notebookEditors
+                - machineSize
