@@ -2,7 +2,7 @@ resource "google_bigquery_dataset" "billing_budget_usages_dataset" {
   dataset_id    = "billing_budget_usages"
   friendly_name = "billing_budget_usages"
   description   = "Dataset that houses the billing budget and usage data"
-  location      = locals.region
+  location      = local.region
 }
 
 resource "google_bigquery_table" "billing_budgets_table" {
