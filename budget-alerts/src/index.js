@@ -44,12 +44,12 @@ async function sendBudgetAlerts(cloudEvent) {
     }
 
     // The templates are personalized with the following data.
-    const personalization = {
+    const personalisation = {
       // The display name is the project ID, by convention.
       project_id: message.budgetDisplayName,
 
-      // Transform the threshold from 0 to 1 to a percentage.
-      threshold: (message.alertThresholdExceeded * 100).toFixed(1),
+      // Transform the threshold from 0 to 1 to a percentage to a whole number.
+      threshold: (message.alertThresholdExceeded * 100).toFixed(0),
 
       // Costs accrued.
       amount: message.costAmount,
@@ -60,8 +60,8 @@ async function sendBudgetAlerts(cloudEvent) {
       currency_code: message.currencyCode, // e.g.: CAD
     };
 
-    await sendEmail(templateId, recipients, personalization);
-    console.log(`Exiting after notifying ${recipients.length} recipients that ${personalization.project_id} has reached ${personalization.threshold}% of the budget (${personalization.amount}$ ${personalization.currency_code})`);
+    await sendEmail(templateId, recipients, personalisation);
+    console.log(`Exiting after notifying ${recipients.length} recipients that ${personalisation.project_id} has reached ${personalisation.threshold}% of the budget (${personalisation.amount}$ ${personalisation.currency_code})`);
   } catch (error) {
     console.error(
       `Error processing budget alert for project ${projectId}:`,
