@@ -27,7 +27,7 @@ resource "google_bigquery_table" "billing_budgets_table" {
     "name": "amount",
     "type": "FLOAT",
     "mode": "REQUIRED",
-    "description": "Maxmium budget amount"
+    "description": "Maximum annual budget amount (in CAD)"
   },
   {
     "name": "currencyCode",
