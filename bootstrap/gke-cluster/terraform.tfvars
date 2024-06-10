@@ -14,4 +14,4 @@ cloudbuild_host_connection_region = "northamerica-northeast1"
 
 cloudbuild_repository_owner  = "PHACDataHub"
 cloudbuild_repository_name   = "sci-portal"
-cloudbuild_repository_branch = "main"
+cloudbuild_repository_branch = "^main$"
