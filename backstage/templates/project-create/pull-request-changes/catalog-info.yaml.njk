@@ -7,7 +7,8 @@ metadata:
   annotations:
     backstage.io/source-location: https://github.com/PHACDevHub/sci-portal-users/${{values.sourceLocation}}
     backstage.io/source-template: template:default/project-create
-    cloud.google.com/project: ${{values.projectId}}
+    cloud.google.com/project-id: ${{values.projectId}}
+    cloud.google.com/project-name: ${{values.projectName}}
     data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: ${{values.budgetAlertEmailRecipients | join(',')}}
 spec:
   type: project
@@ -20,7 +21,8 @@ metadata:
   name: ${{values.projectId}}-editors
   title: ${{values.projectName}} Editors
   annotations:
-    cloud.google.com/project: ${{values.projectId}}
+    cloud.google.com/project-id: ${{values.projectId}}
+    cloud.google.com/project-name: ${{values.projectName}}
 spec:
   type: team
   children: []
@@ -36,7 +38,8 @@ metadata:
   name: ${{values.projectId}}-viewers
   title: ${{values.projectName}} Viewers
   annotations:
-    cloud.google.com/project: ${{values.projectId}}
+    cloud.google.com/project-id: ${{values.projectId}}
+    cloud.google.com/project-name: ${{values.projectName}}
 spec:
   type: team
   children: []

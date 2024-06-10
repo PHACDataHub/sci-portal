@@ -12,7 +12,7 @@ async function getBudgetAlertRecipients(projectId) {
   const { BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN, BACKSTAGE_URI } = process.env;
 
   const params = new URLSearchParams({
-    filter: `metadata.annotations.cloud.google.com/project=${projectId}`,
+    filter: `metadata.annotations.cloud.google.com/project-id=${projectId}`,
     fields: `metadata.annotations.${BUDGET_ALERT_RECIPIENTS_ANNOTATION}`,
   });
   const url = `${BACKSTAGE_URI}/api/catalog/entities/by-query?${params}`;
@@ -26,7 +26,7 @@ async function getBudgetAlertRecipients(projectId) {
 
   if (!response.ok) {
     throw new Error(
-      `Status:${response.status} - Failed to fetch project data for project ${projectId}`,
+      `HTTP${response.status} ${response.statusText}: Failed to fetch data from Backstage for project ID ${projectId}`,
     );
   }
 

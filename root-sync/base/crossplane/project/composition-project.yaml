@@ -209,6 +209,46 @@ spec:
                     spendBasis: "CURRENT_SPEND"
                   - thresholdPercent: 1.00
                     spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.01
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.02
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.03
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.04
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.05
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.06
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.07
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.08
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.09
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.10
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.11
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.12
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.13
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.14
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.15
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.16
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.17
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.18
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.19
+                    spendBasis: "CURRENT_SPEND"
+                  - thresholdPercent: 1.20
+                    spendBasis: "CURRENT_SPEND"
                 allUpdatesRule:
                   schemaVersion: "1.0"
                   pubsubTopicRef:
@@ -245,13 +285,8 @@ spec:
                 fmt: "budget-%s"
         - fromFieldPath: "spec.budget"
           toFieldPath: "spec.forProvider.manifest.spec.amount.specifiedAmount.units"
-        - fromFieldPath: "spec.projectName"
+        - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
-          transforms:
-            - type: string
-              string:
-                type: Format
-                fmt: "budget-%s"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
       readinessChecks:

@@ -148,7 +148,8 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           annotations:
             backstage.io/source-location: https://github.com/PHACDevHub/sci-portal-users/DMIA-PHAC/SciencePlatform/<project-id>/
             backstage.io/source-template: template:default/rad-lab-data-science-create
-            cloud.google.com/project: <project-id>
+            cloud.google.com/project-id: <project-id>
+            cloud.google.com/project-name: <project-name>
             data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
           links:
             - title: View Managed Notebooks on Google Cloud
@@ -165,7 +166,8 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           name: <project-id>-editors
           title: <project-name> Editors
           annotations:
-            cloud.google.com/project: <project-id>
+            cloud.google.com/project-id: <project-id>
+            cloud.google.com/project-name: <project-name>
         spec:
           type: team
           children: []
@@ -180,7 +182,8 @@ describe('rad-lab-data-science-create: fetch:template', () => {
           name: <project-id>-viewers
           title: <project-name> Viewers
           annotations:
-            cloud.google.com/project: <project-id>
+            cloud.google.com/project-id: <project-id>
+            cloud.google.com/project-name: <project-name>
         spec:
           type: team
           children: []
