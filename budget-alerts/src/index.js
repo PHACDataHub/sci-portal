@@ -49,7 +49,7 @@ async function sendBudgetAlerts(cloudEvent) {
       project_id: message.budgetDisplayName,
 
       // Transform the threshold from 0 to 1 to a percentage.
-      threshold: (message.alertThresholdExceeded ?? 0 * 100).toFixed(1),
+      threshold: (message.alertThresholdExceeded * 100).toFixed(1),
 
       // Costs accrued.
       amount: message.costAmount,
