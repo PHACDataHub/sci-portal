@@ -12,12 +12,6 @@ const BudgetLimit: React.FC<BudgetLimitProps> = ({ projectId }) => {
     useEffect(() => {
         let isMounted = true;
 
-        // budgetLoader.load("river-sonar-415120").then((loadedBudget) => {
-        //     if (isMounted) {
-        //         setBudget(loadedBudget);
-        //     }
-        // });
-
         budgetLoader.load(projectId).then((loadedBudget) => {
             if (isMounted) {
                 setBudget(loadedBudget);
