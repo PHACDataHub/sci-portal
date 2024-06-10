@@ -23,13 +23,24 @@ const isUnderBudget = notification => notification.alertThresholdExceeded < 1.0;
 async function sendBudgetAlerts(cloudEvent) {
   const message = parseMessage(cloudEvent);
   if (!message) {
-    console.log('The message did not contain the expected data');
+    console.error('The message did not contain the expected data');
     console.log('Exiting with no message to process.');
     return;
   }
 
+  // By convention the budget Display Name is the Project ID.
+  const projectId = message.budgetDisplayName;
+  console.log(`Handling a message for project ID ${projectId}.`);
+
+  // This key is not present if the actual cost does not exceed a threshold.
+  // We can expect messages multiple times per day with the current status.
+  if (!message.alertThresholdExceeded) {
+    console.log('Exiting with threshold exceeded message to process.');
+    return;
+  }
+
   try {
-    const recipients = await getBudgetAlertRecipients(message.projectId);
+    const recipients = await getBudgetAlertRecipients(projectId);
     if (!recipients) {
       console.log('Existing with no recipients to notify');
       return;
@@ -46,10 +57,10 @@ async function sendBudgetAlerts(cloudEvent) {
     // The templates are personalized with the following data.
     const personalisation = {
       // The display name is the project ID, by convention.
-      project_id: message.budgetDisplayName,
+      project_id: projectId,
 
-      // Transform the threshold from 0 to 1 to a percentage to a whole number.
-      threshold: (message.alertThresholdExceeded * 100).toFixed(0),
+      // Transform the threshold from 0 to 1 to a percentage.
+      threshold: (message.alertThresholdExceeded * 100).toFixed(1),
 
       // Costs accrued.
       amount: message.costAmount,

@@ -168,7 +168,7 @@ spec:
                   calendarPeriod: YEAR
                   projects:
                     - name: ($projectName)
-                displayName: (join('', ['budget-', $projectId]))
+                displayName: ($projectId)
               status:
                 (conditions[?type == 'Ready' && reason == 'UpToDate']):
                   - status: "True"

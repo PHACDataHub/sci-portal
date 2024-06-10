@@ -287,11 +287,6 @@ spec:
           toFieldPath: "spec.forProvider.manifest.spec.amount.specifiedAmount.units"
         - fromFieldPath: "spec.projectId"
           toFieldPath: "spec.forProvider.manifest.spec.displayName"
-          transforms:
-            - type: string
-              string:
-                type: Format
-                fmt: "budget-%s"
         - fromFieldPath: "spec.projectName"
           toFieldPath: "spec.forProvider.manifest.spec.budgetFilter.projects[0].name"
       readinessChecks:
