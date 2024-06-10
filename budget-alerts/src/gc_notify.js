@@ -22,7 +22,6 @@ async function sendEmail(templateId, recipients, personalisation) {
     if (!GC_NOTIFY_URI) {
       console.error('GC_NOTIFY_URI has not been set');
     }
-    console.log(`    Created a new NotifyClient for ${GC_NOTIFY_URI}`);
   }
 
   const sendPromises = recipients.map(async recipient => {
