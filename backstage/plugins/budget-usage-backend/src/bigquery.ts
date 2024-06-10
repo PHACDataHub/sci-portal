@@ -1,6 +1,6 @@
 import { bigqueryClient, budgetClient } from './clients';
 import { config } from './config';
-import { formatDate, getFirstDateOfYear } from './utils';
+import { getFirstDateOfYear } from './utils';
 import { writeFileSync, unlinkSync } from 'fs';
 
 const getBudgetUsageQuery = `
@@ -37,6 +37,9 @@ FROM \`${config.bigquery.budgets.tables.budgetUsage.fullPath}\`
 LIMIT 10000;
 `;
 
+/**
+ * Interface representing usage details for a project.
+ */
 export interface Usage {
   projectId: string;
   totalCost: number;
@@ -46,7 +49,14 @@ export interface Usage {
   lastSync: string;
 }
 
-export async function fetchBudgetsUsages(today: Date): Promise<Usage[]> {
+/**
+ * Generates budget usages for projects up to the current date.
+ *
+ * @param today - The current date.
+ * @returns A promise that resolves to an array of `Usage` objects.
+ * @throws Will throw an error if there is an issue fetching the budget usage.
+ */
+export async function generateBudgetUsages(today: Date): Promise<Usage[]> {
   try {
     const dataset = bigqueryClient.dataset(
       config.bigquery.budgetExports.dataset,
@@ -58,7 +68,7 @@ export async function fetchBudgetsUsages(today: Date): Promise<Usage[]> {
       query: getBudgetUsageQuery,
       params: {
         StartBillingDate: getFirstDateOfYear(today),
-        Today: formatDate(today),
+        Today: today.toISOString(),
       },
     });
 
@@ -74,10 +84,17 @@ export async function fetchBudgetsUsages(today: Date): Promise<Usage[]> {
       return projectUsage;
     });
   } catch (error) {
-    throw Error(`Error fetching budget usage: ${error}`);
+    throw new Error(`Error fetching budget usage`);
   }
 }
 
+/**
+ * Converts JSON data to CSV format with specified column order.
+ *
+ * @param jsonData - The JSON data to convert to CSV.
+ * @param order - The order in which the columns should appear in the CSV.
+ * @returns A string representing the CSV data.
+ */
 function jsonToCsvWithOrder(jsonData: any[], order: string[]): string {
   const csvRows: string[] = [];
 
@@ -94,7 +111,13 @@ function jsonToCsvWithOrder(jsonData: any[], order: string[]): string {
   return csvRows.join('\n');
 }
 
-export async function syncBudgetsUsages(budgetUsages: Usage[]) {
+/**
+ * Saves budget usages data to a CSV file and syncs it with BigQuery.
+ *
+ * @param budgetUsages - An array of `Usage` objects representing budget usages.
+ * @throws Will throw an error if there is an issue saving or syncing the data.
+ */
+export async function saveBudgetUsages(budgetUsages: Usage[]) {
   const order = [
     'projectId',
     'totalCost',
@@ -121,18 +144,26 @@ export async function syncBudgetsUsages(budgetUsages: Usage[]) {
     );
     table.createLoadJob('./temp_data.csv', options, async (err, job) => {
       if (err) {
-        console.error('Error in creating load syncBudgetsUsages job: ', err);
+        console.error(
+          'Error in creating load syncBudgetsUsages job: ',
+          err.message,
+        );
       }
       await job?.exists(() => {
         unlinkSync('./temp_data.csv');
       });
     });
   } catch (error) {
-    throw Error(`Error syncing budget usage: ${error}`);
+    throw new Error(`Error processing job for syncing budget usage`);
   }
 }
 
-export async function syncBudgets() {
+/**
+ * Fetches new budgets from the billing account and syncs them with BigQuery.
+ *
+ * @throws Will throw an error if there is an issue fetching or syncing the budgets.
+ */
+export async function fetchAndSyncNewBudgets() {
   try {
     const [budgets] = await budgetClient.listBudgets({
       parent: config.billing.accountId,
@@ -171,11 +202,17 @@ export async function syncBudgets() {
       }
     }
   } catch (error) {
-    throw Error(`Error syncing budget: ${error}`);
+    throw new Error(`Error syncing budget`);
   }
 }
 
-export async function fetchSyncedBudgetUsage() {
+/**
+ * Fetches all synced budget usage data from BigQuery.
+ *
+ * @returns A promise that resolves to the fetched budget usage data.
+ * @throws Will throw an error if there is an issue fetching the data.
+ */
+export async function fetchSyncedBudgetUsages(): Promise<Usage[]> {
   try {
     const dataset = bigqueryClient.dataset(
       config.bigquery.budgetExports.dataset,
@@ -187,13 +224,33 @@ export async function fetchSyncedBudgetUsage() {
       query: fetchBudgetAllUsageQuery,
       params: {},
     });
-    return queryResult;
+
+    return queryResult.map((projectBudgetUsage: any) => {
+      const projectUsage: Usage = {
+        projectId: projectBudgetUsage.projectId,
+        totalCost: projectBudgetUsage.totalCost,
+        budgetLimit: projectBudgetUsage.budgetLimit,
+        budgetConsumed: projectBudgetUsage.budgetConsumed,
+        currencyCode: projectBudgetUsage.currencyCode,
+        lastSync: projectBudgetUsage.lastSync,
+      };
+      return projectUsage;
+    });
   } catch (error) {
-    throw Error(`Error fetching synced budget usage: ${error}`);
+    throw new Error(`Error fetching synced budget usages`);
   }
 }
 
-export async function fetchBudgetUsage(projectId: string) {
+/**
+ * Fetches budget usage data for a specific project from BigQuery.
+ *
+ * @param projectId - The ID of the project to fetch budget usage for.
+ * @returns A promise that resolves to the fetched budget usage data for the specified project.
+ * @throws Will throw an error if there is an issue fetching the data.
+ */
+export async function fetchSyncedBudgetUsage(
+  projectId: string,
+): Promise<Usage | undefined> {
   try {
     const dataset = bigqueryClient.dataset(
       config.bigquery.budgetExports.dataset,
@@ -208,8 +265,23 @@ export async function fetchBudgetUsage(projectId: string) {
       },
     });
 
-    return queryResult;
+    if (queryResult.length === 0) {
+      return undefined;
+    }
+
+    const firstUsage: Usage = queryResult.map((item: any) => ({
+      projectId: item.projectId,
+      totalCost: item.totalCost,
+      budgetLimit: item.budgetLimit,
+      budgetConsumed: item.budgetConsumed,
+      currencyCode: item.currencyCode,
+      lastSync: item.lastSync,
+    }))[0];
+
+    return firstUsage;
   } catch (error) {
-    throw Error(`Error fetching budget usage: ${error}`);
+    throw new Error(`Error fetching budget usage for project: ${projectId}`, {
+      cause: 500,
+    });
   }
 }
