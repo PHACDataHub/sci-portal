@@ -15,7 +15,7 @@ The `budget-usage` plugin is used for syncing billing budget usage. It extends t
 > To successfully make requests to the API, you need to provide either a Backstage user token or a static API key defined in `app-config.yaml`.
 ```yaml
 auth:
-externalAccess:
+   externalAccess:
     - type: static
     options:
         token: ${BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN} # STATIC TOKEN
@@ -29,7 +29,7 @@ The plugin interacts with two main datasets in BigQuery: `billing_daily_costs` a
 ### `billing_daily_costs` Dataset
 
 - **Dataset ID**: `billing_daily_costs`
-- **Description**: Billing dataset exported by Google.
+- **Description**: Billing dataset exported from the Billing Account.
 
 ### `billing_budgets_usages` Dataset
 
