@@ -13,6 +13,7 @@ The `budget-usage` plugin is used for syncing billing budget usage. It extends t
 
 > [!IMPORTANT]  
 > To successfully make requests to the API, you need to provide either a Backstage user token or a static API key defined in `app-config.yaml`.
+
 ```yaml
 auth:
    externalAccess:
@@ -39,28 +40,29 @@ The plugin interacts with two main datasets in BigQuery: `billing_daily_costs` a
 #### Tables
 
 1. **`budgets` Table**:
+
    - **Table ID**: `budgets`
    - **Description**: Table for storing exported budget data.
    - **Schema**:
-     | Name         | Type    | Mode       | Description                 |
+     | Name | Type | Mode | Description |
      |--------------|---------|------------|-----------------------------|
-     | `name`       | STRING  | REQUIRED   | Budget name                 |
-     | `projectId`  | STRING  | REQUIRED   | GCP project ID              |
-     | `amount`     | FLOAT   | REQUIRED   | Maximum annual budget amount (in CAD) |
-     | `currencyCode` | STRING | REQUIRED | Budget currency code         |
+     | `name` | STRING | REQUIRED | Budget name |
+     | `projectId` | STRING | REQUIRED | GCP project ID |
+     | `amount` | FLOAT | REQUIRED | Maximum annual budget amount (in CAD) |
+     | `currencyCode` | STRING | REQUIRED | Budget currency code |
 
 2. **`usages` Table**:
    - **Table ID**: `usages`
    - **Description**: Table for storing budget usage data.
    - **Schema**:
-     | Name         | Type    | Mode       | Description                     |
+     | Name | Type | Mode | Description |
      |--------------|---------|------------|---------------------------------|
-     | `projectId`  | STRING  | REQUIRED   | Project ID                      |
-     | `totalCost`  | FLOAT   | REQUIRED   | Current total cost              |
-     | `budgetLimit`| FLOAT   | REQUIRED   | Maximum budget amount           |
+     | `projectId` | STRING | REQUIRED | Project ID |
+     | `totalCost` | FLOAT | REQUIRED | Current total cost |
+     | `budgetLimit`| FLOAT | REQUIRED | Maximum budget amount |
      | `budgetConsumed` | FLOAT | REQUIRED | Total percentage of budget consumed |
-     | `currencyCode` | STRING | REQUIRED | Budget currency code             |
-     | `lastSync`   | STRING  | REQUIRED   | Last sync time                  |
+     | `currencyCode` | STRING | REQUIRED | Budget currency code |
+     | `lastSync` | STRING | REQUIRED | Last sync time |
 
 ## Getting Started
 
@@ -74,6 +76,7 @@ To get started with this configuration, follow these steps:
 
    ```bash
    yarn install
+   ```
 
 3. **Start API**:
    Start the express server by running the following command

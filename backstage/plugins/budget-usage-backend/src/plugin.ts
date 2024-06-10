@@ -17,10 +17,7 @@ export const budgetUsagePlugin = createBackendPlugin({
         httpRouter: coreServices.httpRouter,
         logger: coreServices.logger,
       },
-      async init({
-        httpRouter,
-        logger,
-      }) {
+      async init({ httpRouter, logger }) {
         httpRouter.use(
           await createRouter({
             logger,

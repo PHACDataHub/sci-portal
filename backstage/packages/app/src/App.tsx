@@ -61,7 +61,7 @@ const customCatalogColumnsFunc: CatalogTableColumnsFunc = entityListContext => {
       render: (data: CatalogTableRow) => {
         return (
           <BudgetUsage projectId={data.entity.metadata.name}></BudgetUsage>
-        )
+        );
       },
     },
     {

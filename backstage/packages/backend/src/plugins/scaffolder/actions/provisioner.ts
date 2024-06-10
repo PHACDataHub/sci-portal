@@ -84,7 +84,10 @@ const getGoogleCloudEmailsByRefs = async (
   token: string,
 ) => {
   const { items } = await catalogApi.getEntitiesByRefs(
-    { entityRefs, fields: ['metadata.namespace', 'metadata.name', 'spec.profile.email'] },
+    {
+      entityRefs,
+      fields: ['metadata.namespace', 'metadata.name', 'spec.profile.email'],
+    },
     { token },
   );
 
