@@ -71,13 +71,15 @@ spec:
                   team-name: 'team-abc'
                   vanity-name: '($projectName)'
                 projectEditors:
-                  - user:sean.poulter@focisolutions.com
+                  - user:keith.young@gcp.hc-sc.gc.ca
+                  - user:vedant.thapa@gcp.hc-sc.gc.ca
                 projectViewers:
-                  - user:sean.poulter@focisolutions.com
-                  - user:sean.poulter@gcp.hc-sc.gc.ca
+                  - user:keith.young@gcp.hc-sc.gc.ca
+                  - user:vedant.thapa@gcp.hc-sc.gc.ca
 
                 notebookEditors:
-                  - sean.poulter@focisolutions.com
+                  - keith.young@gcp.hc-sc.gc.ca
+                  - vedant.thapa@gcp.hc-sc.gc.ca
                 machineSize: medium
 
         # Assert
@@ -142,11 +144,12 @@ spec:
                 bindings:
                   - role: roles/editor
                     members:
-                      - user:sean.poulter@focisolutions.com
+                      - user:keith.young@gcp.hc-sc.gc.ca
+                      - user:vedant.thapa@gcp.hc-sc.gc.ca
                   - role: roles/viewer
                     members:
-                      - user:sean.poulter@focisolutions.com
-                      - user:sean.poulter@gcp.hc-sc.gc.ca
+                      - user:keith.young@gcp.hc-sc.gc.ca
+                      - user:vedant.thapa@gcp.hc-sc.gc.ca
               status:
                 (conditions[?type == 'Ready' && reason == 'UpToDate']):
                   - status: "True"
@@ -216,7 +219,8 @@ spec:
                     folder_id: ($folderId)
                     project_id_prefix: ($projectId)
                     trusted_users:
-                      - sean.poulter@focisolutions.com
+                      - keith.young@gcp.hc-sc.gc.ca
+                      - vedant.thapa@gcp.hc-sc.gc.ca
                     machine_type: n1-standard-16
               status:
                 atProvider:

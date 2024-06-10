@@ -71,10 +71,11 @@ spec:
                   team-name: 'team-abc'
                   vanity-name: '($projectName)'
                 projectEditors:
-                  - user:sean.poulter@focisolutions.com
+                  - user:keith.young@gcp.hc-sc.gc.ca
+                  - user:vedant.thapa@gcp.hc-sc.gc.ca
                 projectViewers:
-                  - user:sean.poulter@focisolutions.com
-                  - user:sean.poulter@gcp.hc-sc.gc.ca
+                  - user:keith.young@gcp.hc-sc.gc.ca
+                  - user:vedant.thapa@gcp.hc-sc.gc.ca
 
         # Assert
 
@@ -138,11 +139,12 @@ spec:
                 bindings:
                   - role: roles/editor
                     members:
-                      - user:sean.poulter@focisolutions.com
+                      - user:keith.young@gcp.hc-sc.gc.ca
+                      - user:vedant.thapa@gcp.hc-sc.gc.ca
                   - role: roles/viewer
                     members:
-                      - user:sean.poulter@focisolutions.com
-                      - user:sean.poulter@gcp.hc-sc.gc.ca
+                      - user:keith.young@gcp.hc-sc.gc.ca
+                      - user:vedant.thapa@gcp.hc-sc.gc.ca
               status:
                 (conditions[?type == 'Ready' && reason == 'UpToDate']):
                   - status: "True"

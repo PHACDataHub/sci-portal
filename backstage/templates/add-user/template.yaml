@@ -54,12 +54,12 @@ spec:
       name: Create User
       action: catalog:write
       input:
-        filePath: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}.yaml
+        filePath: ${{parameters.email | replace(r/@gcp.hc-sc.hc.ca$/, "")}}.yaml
         entity:
           apiVersion: backstage.io/v1alpha1
           kind: User
           metadata:
-            name: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}
+            name: ${{parameters.email | replace(r/@gcp.hc-sc.hc.ca$/, "")}}
           spec:
             profile:
               displayName: '${{parameters.displayName}}'
@@ -83,7 +83,7 @@ spec:
       if: ${{ parameters.pullRequestAction != 'Diff Only' }}
       input:
         repoUrl: github.com?owner=PHACDataHub&repo=sci-portal-users
-        branchName: ${{parameters.email | replace(r/@(focisolutions.com|gcp.hc-sc.hc.ca)/, "")}}
+        branchName: ${{parameters.email | replace(r/@gcp.hc-sc.hc.ca$/, "")}}
         title: Add ${{parameters.email}}
         description: This PR adds a `User` for ${{parameters.email}}.
         reviewers:
