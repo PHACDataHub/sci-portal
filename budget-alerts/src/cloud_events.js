@@ -29,8 +29,11 @@ function parseMessage(cloudEvent) {
     return undefined;
   }
 
-  const message = Buffer.from(encodedMessage, 'base64').toString();
-  return JSON.parse(message);
+  const message = JSON.parse(Buffer.from(encodedMessage, 'base64').toString());
+  if (!('alertThresholdExceeded' in message)) {
+    message.alertThresholdExceeded = 0;
+  }
+  return message;
 }
 
 module.exports = { parseMessage };

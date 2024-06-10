@@ -22,6 +22,8 @@ async function getBudgetAlertRecipients(projectId) {
   };
 
   const response = await fetch(url, { method: 'GET', headers });
+  console.log(`    HTTP${response.status} ${response.statusText} - GET ${url}`);
+
   if (!response.ok) {
     throw new Error(
       `Status:${response.status} - Failed to fetch project data for project ${projectId}`,
@@ -29,7 +31,6 @@ async function getBudgetAlertRecipients(projectId) {
   }
 
   const body = await response.json();
-
   const uniqueRecipients = new Set();
   for (const item of body.items) {
     const recipients =

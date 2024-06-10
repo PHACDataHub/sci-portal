@@ -3,20 +3,25 @@ const { parseMessage } = require('../cloud_events');
 
 describe('parseMessage', () => {
   test('should parse a valid base64-encoded JSON message', () => {
-    const inputData = {
-      hello: 'world',
-    };
-
     const cloudEvent = {
       data: {
         message: {
-          data: Buffer.from(JSON.stringify(inputData)).toString('base64'),
+          data: 'ewogICJidWRnZXREaXNwbGF5TmFtZSI6ICJidWRnZXQtcGh4LXRlc3QtNDQ0IiwKICAiY29zdEFtb3VudCI6IDAuMDIsCiAgImNvc3RJbnRlcnZhbFN0YXJ0IjogIjIwMjQtMDEtMDFUMDg6MDA6MDBaIiwKICAiYnVkZ2V0QW1vdW50IjogMS4wLAogICJidWRnZXRBbW91bnRUeXBlIjogIlNQRUNJRklFRF9BTU9VTlQiLAogICJjdXJyZW5jeUNvZGUiOiAiQ0FEIgp9',
         },
       },
     };
 
-    const parsedResult = parseMessage(cloudEvent);
-    expect(parsedResult).toEqual(inputData);
+    const actual = parseMessage(cloudEvent);
+    const expected = {
+      alertThresholdExceeded: 0,
+      budgetAmount: 1,
+      budgetAmountType: 'SPECIFIED_AMOUNT',
+      budgetDisplayName: 'budget-phx-test-444',
+      costAmount: 0.02,
+      costIntervalStart: '2024-01-01T08:00:00Z',
+      currencyCode: 'CAD'
+    };
+    expect(actual).toEqual(expected);
   });
 
   test('should return undefined if message data is missing', () => {
