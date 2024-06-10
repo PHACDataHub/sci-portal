@@ -48,6 +48,7 @@
     "@backstage/types": "^1.1.1",
     "@google-cloud/bigquery": "^7.7.1",
     "@google-cloud/billing-budgets": "^5.4.0",
+    "@internal/backstage-plugin-budget-usage-backend": "^0.1.0",
     "app": "link:../app",
     "better-sqlite3": "^9.0.0",
     "dockerode": "^3.3.1",
