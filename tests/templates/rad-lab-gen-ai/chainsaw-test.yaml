@@ -2,7 +2,7 @@
 apiVersion: chainsaw.kyverno.io/v1alpha1
 kind: Test
 metadata:
-  name: project-claim
+  name: rad-lab-gen-ai-claim
 spec:
   template: true
   bindings:
@@ -47,11 +47,11 @@ spec:
 
         # Act
 
-        - description: Apply a ProjectClaim
+        - description: Apply a RadLabGenAIClaim
           apply:
             resource:
               apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-              kind: ProjectClaim
+              kind: RadLabGenAIClaim
               metadata:
                 namespace: default
                 name: (join('-', [$projectName, $requestId]))
@@ -76,14 +76,18 @@ spec:
                   - user:sean.poulter@focisolutions.com
                   - user:sean.poulter@gcp.hc-sc.gc.ca
 
+                notebookEditors:
+                  - sean.poulter@focisolutions.com
+                machineSize: medium
+
         # Assert
 
-        - description: Assert the ProjectClaim has been created
+        - description: Assert the RadLabGenAIClaim has been created
           assert:
             timeout: 5m
             resource:
               apiVersion: data-science-portal.phac-aspc.gc.ca/v1alpha1
-              kind: ProjectClaim
+              kind: RadLabGenAIClaim
               metadata:
                 namespace: default
                 name: (join('-', [$projectName, $requestId]))
@@ -183,4 +187,46 @@ spec:
                 resourceID: dataplex.googleapis.com
               status:
                 (conditions[?type == 'Ready' && reason == 'UpToDate']):
+                  - status: "True"
+
+        - description: Assert the Terraform ProviderConfig has been created
+          assert:
+            resource:
+              apiVersion: tf.upbound.io/v1beta1
+              kind: ProviderConfig
+              metadata:
+                name: ($projectId)
+
+        - description: Assert the Terraform Workspace has been created
+          assert:
+            timeout: 10m
+            resource:
+              apiVersion: tf.upbound.io/v1beta1
+              kind: Workspace
+              metadata:
+                # namespace: default
+                name: ($projectId)
+              spec:
+                providerConfigRef:
+                  name: ($projectId)
+                forProvider:
+                  source: Remote
+                  module: git::https://github.com/PHACDataHub/sci-portal.git//templates/rad-lab/gen-ai?ref=main
+                  varmap:
+                    folder_id: ($folderId)
+                    project_id_prefix: ($projectId)
+                    trusted_users:
+                      - sean.poulter@focisolutions.com
+                    machine_type: n1-standard-16
+              status:
+                atProvider:
+                  outputs:
+                    workbench_googlemanaged_urls:
+                    - (concat('https://console.cloud.google.com/vertex-ai/workbench/managed?project=', $projectId))
+                    user_scripts_bucket_uri: (concat('https://www.googleapis.com/storage/v1/b/user-scripts-', $projectId))
+
+                # conditions:
+                (conditions[?type == 'Synced']):
+                  - status: "True"
+                (conditions[?type == 'Ready']):
                   - status: "True"

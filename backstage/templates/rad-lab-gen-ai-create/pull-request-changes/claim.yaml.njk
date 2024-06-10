@@ -26,3 +26,9 @@ spec:
     - user:${{viewer.email}}
   {%- endfor %}
   {%- endif %}
+
+  notebookEditors:
+  {%- for editor in values.editors %}
+    - ${{editor.email}}
+  {%- endfor %}
+  machineSize: ${{values.machineSize}}
