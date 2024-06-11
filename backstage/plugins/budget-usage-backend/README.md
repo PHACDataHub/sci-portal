@@ -24,6 +24,7 @@ auth:
 ```
 
 **Sample Request:**
+
 ```
 curl -X POST \
   -H "Authorization: Bearer <user_token | static_token>" \

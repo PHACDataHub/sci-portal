@@ -1,13 +1,6 @@
-const {
-  GCP_PROJECT_ID,
-  GCP_REGION,
-  GCP_BILLING_ACCOUNT_ID,
-  BIG_QUERY_BUDGET_EXPORT_DATASET,
-  BIG_QUERY_BUDGET_EXPORT_DATASET_TABLE,
-  BIG_QUERY_BUDGET_DATASET,
-  BIG_QUERY_BUDGET_DATASET_BUDGET_TABLE,
-  BIG_QUERY_BUDGET_DATASET_BUDGET_USAGE_TABLE,
-} = process.env as { [key: string]: string | undefined };
+const { GCP_PROJECT_ID, GCP_REGION, GCP_BILLING_ACCOUNT_ID } = process.env as {
+  [key: string]: string | undefined;
+};
 
 if (!GCP_PROJECT_ID) {
   throw new Error('Missing required environment variable: GCP_PROJECT_ID');
@@ -23,34 +16,21 @@ if (!GCP_BILLING_ACCOUNT_ID) {
   );
 }
 
-if (!BIG_QUERY_BUDGET_EXPORT_DATASET) {
-  throw new Error(
-    'Missing required environment variable: BIG_QUERY_BUDGET_EXPORT_DATASET',
-  );
-}
+/* Allow the BigQuery datasets and tables to be configured, if necessary */
 
-if (!BIG_QUERY_BUDGET_EXPORT_DATASET_TABLE) {
-  throw new Error(
-    'Missing required environment variable: BIG_QUERY_BUDGET_EXPORT_DATASET_TABLE',
-  );
-}
+// The Billing Account export is configured with click-ops at the org-level.
+const BILLING_ACCOUNT_EXPORT_DATASET =
+  process.env.BILLING_ACCOUNT_EXPORT_DATASET || 'billing_daily_costs';
+const BILLING_ACCOUNT_EXPORT_DATASET_TABLE =
+  process.env.BILLING_ACCOUNT_EXPORT_DATASET_TABLE || 'billing-export-view';
 
-if (!BIG_QUERY_BUDGET_DATASET) {
-  throw new Error(
-    'Missing required environment variable: BIG_QUERY_BUDGET_DATASET',
-  );
-}
-
-if (!BIG_QUERY_BUDGET_DATASET_BUDGET_TABLE) {
-  throw new Error(
-    'Missing required environment variable: BIG_QUERY_BUDGET_DATASET_BUDGET_TABLE',
-  );
-}
-if (!BIG_QUERY_BUDGET_DATASET_BUDGET_USAGE_TABLE) {
-  throw new Error(
-    'Missing required environment variable: BIG_QUERY_BUDGET_DATASET_BUDGET_USAGE_TABLE',
-  );
-}
+// The budget usage datasets and tables are defined in bootstrap/bigquery.tf.
+const BUDGET_USAGE_DATASET =
+  process.env.BUDGET_USAGE_DATASET || 'billing_budget_usages';
+const BUDGET_USAGE_DATASET_BUDGET_TABLE =
+  process.env.BUDGET_USAGE_DATASET_BUDGET_TABLE || 'budgets';
+const BUDGET_USAGE_DATASET_BUDGET_USAGE_TABLE =
+  process.env.BUDGET_USAGE_DATASET_BUDGET_USAGE_TABLE || 'usages';
 
 export const config = {
   gcp: {
@@ -63,24 +43,24 @@ export const config = {
 
   bigquery: {
     budgetExports: {
-      dataset: BIG_QUERY_BUDGET_EXPORT_DATASET,
+      dataset: BILLING_ACCOUNT_EXPORT_DATASET,
       tables: {
         exported: {
-          name: BIG_QUERY_BUDGET_EXPORT_DATASET_TABLE,
-          fullPath: `${BIG_QUERY_BUDGET_EXPORT_DATASET}.${BIG_QUERY_BUDGET_EXPORT_DATASET_TABLE}`,
+          name: BILLING_ACCOUNT_EXPORT_DATASET_TABLE,
+          fullPath: `${BILLING_ACCOUNT_EXPORT_DATASET}.${BILLING_ACCOUNT_EXPORT_DATASET_TABLE}`,
         },
       },
     },
     budgets: {
-      dataset: BIG_QUERY_BUDGET_DATASET,
+      dataset: BUDGET_USAGE_DATASET,
       tables: {
         budget: {
-          name: BIG_QUERY_BUDGET_DATASET_BUDGET_TABLE,
-          fullPath: `${BIG_QUERY_BUDGET_DATASET}.${BIG_QUERY_BUDGET_DATASET_BUDGET_TABLE}`,
+          name: BUDGET_USAGE_DATASET_BUDGET_TABLE,
+          fullPath: `${BUDGET_USAGE_DATASET}.${BUDGET_USAGE_DATASET_BUDGET_TABLE}`,
         },
         budgetUsage: {
-          name: BIG_QUERY_BUDGET_DATASET_BUDGET_USAGE_TABLE,
-          fullPath: `${BIG_QUERY_BUDGET_DATASET}.${BIG_QUERY_BUDGET_DATASET_BUDGET_USAGE_TABLE}`,
+          name: BUDGET_USAGE_DATASET_BUDGET_USAGE_TABLE,
+          fullPath: `${BUDGET_USAGE_DATASET}.${BUDGET_USAGE_DATASET_BUDGET_USAGE_TABLE}`,
         },
       },
     },
