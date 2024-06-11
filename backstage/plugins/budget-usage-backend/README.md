@@ -23,6 +23,13 @@ auth:
         subject: budget-alert-events
 ```
 
+**Sample Request:**
+```
+curl -X POST \
+  -H "Authorization: Bearer <user_token | static_token>" \
+  http://localhost:7007/api/budget-usage/sync
+```
+
 ## BigQuery Datasets and Tables
 
 The plugin interacts with two main datasets in BigQuery: `billing_daily_costs` and `billing_budgets_usages`. Here's a breakdown of the datasets and their tables:
@@ -84,3 +91,6 @@ To get started with this configuration, follow these steps:
    ```bash
    task backstage:budget-backend-dev
    ```
+
+> [!IMPORTANT]  
+> You will need to use a GCP Service Account key by exporting it to `GOOGLE_APPLICATION_CREDENTIALS` environment variable. If not provided, BigQuery and Budget clients will not work.
