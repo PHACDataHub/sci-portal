@@ -243,12 +243,7 @@ kubectl create configmap -n backstage backstage-config \
   --from-literal=GITOPS_REPO_NAME="<github-repo>" \
   --from-literal=GCP_BILLING_ACCOUNT_ID="<gcp-billing-account-id>" \
   --from-literal=AUTH_GOOGLE_ALLOWED_DOMAINS="<expected-domains>" \
-  --from-literal=BACKSTAGE_URI="<backstage-uri>" \
-  --from-literal=BIG_QUERY_BUDGET_EXPORT_DATASET=billing_export_data \
-  --from-literal=BIG_QUERY_BUDGET_EXPORT_DATASET_TABLE=gcp_billing_export_v1_<gcp-billing-account-id> \
-  --from-literal=BIG_QUERY_BUDGET_DATASET=billing_budgets_usages \
-  --from-literal=BIG_QUERY_BUDGET_DATASET_BUDGET_TABLE=budgets \
-  --from-literal=BIG_QUERY_BUDGET_DATASET_BUDGET_USAGE_TABLE=usages
+  --from-literal=BACKSTAGE_URI="<backstage-uri>"
 ```
 
 ### Billing Export to BigQuery
