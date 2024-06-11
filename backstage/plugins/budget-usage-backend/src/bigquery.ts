@@ -1,6 +1,8 @@
+import { Table } from '@google-cloud/bigquery';
 import { bigqueryClient, budgetClient } from './clients';
 import { config } from './config';
 import { writeFileSync, unlinkSync } from 'fs';
+import { google } from '@google-cloud/billing-budgets/build/protos/protos';
 
 const getBudgetUsageQuery = `
 SELECT project_id, total_cost, amount as budget_limit, (total_cost*100/amount) as budget_consumed, currencyCode as currency_code, CURRENT_TIMESTAMP() AS current_time FROM (
@@ -21,9 +23,9 @@ INNER JOIN \`${config.bigquery.budgets.tables.budget.fullPath}\` as budget ON bu
 `;
 
 const checkBudgetExistsQuery = `
-SELECT projectId
+SELECT name
 FROM \`${config.bigquery.budgets.tables.budget.fullPath}\`
-WHERE projectId = @Id
+WHERE name = @budgetName
 LIMIT 1
 `;
 
@@ -124,6 +126,11 @@ function jsonToCsvWithOrder(jsonData: any[], order: string[]): string {
  * @throws Will throw an error if there is an issue saving or syncing the data.
  */
 export async function saveBudgetUsages(budgetUsages: Usage[]) {
+  // Skip if there are no budget usages
+  if (!budgetUsages || budgetUsages.length === 0) {
+    return;
+  }
+
   const order = [
     'projectId',
     'totalCost',
@@ -166,51 +173,86 @@ export async function saveBudgetUsages(budgetUsages: Usage[]) {
 }
 
 /**
- * Fetches new budgets from the billing account and syncs them with BigQuery.
- *
- * @throws Will throw an error if there is an issue fetching or syncing the budgets.
+ * Fetches and syncs new budgets from the budget client and inserts them into a BigQuery table if they don't already exist.
  */
 export async function fetchAndSyncNewBudgets() {
+  // Get the dataset and table references from the config
+  const dataset = bigqueryClient.dataset(config.bigquery.budgets.dataset);
+  const table = dataset.table(config.bigquery.budgets.tables.budget.name);
+
   try {
+    // DEBUGGING SA used to make requests
+    const saToken = await bigqueryClient.authClient.getCredentials();
+    console.log('SA EMAIL:', saToken.client_email);
+
     const [budgets] = await budgetClient.listBudgets({
       parent: config.billing.accountId,
     });
 
-    const dataset = bigqueryClient.dataset(config.bigquery.budgets.dataset);
-    const table = dataset.table(config.bigquery.budgets.tables.budget.name);
-
     for (const budget of budgets) {
-      const [queryResult] = await table.query({
-        query: checkBudgetExistsQuery,
-        params: {
-          Id: budget.name,
-        },
-      });
-      if (queryResult?.length === 0) {
-        table.insert(
-          [
-            {
-              name: budget.name,
-              projectId: budget.displayName,
-              amount: budget.amount?.specifiedAmount?.units
-                ? parseFloat(String(budget.amount.specifiedAmount.units))
-                : 0,
-              currencyCode: budget.amount?.specifiedAmount?.currencyCode,
-            },
-          ],
-          err => {
-            if (err) {
-              console.error(
-                'error registering new project' + budget.displayName,
-              );
-            }
-          },
-        );
+      try {
+        const budgetExists = await checkIfBudgetExists(table, budget.name!);
+        if (!budgetExists) {
+          console.log(`Inserting new budget: ${budget.displayName}`);
+          await insertBudget(table, budget);
+        }
+      } catch (error) {
+        console.error(`Error processing budget ${budget.displayName}:`, error);
       }
     }
   } catch (error) {
-    console.error(error);
-    throw new Error(`Error syncing budget`);
+    console.error('Error fetching and syncing budgets:', error);
+    throw error;
+  }
+}
+
+/**
+ * Checks if a budget with the given ID exists in the specified table.
+ * @param {object} table - The BigQuery table object.
+ * @param {string} budgetId - The ID of the budget.
+ * @returns {Promise<boolean>} -  Resolves to true if the budget exists.
+ */
+async function checkIfBudgetExists(table: Table, budgetName: string) {
+  try {
+    const [queryResult] = await table.query({
+      query: checkBudgetExistsQuery,
+      params: { budgetName: budgetName },
+    });
+    return queryResult.length > 0;
+  } catch (error) {
+    console.error(`Error checking if budget exists for ${budgetName}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Inserts a new budget into the specified table.
+ * @param {object} table - The BigQuery table object.
+ * @param {object} budget - The budget object to insert.
+ * @returns {Promise<void>} - A promise that resolves when the budget is inserted.
+ */
+async function insertBudget(
+  table: Table,
+  budget: google.cloud.billing.budgets.v1.IBudget,
+) {
+  // Prepare the budget data for insertion
+  const budgetData = {
+    name: budget.name,
+    projectId: budget.displayName,
+    amount: budget.amount?.specifiedAmount?.units
+      ? parseFloat(String(budget.amount.specifiedAmount.units))
+      : 0,
+    currencyCode: budget.amount?.specifiedAmount?.currencyCode,
+  };
+
+  try {
+    // Insert the budget data into the table
+    await table.insert([budgetData]);
+    console.log(`Successfully inserted budget ${budget.displayName}`);
+  } catch (error) {
+    // Log error for the budget insertion
+    console.error(`Error inserting budget ${budget.displayName}:`, error);
+    throw error;
   }
 }
 

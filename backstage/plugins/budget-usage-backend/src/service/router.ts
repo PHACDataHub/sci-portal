@@ -29,7 +29,7 @@ export async function createRouter(
 
   router.post('/sync', async (_, response) => {
     try {
-      logger.info('Fetching and syncing budgets');
+      logger.info('Fetching and syncing budgets, this may take a while......');
       await fetchAndSyncNewBudgets();
       logger.info('Generating budget usages');
       const budgetUsages = await generateBudgetUsages(new Date());
