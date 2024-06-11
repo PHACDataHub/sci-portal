@@ -26,7 +26,7 @@ const BILLING_ACCOUNT_EXPORT_DATASET_TABLE =
 
 // The budget usage datasets and tables are defined in bootstrap/bigquery.tf.
 const BUDGET_USAGE_DATASET =
-  process.env.BUDGET_USAGE_DATASET || 'billing_budget_usages';
+  process.env.BUDGET_USAGE_DATASET || 'billing_budgets_usages';
 const BUDGET_USAGE_DATASET_BUDGET_TABLE =
   process.env.BUDGET_USAGE_DATASET_BUDGET_TABLE || 'budgets';
 const BUDGET_USAGE_DATASET_BUDGET_USAGE_TABLE =
