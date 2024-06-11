@@ -1,0 +1,26 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: backstage
+  name: calculate-percent-budget-daily
+spec:
+  # Calculate the percentage budget used at the start of the workday in the East (6 AM, Atlantic).
+  timeZone: Canada/Atlantic
+  schedule: "0 6 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: curl
+              image: curlimages/curl:8.8.0
+              imagePullPolicy: IfNotPresent
+              command: ['curl', '-v', '--request', 'POST', '-H', 'Authorization: Bearer $(BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN)', '$(BASE_URL)/api/budget-usage/sync']
+              env:
+                - name: BASE_URL
+                  value: http://backstage:7007
+              envFrom:
+                - secretRef:
+                    name: backstage-auth-keys
+          restartPolicy: OnFailure

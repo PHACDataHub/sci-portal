@@ -29,17 +29,18 @@ export async function createRouter(
 
   router.post('/sync', async (_, response) => {
     try {
-      console.log('Fetching and syncing budgets');
+      logger.info('Fetching and syncing budgets');
       await fetchAndSyncNewBudgets();
-      console.log('Generating budget usages');
+      logger.info('Generating budget usages');
       const budgetUsages = await generateBudgetUsages(new Date());
-      console.log('Saving budget usages');
+      logger.info('Saving budget usages');
       await saveBudgetUsages(budgetUsages);
       response.json({
         message: 'Synced budgets',
         budgetUsages,
       });
     } catch (error) {
+      logger.error((error as Error).toString());
       const responseError = error as Error;
       response.status(500).json({
         message: responseError.message,
