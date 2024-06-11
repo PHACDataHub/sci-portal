@@ -43,35 +43,49 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import LightIcon from '@material-ui/icons/WbSunny';
 import { UnifiedThemeProvider } from '@backstage/theme';
-import { GovTheme } from './theme/govTheme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
+import {
+  DefaultFilters,
+  EntityListContextProps,
+} from '@backstage/plugin-catalog-react';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
-import { DefaultFilters } from '@backstage/plugin-catalog-react';
-import BudgetUsage from './components/budget/BudgetUsage';
+import { GovTheme } from './theme/govTheme';
+import { BudgetLimit, BudgetUsage } from './components/budget';
 import { DataLoaderProvider } from './loaders/DataLoader';
-import BudgetLimit from './components/budget/BudgetLimit';
 
-const customCatalogColumnsFunc: CatalogTableColumnsFunc = entityListContext => {
-  return [
-    ...CatalogTable.defaultColumnsFunc(entityListContext),
-    {
-      title: '% Budget',
-      field: 'entity.metadata.budget',
-      render: (data: CatalogTableRow) => {
-        return (
-          <BudgetUsage projectId={data.entity.metadata.name}></BudgetUsage>
-        );
+/**
+ * Returns true when the `Cost` and `% Budget` columns should be rendered.
+ */
+const entityKindHasBudget = (
+  entityListContext: EntityListContextProps,
+): boolean => {
+  const kind = entityListContext.filters.kind?.value;
+  return kind === 'Component' || kind === 'Resource';
+};
+
+const columnsFunc: CatalogTableColumnsFunc = entityListContext => {
+  if (entityKindHasBudget(entityListContext)) {
+    return [
+      ...CatalogTable.defaultColumnsFunc(entityListContext),
+      {
+        title: '% Budget',
+        field: 'entity.metadata.budget',
+        render: (data: CatalogTableRow) => {
+          return <BudgetUsage projectId={data.entity.metadata.name} />;
+        },
       },
-    },
-    {
-      title: 'Cost',
-      field: 'entity.metadata.cost',
-      render: (data: CatalogTableRow) => (
-        <BudgetLimit projectId={data.entity.metadata.name}></BudgetLimit>
-      ),
-    },
-  ];
+      {
+        title: 'Cost (CAD)',
+        field: 'entity.metadata.cost',
+        render: (data: CatalogTableRow) => (
+          <BudgetLimit projectId={data.entity.metadata.name} />
+        ),
+      },
+    ];
+  }
+
+  return CatalogTable.defaultColumnsFunc(entityListContext);
 };
 
 const app = createApp({
@@ -131,7 +145,7 @@ const routes = (
       element={
         <DataLoaderProvider>
           <CatalogIndexPage
-            columns={customCatalogColumnsFunc}
+            columns={columnsFunc}
             filters={
               <>
                 <DefaultFilters
