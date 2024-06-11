@@ -11,7 +11,9 @@ SELECT project_id, SUM(t0_qt_mnecho490c) AS total_cost FROM (
       SELECT t0.project.id AS project_id, t0.cost AS clmn0_, t0.usage_start_time AS clmn1_ FROM \`${config.bigquery.budgetExports.tables.exported.fullPath}\` AS t0)
       )
     )
-    WHERE (clmn1_ >= @StartBillingDate AND clmn1_ < TIMESTAMP_ADD( @Today, INTERVAL 1 DAY)) GROUP BY project_id, t0_qt_nnecho490c ORDER BY t0_qt_nnecho490c ASC LIMIT 2000000
+    WHERE (clmn1_ >= @StartBillingDate AND clmn1_ < TIMESTAMP_ADD( @Today, INTERVAL 1 DAY)) GROUP BY project_id, t0_qt_nnecho490c
+    ORDER BY t0_qt_nnecho490c ASC
+    LIMIT 2000000
     )
     GROUP BY project_id
   )
@@ -28,6 +30,7 @@ const fetchBudgetUsageQuery = `
 SELECT *
 FROM \`${config.bigquery.budgets.tables.budgetUsage.fullPath}\`
 WHERE projectId = @Id
+LIMIT 1
 `;
 
 const fetchBudgetAllUsageQuery = `
@@ -75,17 +78,16 @@ export async function generateBudgetUsages(today: Date): Promise<Usage[]> {
       },
     });
 
-    return queryResult.map((projectBudgetUsage: any) => {
-      const projectUsage: Usage = {
-        projectId: projectBudgetUsage.project_id,
-        totalCost: projectBudgetUsage.total_cost,
-        budgetLimit: projectBudgetUsage.budget_limit,
-        budgetConsumed: projectBudgetUsage.budget_consumed,
-        currencyCode: projectBudgetUsage.currency_code,
-        lastSync: projectBudgetUsage.current_time.value,
-      };
-      return projectUsage;
-    });
+    return queryResult.map(
+      (row: any): Usage => ({
+        projectId: row.project_id,
+        totalCost: row.total_cost,
+        budgetLimit: row.budget_limit,
+        budgetConsumed: row.budget_consumed,
+        currencyCode: row.currency_code,
+        lastSync: row.current_time.value,
+      }),
+    );
   } catch (error) {
     throw new Error(`Error fetching budget usage`);
   }
@@ -228,17 +230,16 @@ export async function fetchSyncedBudgetUsages(): Promise<Usage[]> {
       params: {},
     });
 
-    return queryResult.map((projectBudgetUsage: any) => {
-      const projectUsage: Usage = {
-        projectId: projectBudgetUsage.projectId,
-        totalCost: projectBudgetUsage.totalCost,
-        budgetLimit: projectBudgetUsage.budgetLimit,
-        budgetConsumed: projectBudgetUsage.budgetConsumed,
-        currencyCode: projectBudgetUsage.currencyCode,
-        lastSync: projectBudgetUsage.lastSync,
-      };
-      return projectUsage;
-    });
+    return queryResult.map(
+      (row: any): Usage => ({
+        projectId: row.projectId,
+        totalCost: row.totalCost,
+        budgetLimit: row.budgetLimit,
+        budgetConsumed: row.budgetConsumed,
+        currencyCode: row.currencyCode,
+        lastSync: row.lastSync,
+      }),
+    );
   } catch (error) {
     throw new Error(`Error fetching synced budget usages`);
   }
@@ -272,14 +273,16 @@ export async function fetchSyncedBudgetUsage(
       return undefined;
     }
 
-    const firstUsage: Usage = queryResult.map((item: any) => ({
-      projectId: item.projectId,
-      totalCost: item.totalCost,
-      budgetLimit: item.budgetLimit,
-      budgetConsumed: item.budgetConsumed,
-      currencyCode: item.currencyCode,
-      lastSync: item.lastSync,
-    }))[0];
+    const firstUsage = queryResult.map(
+      (row: any): Usage => ({
+        projectId: row.projectId,
+        totalCost: row.totalCost,
+        budgetLimit: row.budgetLimit,
+        budgetConsumed: row.budgetConsumed,
+        currencyCode: row.currencyCode,
+        lastSync: row.lastSync,
+      }),
+    )[0];
 
     return firstUsage;
   } catch (error) {
