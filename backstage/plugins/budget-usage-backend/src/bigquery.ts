@@ -209,8 +209,8 @@ export async function fetchAndSyncNewBudgets() {
 /**
  * Checks if a budget with the given ID exists in the specified table.
  * @param {object} table - The BigQuery table object.
- * @param {string} budgetId - The ID of the budget to check.
- * @returns {Promise<boolean>} - A promise that resolves to true if the budget exists, false otherwise.
+ * @param {string} budgetId - The ID of the budget.
+ * @returns {Promise<boolean>} -  Resolves to true if the budget exists.
  */
 async function checkIfBudgetExists(table: Table, budgetName: string) {
   try {
