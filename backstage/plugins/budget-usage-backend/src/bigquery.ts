@@ -1,6 +1,5 @@
 import { bigqueryClient, budgetClient } from './clients';
 import { config } from './config';
-import { getFirstDateOfYear } from './utils';
 import { writeFileSync, unlinkSync } from 'fs';
 
 const getBudgetUsageQuery = `
@@ -49,6 +48,10 @@ export interface Usage {
   lastSync: string;
 }
 
+function firstDateOfYear(date: Date): string {
+  return new Date(date.getFullYear(), 0, 1).toISOString();
+}
+
 /**
  * Generates budget usages for projects up to the current date.
  *
@@ -67,7 +70,7 @@ export async function generateBudgetUsages(today: Date): Promise<Usage[]> {
     const [queryResult] = await table.query({
       query: getBudgetUsageQuery,
       params: {
-        StartBillingDate: getFirstDateOfYear(today),
+        StartBillingDate: firstDateOfYear(today),
         Today: today.toISOString(),
       },
     });
