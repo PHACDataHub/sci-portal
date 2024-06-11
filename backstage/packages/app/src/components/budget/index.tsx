@@ -27,7 +27,7 @@ const BudgetComponent: React.FC<BudgetComponentProps> = ({
     };
   }, [projectId, budgetLoader]);
 
-  return render(budget);
+  return budget ? render(budget) : '-';
 };
 
 interface BudgetLimitProps {

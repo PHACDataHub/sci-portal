@@ -61,7 +61,7 @@ const entityKindHasBudget = (
   entityListContext: EntityListContextProps,
 ): boolean => {
   const kind = entityListContext.filters.kind?.value;
-  return kind === 'Component' || kind === 'Resource';
+  return kind === 'component' || kind === 'resource';
 };
 
 const columnsFunc: CatalogTableColumnsFunc = entityListContext => {
@@ -71,6 +71,7 @@ const columnsFunc: CatalogTableColumnsFunc = entityListContext => {
       {
         title: '% Budget',
         field: 'entity.metadata.budget',
+        tooltip: 'The percentage of the budget that has been spent, updated once per day.',
         render: (data: CatalogTableRow) => {
           return <BudgetUsage projectId={data.entity.metadata.name} />;
         },
@@ -78,6 +79,7 @@ const columnsFunc: CatalogTableColumnsFunc = entityListContext => {
       {
         title: 'Cost (CAD)',
         field: 'entity.metadata.cost',
+        tooltip: 'The cost that has been spent, updated once per day.',
         render: (data: CatalogTableRow) => (
           <BudgetLimit projectId={data.entity.metadata.name} />
         ),
@@ -144,18 +146,7 @@ const routes = (
       path="/catalog"
       element={
         <DataLoaderProvider>
-          <CatalogIndexPage
-            columns={columnsFunc}
-            filters={
-              <>
-                <DefaultFilters
-                  initialKind="Resource"
-                  initiallySelectedFilter="owned"
-                  ownerPickerMode="all"
-                />
-              </>
-            }
-          />
+          <CatalogIndexPage columns={columnsFunc}/>
         </DataLoaderProvider>
       }
     />
