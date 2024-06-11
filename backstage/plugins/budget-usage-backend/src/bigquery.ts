@@ -185,28 +185,22 @@ export async function fetchAndSyncNewBudgets() {
     const saToken = await bigqueryClient.authClient.getCredentials();
     console.log('SA EMAIL:', saToken.client_email);
 
-    // Fetch the list of budgets
     const [budgets] = await budgetClient.listBudgets({
       parent: config.billing.accountId,
     });
 
-    // Process each budget
     for (const budget of budgets) {
       try {
-        // Check if the budget already exists in the table
         const budgetExists = await checkIfBudgetExists(table, budget.name!);
-        // If the budget does not exist, insert it
         if (!budgetExists) {
           console.log(`Inserting new budget: ${budget.displayName}`);
           await insertBudget(table, budget);
         }
       } catch (error) {
-        // Log error for the specific budget being processed
         console.error(`Error processing budget ${budget.displayName}:`, error);
       }
     }
   } catch (error) {
-    // Log error for the entire budget fetching and syncing process
     console.error('Error fetching and syncing budgets:', error);
     throw error;
   }
@@ -226,7 +220,6 @@ async function checkIfBudgetExists(table: Table, budgetName: string) {
     });
     return queryResult.length > 0;
   } catch (error) {
-    // Log error for the budget existence check
     console.error(`Error checking if budget exists for ${budgetName}:`, error);
     throw error;
   }
