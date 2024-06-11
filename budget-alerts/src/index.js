@@ -30,7 +30,22 @@ async function sendBudgetAlerts(cloudEvent) {
 
   // By convention the budget Display Name is the Project ID.
   const projectId = message.budgetDisplayName;
-  console.log(`Handling a message for project ID ${projectId}.`);
+
+  const cost = message.costAmount.toFixed(2);
+  const budget = message.budgetAmount.toFixed(2);
+  const percentage = (100 * (message.alertThresholdExceeded ?? (message.costAmount / message.budgetAmount))).toFixed(0);
+  const currencyCode = message.currencyCode;
+
+  console.log(JSON.stringify({
+    severity: 'INFO',
+    message: `Handling a message for project ID ${projectId}. The project has used ${percentage}% of the $${budget} ${currencyCode} budget ($${cost} ${currencyCode}).`,
+    component: {
+      message,
+
+      // Include the base64 encoded message for manual testing.
+      data: cloudEvent.data.message.data,
+    },
+  }));
 
   // This key is not present if the actual cost does not exceed a threshold.
   // We can expect messages multiple times per day with the current status.
@@ -42,7 +57,7 @@ async function sendBudgetAlerts(cloudEvent) {
   try {
     const recipients = await getBudgetAlertRecipients(projectId);
     if (!recipients) {
-      console.log('Existing with no recipients to notify');
+      console.log('Exiting with no recipients to notify.');
       return;
     }
 
@@ -55,24 +70,16 @@ async function sendBudgetAlerts(cloudEvent) {
     }
 
     // The templates are personalized with the following data.
-    const personalisation = {
-      // The display name is the project ID, by convention.
+    const data = {
       project_id: projectId,
-
-      // Transform the threshold from 0 to 1 to a percentage.
-      threshold: (message.alertThresholdExceeded * 100).toFixed(0),
-
-      // Costs accrued.
-      amount: message.costAmount,
-
-      // Amount allocated in the budget.
-      budget_amount: message.budgetAmount,
-
+      threshold: percentage,
+      amount: cost,
+      budget_amount: budget,
       currency_code: message.currencyCode, // e.g.: CAD
     };
 
-    await sendEmail(templateId, recipients, personalisation);
-    console.log(`Exiting after notifying ${recipients.length} recipients that ${personalisation.project_id} has reached ${personalisation.threshold}% of the budget (${personalisation.amount}$ ${personalisation.currency_code})`);
+    await sendEmail(templateId, recipients, data);
+    console.log(`Exiting after notifying ${recipients.length} recipients.`);
   } catch (error) {
     console.error(
       `Error processing budget alert for project ${projectId}:`,

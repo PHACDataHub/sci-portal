@@ -12,8 +12,8 @@ async function getBudgetAlertRecipients(projectId) {
   const { BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN, BACKSTAGE_URI } = process.env;
 
   const params = new URLSearchParams({
-    filter: `metadata.annotations.cloud.google.com/project-id=${projectId}`,
-    fields: `metadata.annotations.${BUDGET_ALERT_RECIPIENTS_ANNOTATION}`,
+    filter: `metadata.annotations.cloud.google.com/project=${projectId}`,
+    fields: `kind,metadata.annotations.${BUDGET_ALERT_RECIPIENTS_ANNOTATION}`,
   });
   const url = `${BACKSTAGE_URI}/api/catalog/entities/by-query?${params}`;
   const headers = {
@@ -22,7 +22,19 @@ async function getBudgetAlertRecipients(projectId) {
   };
 
   const response = await fetch(url, { method: 'GET', headers });
-  console.log(`HTTP${response.status} ${response.statusText} - GET ${url}`);
+  let body;
+  let err;
+  try {
+    body = await response.json();
+  }
+  catch (err) {
+    err = err;
+  }
+  console.log(JSON.stringify({ 
+    severity: 'INFO',
+    message: `HTTP${response.status} ${response.statusText} - GET ${url}`,
+    component: { body, err }, // Uncomment to debug.
+  }));
 
   if (!response.ok) {
     throw new Error(
@@ -30,10 +42,12 @@ async function getBudgetAlertRecipients(projectId) {
     );
   }
 
-  const body = await response.json();
-
   const uniqueRecipients = new Set();
   for (const item of body.items) {
+    if (item.kind === 'Group') {
+      continue;
+    }
+
     const recipients =
       item.metadata.annotations[BUDGET_ALERT_RECIPIENTS_ANNOTATION].split(',');
     for (const recipient of recipients) {

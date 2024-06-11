@@ -27,7 +27,11 @@ async function sendEmail(templateId, recipients, personalisation) {
   const sendPromises = recipients.map(async recipient => {
     try {
       const response = await client.sendEmail(templateId, recipient, { personalisation });
-      console.log(`An email has been sent to ${recipient}. Inspect the notification at ${response?.uri}.`);
+      console.log(JSON.stringify({
+        severity: 'INFO',
+        message: `An email has been sent to ${recipient}. Inspect the notification at ${response?.uri}.`,
+        component: response, // Uncomment to debug.
+      }));
     } catch (error) {
       throw new Error(
         `Unable to send email to ${recipient}`,
