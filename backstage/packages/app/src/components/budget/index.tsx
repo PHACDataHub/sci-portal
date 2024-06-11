@@ -3,7 +3,7 @@ import { Budget, useDataLoader } from '../../loaders/DataLoader';
 
 interface BudgetComponentProps {
   projectId: string;
-  render: (budget: Budget | null) => ReactNode;
+  render: (budget: Budget) => ReactNode;
 }
 
 const BudgetComponent: React.FC<BudgetComponentProps> = ({
@@ -38,8 +38,8 @@ export const BudgetLimit: React.FC<BudgetLimitProps> = ({ projectId }) => {
   return (
     <BudgetComponent
       projectId={projectId}
-      render={(budget: Budget | null) => (
-        <div>{budget && <strong>${budget.totalCost.toFixed(2)}</strong>}</div>
+      render={(budget: Budget) => (
+        <strong>${budget.totalCost.toFixed(2)}</strong>
       )}
     />
   );
@@ -53,10 +53,8 @@ export const BudgetUsage: React.FC<BudgetUsageProps> = ({ projectId }) => {
   return (
     <BudgetComponent
       projectId={projectId}
-      render={(budget: Budget | null) => (
-        <div>
-          {budget && <strong>{budget.budgetConsumed.toFixed(2)}</strong>}
-        </div>
+      render={(budget: Budget) => (
+        <strong>{budget.budgetConsumed.toFixed(2)}</strong>
       )}
     />
   );

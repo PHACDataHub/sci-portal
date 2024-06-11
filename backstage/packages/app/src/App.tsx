@@ -25,12 +25,6 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
-import { entityPage } from './components/catalog/EntityPage';
-import { searchPage } from './components/search/SearchPage';
-import { Root } from './components/Root';
-import { HomePage } from './components/home/HomePage';
-
 import {
   AlertDisplay,
   OAuthRequestDialog,
@@ -41,14 +35,16 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import LightIcon from '@material-ui/icons/WbSunny';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
-import {
-  DefaultFilters,
-  EntityListContextProps,
-} from '@backstage/plugin-catalog-react';
+import { EntityListContextProps } from '@backstage/plugin-catalog-react';
+import LightIcon from '@material-ui/icons/WbSunny';
+import { apis } from './apis';
+import { entityPage } from './components/catalog/EntityPage';
+import { searchPage } from './components/search/SearchPage';
+import { Root } from './components/Root';
+import { HomePage } from './components/home/HomePage';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
 import { GovTheme } from './theme/govTheme';
 import { BudgetLimit, BudgetUsage } from './components/budget';
@@ -71,7 +67,8 @@ const columnsFunc: CatalogTableColumnsFunc = entityListContext => {
       {
         title: '% Budget',
         field: 'entity.metadata.budget',
-        tooltip: 'The percentage of the budget that has been spent, updated once per day.',
+        tooltip:
+          'The percentage of the budget that has been spent, updated once per day.',
         render: (data: CatalogTableRow) => {
           return <BudgetUsage projectId={data.entity.metadata.name} />;
         },
@@ -146,7 +143,7 @@ const routes = (
       path="/catalog"
       element={
         <DataLoaderProvider>
-          <CatalogIndexPage columns={columnsFunc}/>
+          <CatalogIndexPage columns={columnsFunc} />
         </DataLoaderProvider>
       }
     />
