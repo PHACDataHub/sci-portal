@@ -89,6 +89,7 @@ export async function generateBudgetUsages(today: Date): Promise<Usage[]> {
       }),
     );
   } catch (error) {
+    console.error(error);
     throw new Error(`Error fetching budget usage`);
   }
 }
@@ -159,6 +160,7 @@ export async function saveBudgetUsages(budgetUsages: Usage[]) {
       });
     });
   } catch (error) {
+    console.error(error);
     throw new Error(`Error processing job for syncing budget usage`);
   }
 }
@@ -207,6 +209,7 @@ export async function fetchAndSyncNewBudgets() {
       }
     }
   } catch (error) {
+    console.error(error);
     throw new Error(`Error syncing budget`);
   }
 }
@@ -239,6 +242,7 @@ export async function fetchSyncedBudgetUsages(): Promise<Usage[]> {
       }),
     );
   } catch (error) {
+    console.error(error);
     throw new Error(`Error fetching synced budget usages`);
   }
 }
@@ -282,6 +286,7 @@ export async function fetchSyncedBudgetUsage(
 
     return firstUsage;
   } catch (error) {
+    console.error(error);
     throw new Error(`Error fetching budget usage for project: ${projectId}`, {
       cause: 500,
     });
