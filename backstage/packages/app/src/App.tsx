@@ -25,12 +25,6 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
-import { entityPage } from './components/catalog/EntityPage';
-import { searchPage } from './components/search/SearchPage';
-import { Root } from './components/Root';
-import { HomePage } from './components/home/HomePage';
-
 import {
   AlertDisplay,
   OAuthRequestDialog,
@@ -41,37 +35,56 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import LightIcon from '@material-ui/icons/WbSunny';
 import { UnifiedThemeProvider } from '@backstage/theme';
-import { GovTheme } from './theme/govTheme';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { googleAuthApiRef } from '@backstage/core-plugin-api';
+import { EntityListContextProps } from '@backstage/plugin-catalog-react';
+import LightIcon from '@material-ui/icons/WbSunny';
+import { apis } from './apis';
+import { entityPage } from './components/catalog/EntityPage';
+import { searchPage } from './components/search/SearchPage';
+import { Root } from './components/Root';
+import { HomePage } from './components/home/HomePage';
 import { CostDashboardPage } from './components/costDashboard/CostDashboardPage';
-import { DefaultFilters } from '@backstage/plugin-catalog-react';
-import BudgetUsage from './components/budget/BudgetUsage';
+import { GovTheme } from './theme/govTheme';
+import { BudgetLimit, BudgetUsage } from './components/budget';
 import { DataLoaderProvider } from './loaders/DataLoader';
-import BudgetLimit from './components/budget/BudgetLimit';
 
-const customCatalogColumnsFunc: CatalogTableColumnsFunc = entityListContext => {
-  return [
-    ...CatalogTable.defaultColumnsFunc(entityListContext),
-    {
-      title: '% Budget',
-      field: 'entity.metadata.budget',
-      render: (data: CatalogTableRow) => {
-        return (
-          <BudgetUsage projectId={data.entity.metadata.name}></BudgetUsage>
-        );
+/**
+ * Returns true when the `Cost` and `% Budget` columns should be rendered.
+ */
+const entityKindHasBudget = (
+  entityListContext: EntityListContextProps,
+): boolean => {
+  const kind = entityListContext.filters.kind?.value;
+  return kind === 'component' || kind === 'resource';
+};
+
+const columnsFunc: CatalogTableColumnsFunc = entityListContext => {
+  if (entityKindHasBudget(entityListContext)) {
+    return [
+      ...CatalogTable.defaultColumnsFunc(entityListContext),
+      {
+        title: '% Budget',
+        field: 'entity.metadata.budget',
+        tooltip:
+          'The percentage of the budget that has been spent, updated once per day.',
+        render: (data: CatalogTableRow) => {
+          return <BudgetUsage projectId={data.entity.metadata.name} />;
+        },
       },
-    },
-    {
-      title: 'Cost',
-      field: 'entity.metadata.cost',
-      render: (data: CatalogTableRow) => (
-        <BudgetLimit projectId={data.entity.metadata.name}></BudgetLimit>
-      ),
-    },
-  ];
+      {
+        title: 'Cost (CAD)',
+        field: 'entity.metadata.cost',
+        tooltip: 'The cost that has been spent, updated once per day.',
+        render: (data: CatalogTableRow) => (
+          <BudgetLimit projectId={data.entity.metadata.name} />
+        ),
+      },
+    ];
+  }
+
+  return CatalogTable.defaultColumnsFunc(entityListContext);
 };
 
 const app = createApp({
@@ -130,18 +143,7 @@ const routes = (
       path="/catalog"
       element={
         <DataLoaderProvider>
-          <CatalogIndexPage
-            columns={customCatalogColumnsFunc}
-            filters={
-              <>
-                <DefaultFilters
-                  initialKind="Resource"
-                  initiallySelectedFilter="owned"
-                  ownerPickerMode="all"
-                />
-              </>
-            }
-          />
+          <CatalogIndexPage columns={columnsFunc} />
         </DataLoaderProvider>
       }
     />
