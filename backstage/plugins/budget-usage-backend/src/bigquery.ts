@@ -219,11 +219,9 @@ export async function fetchAndSyncNewBudgets() {
  */
 export async function fetchSyncedBudgetUsages(): Promise<Usage[]> {
   try {
-    const dataset = bigqueryClient.dataset(
-      config.bigquery.budgetExports.dataset,
-    );
+    const dataset = bigqueryClient.dataset(config.bigquery.budgets.dataset);
     const table = dataset.table(
-      config.bigquery.budgetExports.tables.exported.name,
+      config.bigquery.budgets.tables.budgetUsage.name,
     );
     const [queryResult] = await table.query({
       query: fetchBudgetAllUsageQuery,
@@ -256,11 +254,9 @@ export async function fetchSyncedBudgetUsage(
   projectId: string,
 ): Promise<Usage | undefined> {
   try {
-    const dataset = bigqueryClient.dataset(
-      config.bigquery.budgetExports.dataset,
-    );
+    const dataset = bigqueryClient.dataset(config.bigquery.budgets.dataset);
     const table = dataset.table(
-      config.bigquery.budgetExports.tables.exported.name,
+      config.bigquery.budgets.tables.budgetUsage.name,
     );
     const [queryResult] = await table.query({
       query: fetchBudgetUsageQuery,
