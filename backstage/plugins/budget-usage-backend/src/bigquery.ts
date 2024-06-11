@@ -24,13 +24,13 @@ const checkBudgetExistsQuery = `
 SELECT projectId
 FROM \`${config.bigquery.budgets.tables.budget.fullPath}\`
 WHERE projectId = @Id
+LIMIT 1
 `;
 
 const fetchBudgetUsageQuery = `
 SELECT *
 FROM \`${config.bigquery.budgets.tables.budgetUsage.fullPath}\`
 WHERE projectId = @Id
-LIMIT 1
 `;
 
 const fetchBudgetAllUsageQuery = `
@@ -51,8 +51,8 @@ export interface Usage {
   lastSync: string;
 }
 
-function firstDateOfYear(date: Date): string {
-  return new Date(date.getFullYear(), 0, 1).toISOString();
+function startOfYear(date: Date): Date {
+  return new Date(date.getFullYear(), 0, 1);
 }
 
 /**
@@ -73,7 +73,7 @@ export async function generateBudgetUsages(today: Date): Promise<Usage[]> {
     const [queryResult] = await table.query({
       query: getBudgetUsageQuery,
       params: {
-        StartBillingDate: firstDateOfYear(today),
+        StartBillingDate: startOfYear(today).toISOString(),
         Today: today.toISOString(),
       },
     });
