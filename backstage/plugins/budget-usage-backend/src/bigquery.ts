@@ -31,7 +31,6 @@ const fetchBudgetUsageQuery = `
 SELECT *
 FROM \`${config.bigquery.budgets.tables.budgetUsage.fullPath}\`
 WHERE projectId = @Id
-LIMIT 1
 `;
 
 const fetchBudgetAllUsageQuery = `
