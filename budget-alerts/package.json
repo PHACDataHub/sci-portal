@@ -14,6 +14,7 @@
     "@google-cloud/functions-framework": "^3.4.0",
     "@google-cloud/pubsub": "^4.4.0",
     "@spotify/prettier-config": "^12.0.0",
+    "@google-cloud/storage": "^7.11.2",
     "axios": "^1.7.2",
     "notifications-node-client": "8.0.0"
   },

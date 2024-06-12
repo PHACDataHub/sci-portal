@@ -1,0 +1,162 @@
+{
+    "alertsSent": {
+        "threholds": {
+            "0.25": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "0.5": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "0.75": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "0.9": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "0.95": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.0": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.01": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.02": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.03": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.04": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.05": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.06": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.07": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.08": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.09": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.1": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.11": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.12": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.13": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.14": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.15": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.16": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.17": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.18": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.19": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ],
+            "1.2": [
+                {
+                    "costIntervalStart": "",
+                    "alertEmailSentAt": ""
+                }
+            ]
+        }
+    }
+}

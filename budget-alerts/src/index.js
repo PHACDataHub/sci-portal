@@ -3,6 +3,7 @@ const functions = require('@google-cloud/functions-framework');
 const { getBudgetAlertRecipients } = require('./backstage');
 const { parseMessage } = require('./cloud_events');
 const { sendEmail } = require('./gc_notify');
+const { validateIfAlertEmailSent } = require('./cloud_storage_interact');
 
 const { GC_NOTIFY_ALERT_TEMPLATE_ID, GC_NOTIFY_OVER_BUDGET_TEMPLATE_ID } =
   process.env;
@@ -51,6 +52,15 @@ async function sendBudgetAlerts(cloudEvent) {
   // We can expect messages multiple times per day with the current status.
   if (!message.alertThresholdExceeded) {
     console.log('Exiting with threshold exceeded message to process.');
+    return;
+  }
+
+  // Check if email sent for the current threshold + costIntervalStart combination previously
+  // Read the boolean value into the sendEmail variable and use variable value to exit in case set to false
+  const sendEmail = JSON.parse(validateIfAlertEmailSent(message));
+
+  if (!(sendEmail.sendEmail)) {
+    console.log('Exiting since alert email already sent at ' + String(sendEmail.alertEmailSentAt));
     return;
   }
 
