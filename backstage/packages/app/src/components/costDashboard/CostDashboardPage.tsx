@@ -4,7 +4,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
   iFrame: {
-    width: '85vw',
+    width: '90vw',
     height: '90vh',
   },
 });
