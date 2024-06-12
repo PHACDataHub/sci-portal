@@ -63,7 +63,7 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
       **Pricing Structure**: Subscription
       **Budget Alert Email Recipients:** jane.doe@gcp.hc-sc.gc.ca, john.doe@gcp.hc-sc.gc.ca, steve.smith@gcp.hc-sc.gc.ca
 
-      ### Rad Lab GenAI
+      ### RAD Lab GenAI
 
       **Machine Size**: Medium
       "

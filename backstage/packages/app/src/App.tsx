@@ -171,7 +171,7 @@ const routes = (
         <ScaffolderPage
           groups={[
             {
-              title: 'Rad Lab Modules',
+              title: 'RAD Lab Modules',
               filter: entity =>
                 entity?.metadata?.tags?.includes('rad-lab') ?? false,
             },
