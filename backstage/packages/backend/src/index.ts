@@ -7,7 +7,6 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
 
-import { googleAuthWithCustomSignInResolver } from './plugins/auth/module';
 import { CustomPermissionPolicy } from './plugins/permissions';
 import { createProvisionTemplateAction } from './plugins/scaffolder/actions/provisioner';
 import { createDebugWorkspaceAction } from './plugins/scaffolder/actions/debug-workspace';
@@ -21,8 +20,7 @@ backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
 
 // auth plugin
 backend.add(import('@backstage/plugin-auth-backend'));
-// See https://backstage.io/docs/backend-system/building-backends/migrating#the-auth-plugin
-backend.add(googleAuthWithCustomSignInResolver);
+backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));
