@@ -15,7 +15,7 @@ SELECT project_id, SUM(t0_qt_mnecho490c) AS total_cost FROM (
     )
     WHERE (clmn1_ >= @StartBillingDate AND clmn1_ < TIMESTAMP_ADD( @Today, INTERVAL 1 DAY)) GROUP BY project_id, t0_qt_nnecho490c
     ORDER BY t0_qt_nnecho490c ASC
-    LIMIT 2000000
+    LIMIT 9223372036854775807
     )
     GROUP BY project_id
   )
@@ -181,10 +181,6 @@ export async function fetchAndSyncNewBudgets() {
   const table = dataset.table(config.bigquery.budgets.tables.budget.name);
 
   try {
-    // DEBUGGING SA used to make requests
-    const saToken = await bigqueryClient.authClient.getCredentials();
-    console.log('SA EMAIL:', saToken.client_email);
-
     const [budgets] = await budgetClient.listBudgets({
       parent: config.billing.accountId,
     });
@@ -193,7 +189,6 @@ export async function fetchAndSyncNewBudgets() {
       try {
         const budgetExists = await checkIfBudgetExists(table, budget.name!);
         if (!budgetExists) {
-          console.log(`Inserting new budget: ${budget.displayName}`);
           await insertBudget(table, budget);
         }
       } catch (error) {
@@ -208,9 +203,9 @@ export async function fetchAndSyncNewBudgets() {
 
 /**
  * Checks if a budget with the given ID exists in the specified table.
- * @param {object} table - The BigQuery table object.
- * @param {string} budgetId - The ID of the budget.
- * @returns {Promise<boolean>} -  Resolves to true if the budget exists.
+ * @param table - The BigQuery table object.
+ * @param budgetName - The name of the budget.
+ * @returns Resolves to true if the budget exists.
  */
 async function checkIfBudgetExists(table: Table, budgetName: string) {
   try {
@@ -227,9 +222,9 @@ async function checkIfBudgetExists(table: Table, budgetName: string) {
 
 /**
  * Inserts a new budget into the specified table.
- * @param {object} table - The BigQuery table object.
- * @param {object} budget - The budget object to insert.
- * @returns {Promise<void>} - A promise that resolves when the budget is inserted.
+ * @param table - The BigQuery table object.
+ * @param budget - The budget object to insert.
+ * @returns  A promise that resolves when the budget is inserted.
  */
 async function insertBudget(
   table: Table,
