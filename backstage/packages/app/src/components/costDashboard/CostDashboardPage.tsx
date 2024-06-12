@@ -21,7 +21,7 @@ export const CostDashboardPage = () => {
           title="FinOps Dashboard"
           width="100%"
           height="100%"
-          src="https://lookerstudio.google.com/embed/reporting/80ca1952-ecbf-4823-a470-cd1768b4c667/page/p_l3qef1s8rc"
+          src="https://lookerstudio.google.com/embed/reporting/d8371c60-4744-4eea-9c3a-894872ef9072/page/p_l3qef1s8rc"
           allowFullScreen
           sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
         />
