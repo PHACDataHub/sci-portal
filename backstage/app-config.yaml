@@ -74,10 +74,9 @@ auth:
       development:
         clientId: ${AUTH_GOOGLE_CLIENT_ID}
         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
-
-  # We configure a custom sign-in resolver until we can manage Users and Groups with Secure LDAP.
-  # See https://backstage.io/docs/auth/identity-resolver#sign-in-without-users-in-the-catalog
-  allowedDomains: ${AUTH_GOOGLE_ALLOWED_DOMAINS}
+        signIn:
+          resolvers:
+            - resolver: emailMatchingUserEntityProfileEmail
 
 # Sign in without a pop-up. See https://backstage.io/docs/auth/#sign-in-configuration.
 enableExperimentalRedirectFlow: true

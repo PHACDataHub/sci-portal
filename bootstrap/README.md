@@ -242,7 +242,6 @@ kubectl create configmap -n backstage backstage-config \
   --from-literal=GITOPS_REPO_OWNER=<github-organization> \
   --from-literal=GITOPS_REPO_NAME="<github-repo>" \
   --from-literal=GCP_BILLING_ACCOUNT_ID="<gcp-billing-account-id>" \
-  --from-literal=AUTH_GOOGLE_ALLOWED_DOMAINS="<expected-domains>" \
   --from-literal=BACKSTAGE_URI="<backstage-uri>"
 ```
 

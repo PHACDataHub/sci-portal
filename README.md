@@ -31,12 +31,13 @@ The process to bootstrap the cluster is documented in **[bootstrap/README.md](bo
 
 ### Authentication in Backstage
 
-* Using the [Google Authentication Provider](https://backstage.io/docs/auth/google/provider) which uses OAuth Credentials.
-* The [Sign-in Identities and Resolvers](https://backstage.io/docs/auth/identity-resolver) docs state that we must explicitly configure the provider to map external identities to user identities in Backstage. This is **not** provided by the Google Authentication provider.
-* Options:
-  * A custom sign-in resolver with domain validation that populates `User` entities in the Catalog
-  * Use the Google Secure LDAP service to get [LDAP Organizational Data](https://backstage.io/docs/integrations/ldap/org/)
+To review the [Backstage documentation](https://backstage.io/docs/auth/):
 
+> The authentication system in Backstage serves two distinct purposes: sign-in and identification of users, as well as delegating access to third-party resources.
+
+The built-in [Google Authentication Provider](https://backstage.io/docs/auth/google/provider) is used to sign-in using Google OAuth.
+
+The user's sign-in identity is matched to the corresponding User in the Backstage Catalog using the `emailMatchingUserEntityProfileEmail` [resolver](https://backstage.io/docs/auth/identity-resolver). The Backstage Catalog should be populated using an external source of truth. The ideal solution would be to load Users using an LDAP integration. Unfortunately we were not able to use Google Secure LDAP during the engagement. As a workaround, Users are manually managed in the [sci-portal-users](https://github.com/PHACDataHub/sci-portal-users) repo. The Backstage Catalog is populated using the [GitHub Discovery](https://backstage.io/docs/integrations/github/discovery) integration.
 
 ### Integrations
 
