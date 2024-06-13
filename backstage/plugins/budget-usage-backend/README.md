@@ -2,6 +2,16 @@
 
 The `budget-usage` plugin is used for syncing billing budget usage. It extends the Backstage API and adds the following endpoints under the `/api/budget-usage` path:
 
+
+> [!IMPORTANT]  
+> The /sync endpoint fetches a list of budgets from the billing account. For this to succeed, the service account used to make this request must have, at a minimum, the `roles/billing.viewer` role, which is essential for listing budgets Additionally, the following BigQuery-related roles are needed to update and run BigQuery jobs: BigQuery Data Owner `roles/bigquery.dataOwner`, which allows the service account to update BigQuery tables, and BigQuery Job User `roles/bigquery.jobUser`, which allows it to run BigQuery jobs for data syncing.
+
+
+> [!IMPORTANT]
+You cannot directly apply roles for Cloud Billing accounts from the same page as folder or project IAM. This is because Cloud Billing accounts exist outside the standard GCP resource hierarchy of projects, folders, and organizations. You must navigate to the Billing page `https://console.cloud.google.com/billing/<billing-id>/manage`, click on 'Add Principal,' and assign billing-related IAM roles through that page.
+
+
+
 ## Endpoints
 
 - **Health Check**: `GET /health` - A simple endpoint for checking the health status of the service.
