@@ -69,7 +69,7 @@ export const config = {
       tables: {
         budget: {
           name: BUDGET_USAGE_DATASET_BUDGET_TABLE,
-          fullPath: `${BUDGET_USAGE_DATASET}.${BUDGET_USAGE_DATASET_BUDGET_TABLE}`,
+          fullPath: `${GCP_PROJECT_ID}.${BUDGET_USAGE_DATASET}.${BUDGET_USAGE_DATASET_BUDGET_TABLE}`,
         },
         budgetUsage: {
           name: BUDGET_USAGE_DATASET_BUDGET_USAGE_TABLE,
