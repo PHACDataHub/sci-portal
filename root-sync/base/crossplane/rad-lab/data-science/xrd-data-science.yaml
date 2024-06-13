@@ -75,7 +75,7 @@ spec:
                   items:
                     type: string
 
-                # Rad Lab Properties
+                # RAD Lab Properties
                 notebookEditors:
                   type: array
                   items:
@@ -93,6 +93,6 @@ spec:
                 - projectEditors
                 - projectViewers
 
-                # Rad Lab Properties
+                # RAD Lab Properties
                 - notebookEditors
                 - machineSize

@@ -2,7 +2,7 @@ This **Dockerfile** extends the Crossplane Terraform Provider image and installs
 
 ### Why do we need `gcloud`?
 
-The `gcloud` CLI is required for the [Rad Lab](https://github.com/GoogleCloudPlatform/rad-lab/tree/v13.3.1/modules) modules that call it in a `local-exec` command like [**modules/gen_ai/main.tf**](https://github.com/GoogleCloudPlatform/rad-lab/blob/v13.3.1/modules/gen_ai/main.tf#L181-L188):
+The `gcloud` CLI is required for the [RAD Lab](https://github.com/GoogleCloudPlatform/rad-lab/tree/v13.3.1/modules) modules that call it in a `local-exec` command like [**modules/gen_ai/main.tf**](https://github.com/GoogleCloudPlatform/rad-lab/blob/v13.3.1/modules/gen_ai/main.tf#L181-L188):
 
 ```tf
 resource "null_resource" "ai_workbench_usermanaged_provisioning_state" {
