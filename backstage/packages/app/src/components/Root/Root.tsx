@@ -70,7 +70,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem
           icon={AddCircleOutlineIcon}
           to="create"
-          text="Create Resource"
+          text="Create..."
         />
         <SidebarItem
           icon={MonetizationIcon}
