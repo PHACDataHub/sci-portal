@@ -18,7 +18,6 @@ import {
 import { SearchContextProvider } from '@backstage/plugin-search-react';
 import Typography from '@material-ui/core/Typography';
 import { shapes } from '@backstage/theme';
-import { ResourcesComponent } from '@internal/backstage-plugin-resources';
 
 const useStyles = makeStyles(theme => ({
   searchBarInput: {
@@ -76,10 +75,6 @@ export const HomePage = () => {
               />
             </Grid>
             <Grid container item xs={12}>
-              <Grid item xs={12} md={12}>
-                <ResourcesComponent />
-              </Grid>
-
               <Typography
                 classes={{ root: classes.sectionHeading }}
                 variant="h5"
