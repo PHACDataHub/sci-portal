@@ -14,10 +14,13 @@ import {
   ItemCardHeader,
   LinkButton,
   ItemCardGrid,
+  Header,
+  InfoCard,
 } from '@backstage/core-components';
 import { SearchContextProvider } from '@backstage/plugin-search-react';
 import Typography from '@material-ui/core/Typography';
 import { shapes } from '@backstage/theme';
+import { HomePageStarredEntities, HomePageToolkit } from '@backstage/plugin-home';
 
 const useStyles = makeStyles(theme => ({
   searchBarInput: {
@@ -54,15 +57,16 @@ const useStyles = makeStyles(theme => ({
 
 export const HomePage = () => {
   const classes = useStyles();
+  const headerProps = {
+    title: 'Data Science Portal',
+  };
 
   return (
     <SearchContextProvider>
       <Page themeId="home">
+        <Header {...headerProps}></Header>
         <Content>
           <Grid container justifyContent="center" spacing={6}>
-            <Typography classes={{ root: classes.pageTitle }} variant="h2">
-              Data Science Portal
-            </Typography>
             <Grid container item xs={12} justifyContent="center">
               <HomePageSearchBar
                 InputProps={{
@@ -75,51 +79,11 @@ export const HomePage = () => {
               />
             </Grid>
             <Grid container item xs={12}>
-              <Typography
-                classes={{ root: classes.sectionHeading }}
-                variant="h5"
-              >
-                Recent Activity
-              </Typography>
-              <ItemCardGrid classes={{ root: classes.grid }}>
-                <Card classes={{ root: classes.card }}>
-                  <CardMedia>
-                    <ItemCardHeader
-                      title="Resource Provisioning"
-                      classes={{ root: classes.header }}
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    Request to provision any resource type you need. Once
-                    requested, a Pull Request will be created for review.
-                  </CardContent>
-                  <CardActions>
-                    <LinkButton
-                      color="primary"
-                      to="create/templates/default/resource-provisioner"
-                    >
-                      View
-                    </LinkButton>
-                  </CardActions>
-                </Card>
-                <Card classes={{ root: classes.card }}>
-                  <CardMedia>
-                    <ItemCardHeader
-                      title="Cost Dashboard"
-                      classes={{ root: classes.header }}
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    Monitor costs and budgets by viewing your dashboard
-                    overview.
-                  </CardContent>
-                  <CardActions>
-                    <LinkButton color="primary" to="">
-                      View
-                    </LinkButton>
-                  </CardActions>
-                </Card>
-              </ItemCardGrid>
+              <Grid item xs={12} md={6}>
+                <InfoCard title="What is the Data Science Portal?">
+                  <div style={{ height: 170 }}>Lorem ipsum ...</div>
+                </InfoCard>
+              </Grid>
             </Grid>
           </Grid>
         </Content>
