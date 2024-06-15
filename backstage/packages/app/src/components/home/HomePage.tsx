@@ -1,26 +1,9 @@
 import React from 'react';
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  makeStyles,
-} from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { HomePageSearchBar } from '@backstage/plugin-search';
-import {
-  Page,
-  Content,
-  ItemCardHeader,
-  LinkButton,
-  ItemCardGrid,
-  Header,
-  InfoCard,
-} from '@backstage/core-components';
+import { Page, Content, Header, InfoCard } from '@backstage/core-components';
 import { SearchContextProvider } from '@backstage/plugin-search-react';
-import Typography from '@material-ui/core/Typography';
 import { shapes } from '@backstage/theme';
-import { HomePageStarredEntities, HomePageToolkit } from '@backstage/plugin-home';
 
 const useStyles = makeStyles(theme => ({
   searchBarInput: {
