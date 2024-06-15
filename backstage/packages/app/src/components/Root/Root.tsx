@@ -67,11 +67,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         {/* Global nav, not org-specific */}
         <SidebarItem icon={HomeIcon} to="/" text="Home" />
         <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
-        <SidebarItem
-          icon={AddCircleOutlineIcon}
-          to="create"
-          text="Create..."
-        />
+        <SidebarItem icon={AddCircleOutlineIcon} to="create" text="Create..." />
         <SidebarItem
           icon={MonetizationIcon}
           to="cost-dashboard"
