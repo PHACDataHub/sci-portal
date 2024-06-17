@@ -7,7 +7,7 @@ properties:
   pullRequestAction:
     title: Pull Request Action
     type: string
-    default: Diff Only
+    default: Publish Pull Request
     enum:
       - Diff Only
       - Publish and Close Pull Request
