@@ -164,6 +164,9 @@ describe('project-create: fetch:template', () => {
             cloud.google.com/project-id: <project-id>
             cloud.google.com/project-name: <project-name>
             data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
+          links:
+            - title: View Project on Google Cloud
+              url: https://console.cloud.google.com/welcome?project=<project-id>
         spec:
           type: project
           owner: group:default/<project-id>-editors
