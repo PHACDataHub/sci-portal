@@ -235,6 +235,14 @@
       "source": "devbox-search",
       "version": "21+35",
       "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "path": "/nix/store/9iv3zq45jsmws7lq38bn4470yxqgj978-zulu-ca-jdk-21.0.2",
+              "default": true
+            }
+          ]
+        },
         "aarch64-linux": {
           "outputs": [
             {
@@ -538,6 +546,18 @@
             }
           ],
           "store_path": "/nix/store/7y64w0h7ra5r2kvhi30vzgfh38fss5zx-kyverno-chainsaw-0.2.3"
+        }
+      }
+    },
+    "path:./.devbox/flakes/google-cloud-sdk#google-cloud-sdk": {
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "path": "/nix/store/lcrzzknv4vnk3mcry8xc4ws4yngml3sw-google-cloud-sdk-467.0.0",
+              "default": true
+            }
+          ]
         }
       }
     },
