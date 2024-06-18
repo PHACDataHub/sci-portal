@@ -134,71 +134,73 @@ The following changes are necessary to support multi-cloud in our Crossplane Com
       name: google-<template>
   ```
 
-Additional work is expected to set up a GitOps tool to provision infrastructure for the new provider, and add budget monitoring and alerts.
+Additional work is expected to set up a GitOps tool to provision infrastructure using the new provider, and add budget monitoring and alerts.
 
 ### Translations
 
-Translations must be provided to the three distinct sources:
+Translations must be defined for each Backstage components:
 
-- The Frontend App can use a [Translation Extension](https://backstage.io/docs/frontend-system/building-apps/migrating/#__experimentaltranslations).
-- The Plugins have [experimental support](https://backstage.io/docs/plugins/internationalization/).
+- The App (Frontend) uses a [Translation Extension](https://backstage.io/docs/frontend-system/building-apps/migrating/#__experimentaltranslations).
+- Plugins have [experimental support](https://backstage.io/docs/plugins/internationalization/).
 - Templates do not have support but the underlying library `react-jsonschema-form` provides a [`translateString` function](https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/form-props/#translatestring) that may work.
 
 ### Improving GitHub Discovery
 
-Backstage has been configured to discover new Catalog entities from our repositories using polling. This pull-based model is inefficient and can be improved on by [following the documentation](https://backstage.io/docs/integrations/github/discovery/#events-supportEvents) to configure Backstage to listen for events from a GitHub Webhook.
+Backstage has been configured to discover new Catalog entities in our repositories using polling. The pull-based model is inefficient and does not scale well as the number of size of the repositories grows. [Following the documentation](https://backstage.io/docs/integrations/github/discovery/#events-supportEvents) to configure Backstage to listen for events from a GitHub Webhook to improve the performance.
 
 ## Known Limitations
 
 ### Not Ready for Production
 
-This is a reference implementation of Backstage not intended for deployment in production. An incomplete list of considerations to deploy in production are [documented below](#preparing-for-production).
+This is a reference implementation that is not intended for deployment in production. An incomplete list of considerations to deploy in production are [documented below](#preparing-for-production).
 
 ### Vertex AI Deprecations
 
 The RAD Lab Data Science and Gen AI modules will not be able to create notebooks after January 30, 2025 when [support for Vertex AI Workbench managed notebooks is shutdown](https://cloud.google.com/vertex-ai/docs/deprecations). Existing managed notebooks will continue to work but will not be patched.
 
-As of June 2024, the team supporting the [RAD Lab modules](https://github.com/GoogleCloudPlatform/rad-lab/tree/main/modules) is aware of this issue but has not scheduled maintenance. The RAD Lab Terraform modules must be updated to migrate managed notebook instances to Vertex AI Workbench instances.
+As of June 2024, the team supporting [RAD Lab](https://github.com/GoogleCloudPlatform/rad-lab/tree/main/modules) is aware of this issue but has not scheduled maintenance. The RAD Lab Terraform modules must be updated to migrate managed notebook instances to Vertex AI Workbench instances.
 
 ### FinOps Reporting
 
-To ensure timely delivery of an extensible [Cost Dashboard](https://backstage.alpha.phac-aspc.gc.ca/cost-dashboard), a Looker Studio report has been embedded instead a custom developed dashboard. This provides a flexible starting point that allows more of the team to help refine and build a meaningful FinOps report.
+To ensure timely delivery of an extensible [Cost Dashboard](https://backstage.alpha.phac-aspc.gc.ca/cost-dashboard), a Looker Studio report has been embedded in Backstage instead a custom dashboard. This provides a flexible starting that the team can refine to build a meaningful FinOps report that meets their needs.
 
 ### Deleting Components
 
-To follow the GitOps methodology we should delete Components from the Backstage UI and create a Pull Request in GitHub. However, Backstage cannot create a GitHub Pull Request that removes files, blocking us from implementing this feature. This limitation is tracked on GitHub by [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447).
+To follow the GitOps methodology we should delete Components from the Backstage UI and create a Pull Request in GitHub. However, Backstage cannot create a GitHub Pull Request that removes files, blocking us from implementing this feature. This limitation is tracked by the GitHub Issue [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447).
 
-To implement this feature, we could add a [Custom Catalog Action](https://backstage.io/docs/features/software-catalog/catalog-customization/#customize-actions) that would use a Software Template to remove a project. The new Software Template would take the Catalog Entity and a justification as inputs. When submitted, the template would need to perform the following actions:
+To implement this feature, add a [Custom Catalog Action](https://backstage.io/docs/features/software-catalog/catalog-customization/#customize-actions) that links to a Software Template that removes a project. The template would need to perform the following steps:
 
 - Fetch the **[DMIA-PHAC](https://github.com/PHACDataHub/sci-portal/tree/main/DMIA-PHAC)** directory
 - Remove the directory from the [Kustomization File](https://github.com/PHACDataHub/sci-portal-users/blob/main/DMIA-PHAC/kustomization.yaml)
 - Remove the project directory
 - Create a Pull Request
 
-We already modify the Kustomization File in **[backstage/packages/backend/.../kustomization-file.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts)**. Add a new custom action to remove a directory/resource.
+Extend the module that modifies the  Kustomization File in **[backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts)**.
 
-If [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447) is resolved, update Backstage and use the new API to removes files. Otherwise, create a custom action that extends the built-in `publish:github:pull-request` action to accept a new input parameter for files to delete, and call the `octokit.createPullRequest` method directly.
+If [the GitHub Issue](https://github.com/backstage/backstage/issues/23447) is resolved, update Backstage and use the new API to removes files. Otherwise, create a custom action that extends the built-in `publish:github:pull-request` action to accept a new input parameter for files to delete, and call the `octokit.createPullRequest` method directly.
 
 ### Development on Windows
 
-We discovered that the Backstage Software Templates fail to render templates on Windows. We have created two issues to track this limitation on GitHub: [PHACDataHub/sci-portal#309](https://github.com/PHACDataHub/sci-portal/issues/309) and [backstage/backstage#25056](https://github.com/backstage/backstage/issues/25056). We skip the failing unit tests on Windows to prevent this problem from affecting development.
+We discovered that the Backstage Software Templates fail to render templates on Windows. We have created two GitHub Issues to track this limitation: [PHACDataHub/sci-portal#309](https://github.com/PHACDataHub/sci-portal/issues/309) and [backstage/backstage#25056](https://github.com/backstage/backstage/issues/25056).
+
+The failing unit tests are skipped to prevent this problem from affecting local development and the CI pipeline.
 
 ### Viewer Permissions
 
-In order to focus on higher priority UI features, the Viewers do not have additional permissions defined in Backstage or in the Templates. This is tracked by [PHACDataHub/sci-portal#464](https://github.com/PHACDataHub/sci-portal/issues/464).
+In order to focus on higher priority UI features Viewers do not have additional permissions defined in Backstage or in the Templates. This is tracked by [PHACDataHub/sci-portal#464](https://github.com/PHACDataHub/sci-portal/issues/464).
 
 ## Preparing for Production
 
 This is a reference implementation that is not ready for production. We've listed a few areas for concern below but there are certainly more things to consider:
 
 - Deploy in a hardened cluster
-- Improve secrets management
-- Harden the GitHub App integration
+- Improve cluster secrets management
 - Harden the Backstage Backend auth
+- Harden the GitHub App integration
 - Validate and sanitize all inputs
-- Refine the dataset used for the Cost Dashboard
-- Monitor security vulnerabilities
-- Consider using [Universal Crossplane](https://www.upbound.io/product/universal-crossplane)
+- Restrict the dataset used for the Cost Dashboard
+- Consider using [Universal Crossplane](https://www.upbound.io/product/universal-crossplane) which has upstream security updates
+- Remove excessive IAM Permissions
 
 ## Changes to the Project Scope
 
@@ -210,13 +212,13 @@ Work on Collin Brown’s [template](https://github.com/PHACDataHub/infra-core/tr
 
 ### "Parking" Over-Budget Projects
 
-It is possible to "park" or shutdown an over-spending project to reduce costs on a case-by-case basis.
+It is possible to "park" or shutdown an over-spending project to reduce costs.
 
-If the infrastructure for a given template can be configured to reduce spending, we can create a Crossplane Composition for the "parked" state and use the `compositionSelector` like the implementation for [multi-cloud support](#multi-cloud-support).
+If the infrastructure for a given template can be configured to reduce spending, create and label a Crossplane Composition for the "parked" state. Use the implementation pattern for [multi-cloud support](#multi-cloud-support) to choose which Composition/state to provision.
 
-This functionality can be added to the Backstage UI by introducing a [Custom Catalog Action](https://backstage.io/docs/features/software-catalog/catalog-customization#customize-actions) that appears as a button on the Catalog entity. The button would link to a Template that creates a Pull Request with the new "parked" state. Configure the button to be visible only to users with the [required permissions](https://backstage.io/docs/permissions/frontend-integration).
+Add this functionality to Backstage by adding a [Custom Catalog Action](https://backstage.io/docs/features/software-catalog/catalog-customization#customize-actions) on the Catalog entities. This button should link to a new template that creates a Pull Request with the new "parked" state. Configure the button to be visible only to users with the [required permissions](https://backstage.io/docs/permissions/frontend-integration).
 
-Creating a Pull Request to "park" over-budget projects can be automated as well. Configure the Cloud Function that handles budget alert notifications to use the Backstage API to create a Pull Request at a given threshold.
+To automate "parking" over-budget projects, configure the Cloud Function that handles budget alert notifications to use the Backstage API to create a Pull Request.
 
 A similar approach can be taken to restore a “parked” projects.
 
