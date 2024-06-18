@@ -18,6 +18,10 @@
     - [Viewer Permissions](#viewer-permissions)
     - [FinOps Reporting](#finops-reporting)
 - [Preparing for Production](#preparing-for-production)
+- [Changes to the Project Scope](#changes-to-the-project-scope)
+    - [RStudio and RShiny Cloud Workstation](#rstudio-and-rshiny-cloud-workstation)
+    - ["Parking" Over-Budget Projects](#parking-over-budget-projects)
+    - [Administrator Roles/Permissions](#administrator-rolespermissions)
 
 ## About this Document
 
@@ -35,8 +39,8 @@ PHAC engaged Google to build a reference implementation of a web app that provid
 
 The reference implementation is split between two repositories:
 
-- [PHACDataHub/sci-portal-users](https://github.com/PHACDataHub/sci-portal-users) contains the `User`, `Group`, and infrastructure definitions
-- [PHACDataHub/sci-portal](https://github.com/PHACDataHub/sci-portal) contains the rest of the reference implementation
+- [PHACDataHub/sci-portal-users](https://github.com/PHACDataHub/sci-portal-users) contains the `User`, `Group`, and infrastructure definitions.
+- [PHACDataHub/sci-portal](https://github.com/PHACDataHub/sci-portal) contains the rest of the reference implementation.
 
 ## Extensibility
 
@@ -46,22 +50,21 @@ This section explains how to extend the reference implementation to add new temp
 
 Before adding a new template, review the Backstage documentation on writing [Software Templates](https://backstage.io/docs/features/software-templates/) and [Crossplane Concepts](https://docs.crossplane.io/latest/concepts/).
 
-We have established a convention that makes adding new templates quick and easy.
-
-Templates are defined in the **[backstage/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/templates)** directory. Backstage is configured to populate the Catalog from files match the pattern `backstage/templates/*/template.yaml`. To add a template that creates a new GCP Project, we recommend copying the **[backstage/templates/rad-lab-data-science/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/templates/rad-lab-data-science-create)** directory.
+We have tried to establish a convention that makes adding new templates easy. Templates are defined in the **[backstage/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/templates)** directory. This is a convention because Backstage is configured to populate the Catalog from files match the `backstage/templates/*/template.yaml` pattern.
 
 The template directory should contain the following files:
 
 | Path | Description |
 | - | - |
 | **template.yaml** | The YAML manifest that contains the `Template` entity.<br><br>Set the `name`, `title`, and `description` in the `metadata`.<br>Consider changing the `spec.type` to match the Entity that will be created.|
-| **pull-request-description.njk** | A Nunjucks template for the Pull Request description. The templates can reuse other templates using [template inheritance](https://mozilla.github.io/nunjucks/templating.html#template-inheritance). For example, we include the Project template using `{% extends "project-create/pull-request-description.njk" %}`.
-| **pull-request-changes/** | A directory containing Nunjucks templates that are added to the Pull Request in the **[DMIA-PHAC/SciencePlatform/](https://github.com/PHACDataHub/sci-portal-users/tree/main/DMIA-PHAC/SciencePlatform)&lt;project-id&gt;/ directory** |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**catalog-info.yaml.njk** | A Nunjucks template that declares the Backstage Catalog Entities to add. This includes the `Component`/`Resource` to add, and `Group`s for the Editor and Viewer permissions. |
+| **pull-request-description.njk** | A Nunjucks template for the Pull Request description. Templates can include other templates using [template inheritance](https://mozilla.github.io/nunjucks/templating.html#template-inheritance).
+| **pull-request-changes/** | A directory containing Nunjucks templates. These files are added to the Pull Request in the **[DMIA-PHAC/SciencePlatform/](https://github.com/PHACDataHub/sci-portal-users/tree/main/DMIA-PHAC/SciencePlatform)&lt;project-id&gt;/** directory. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**catalog-info.yaml.njk** | A Nunjucks template that declares the Backstage Catalog entities to add. This includes the `Resource`, `Component`, and `Group`s for the Editor and Viewer permissions. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**claim.yaml.njk** | Declares the Crossplane `Claim` used to provision infrastructure. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**kustomization.yaml.njk** | Configures Config Sync to ignore the non-Kubernetes resources such as the Backstage resources in **catalog-info.yaml**. |
 
-To write the Nunjucks templates with confidence, add corresponding unit tests in the **[backstage/packages/backend/src/plugins/scaffolder/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/packages/backend/src/plugins/scaffolder/templates)** directory. Use the tests to assert that the Pull Request description and contents match our expectations.
+>[!TIP]
+> **Write Nunjucks templates with confidence**. Add unit tests to **[backstage/packages/backend/src/plugins/scaffolder/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/packages/backend/src/plugins/scaffolder/templates)** that assert the Pull Request description and contents match our expectations. 
 
 Changes may be required to validate or modify the input parameters. This is handled in our custom action declared in **[backstage/packages/backend/src/plugins/scaffolder/actions/provisioner.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/provisioner.test.ts)**.
 
