@@ -21,6 +21,7 @@
   - [RStudio and RShiny Cloud Workstation](#rstudio-and-rshiny-cloud-workstation)
   - ["Parking" Over-Budget Projects](#parking-over-budget-projects)
   - [Administrator Roles/Permissions](#administrator-rolespermissions)
+  - [Additional Templates for RAD Lab and GCP Services](#additional-templates-for-rad-lab-and-gcp-services)
 
 ## About this Document
 
@@ -197,6 +198,7 @@ This is a reference implementation that is not ready for production. We've liste
 - Validate and sanitize all inputs
 - Refine the dataset used for the Cost Dashboard
 - Monitor security vulnerabilities
+- Consider using [Universal Crossplane](https://www.upbound.io/product/universal-crossplane)
 
 ## Changes to the Project Scope
 
@@ -233,3 +235,7 @@ Follow [the documentation](https://backstage.io/docs/permissions/overview/) to d
 ### Additional Templates for RAD Lab and GCP Services
 
 Follow the documentation above to [Add A New Template](#add-a-new-template).
+
+### Deployment Status
+
+As documented in [PHACDataHub/sci-portal#38](https://github.com/PHACDataHub/sci-portal/issues/38) Vedant and Rajan have made great progress on surfacing the status of managed resources up to the top-level Crossplane claim.
