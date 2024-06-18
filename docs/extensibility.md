@@ -1,27 +1,26 @@
 # Extensibility Report
 
-
 ## Contents
 
 - [About this Document](#about-this-document)
 - [Extensibility](#extensibility)
-    - [Add A New Template](#add-a-new-template)
-    - [Deploy Combinations of Templates](#deploy-combinations-of-templates)
-    - [Multi-Cloud Support](#multi-cloud-support)
-    - [Translations](#translations)
-    - [Improving GitHub Discovery](#improving-github-discovery)
+  - [Add A New Template](#add-a-new-template)
+  - [Deploy Combinations of Templates](#deploy-combinations-of-templates)
+  - [Multi-Cloud Support](#multi-cloud-support)
+  - [Translations](#translations)
+  - [Improving GitHub Discovery](#improving-github-discovery)
 - [Known Limitations](#known-limitations)
-    - [Not Ready for Production](#not-ready-for-production)
-    - [Deleting Components](#deleting-components)
-    - [Vertex AI Deprecations](#vertex-ai-deprecations)
-    - [Development on Windows](#development-on-windows)
-    - [Viewer Permissions](#viewer-permissions)
-    - [FinOps Reporting](#finops-reporting)
+  - [Not Ready for Production](#not-ready-for-production)
+  - [Vertex AI Deprecations](#vertex-ai-deprecations)
+  - [FinOps Reporting](#finops-reporting)
+  - [Deleting Components](#deleting-components)
+  - [Development on Windows](#development-on-windows)
+  - [Viewer Permissions](#viewer-permissions)
 - [Preparing for Production](#preparing-for-production)
 - [Changes to the Project Scope](#changes-to-the-project-scope)
-    - [RStudio and RShiny Cloud Workstation](#rstudio-and-rshiny-cloud-workstation)
-    - ["Parking" Over-Budget Projects](#parking-over-budget-projects)
-    - [Administrator Roles/Permissions](#administrator-rolespermissions)
+  - [RStudio and RShiny Cloud Workstation](#rstudio-and-rshiny-cloud-workstation)
+  - ["Parking" Over-Budget Projects](#parking-over-budget-projects)
+  - [Administrator Roles/Permissions](#administrator-rolespermissions)
 
 ## About this Document
 
@@ -54,17 +53,16 @@ We have tried to establish a convention that makes adding new templates easy. Te
 
 The template directory should contain the following files:
 
-| Path | Description |
-| - | - |
-| **template.yaml** | The YAML manifest that contains the `Template` entity.<br><br>Set the `name`, `title`, and `description` in the `metadata`.<br>Consider changing the `spec.type` to match the Entity that will be created.|
-| **pull-request-description.njk** | A Nunjucks template for the Pull Request description. Templates can include other templates using [template inheritance](https://mozilla.github.io/nunjucks/templating.html#template-inheritance).
-| **pull-request-changes/** | A directory containing Nunjucks templates. These files are added to the Pull Request in the **[DMIA-PHAC/SciencePlatform/](https://github.com/PHACDataHub/sci-portal-users/tree/main/DMIA-PHAC/SciencePlatform)&lt;project-id&gt;/** directory. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**catalog-info.yaml.njk** | A Nunjucks template that declares the Backstage Catalog entities to add. This includes the `Resource`, `Component`, and `Group`s for the Editor and Viewer permissions. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**claim.yaml.njk** | Declares the Crossplane `Claim` used to provision infrastructure. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**kustomization.yaml.njk** | Configures Config Sync to ignore the non-Kubernetes resources such as the Backstage resources in **catalog-info.yaml**. |
+| Path                                                                       | Description                                                                                                                                                                                                                                     |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **template.yaml**                                                          | The YAML manifest that contains the `Template` entity.<br><br>Set the `name`, `title`, and `description` in the `metadata`.<br>Consider changing the `spec.type` to match the Entity that will be created.                                      |
+| **pull-request-description.njk**                                           | A Nunjucks template for the Pull Request description. Templates can include other templates using [template inheritance](https://mozilla.github.io/nunjucks/templating.html#template-inheritance).                                              |
+| **pull-request-changes/**                                                  | A directory containing Nunjucks templates. These files are added to the Pull Request in the **[DMIA-PHAC/SciencePlatform/](https://github.com/PHACDataHub/sci-portal-users/tree/main/DMIA-PHAC/SciencePlatform)&lt;project-id&gt;/** directory. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**catalog-info.yaml.njk**  | A Nunjucks template that declares the Backstage Catalog entities to add. This includes the `Resource`, `Component`, and `Group`s for the Editor and Viewer permissions.                                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**claim.yaml.njk**         | Declares the Crossplane `Claim` used to provision infrastructure.                                                                                                                                                                               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**kustomization.yaml.njk** | Configures Config Sync to ignore the non-Kubernetes resources such as the Backstage resources in **catalog-info.yaml**.                                                                                                                         |
 
->[!TIP]
-> **Write Nunjucks templates with confidence**. Add unit tests to **[backstage/packages/backend/src/plugins/scaffolder/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/packages/backend/src/plugins/scaffolder/templates)** that assert the Pull Request description and contents match our expectations. 
+Write Nunjucks templates with confidence using tests. Add unit tests to **[backstage/packages/backend/src/plugins/scaffolder/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/packages/backend/src/plugins/scaffolder/templates)** that assert the Pull Request description and contents match our expectations.
 
 Changes may be required to validate or modify the input parameters. This is handled in our custom action declared in **[backstage/packages/backend/src/plugins/scaffolder/actions/provisioner.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/provisioner.test.ts)**.
 
@@ -72,39 +70,41 @@ The Pull Request creates a Crossplane `Claim` to provision new infrastructure. T
 
 Define infrastructure using Crossplane following these principles:
 
-* Define infrastructure exclusively using [Config Connector resources](https://cloud.google.com/config-connector/docs/reference/overview), when possible.  
-The [`config-connector` CLI tool](https://cloud.google.com/config-connector/docs/how-to/import-export/overview) can help export resources.
-* When infrastructure cannot be defined using exclusively Config Connector resources, use Terraform.
-* Do not mix tools.
-* Isolate the state between GCP Projects (or equivalent). Use the `Workspace` `providerConfigRef` to target a `ProviderConfig` that configures a state file for each project.
-* Use Crossplane `Usage`s to ensure resources are deleted in the expected order.
-* If the Crossplane Composition requires conditional statements, use [Composition Functions](https://docs.crossplane.io/latest/concepts/composition-functions/). It is a known limitation that [Patch and Transforms](https://docs.crossplane.io/latest/concepts/patch-and-transform/) do not support conditions.
+- Define infrastructure exclusively using [Config Connector resources](https://cloud.google.com/config-connector/docs/reference/overview), when possible.  
+  The [`config-connector` CLI tool](https://cloud.google.com/config-connector/docs/how-to/import-export/overview) may be helpful to export resources.
+- When infrastructure cannot be defined using exclusively Config Connector resources, use Terraform.
+- Do not mix tools (Config Connector, Terraform, or others).
+- Isolate the Terraform state for each GCP Project (or equivalent). Create a `ProviderConfig` that configures the state file `backend` for each Project. Configure the `Workspace` to use the `ProviderConfig` using the `providerConfigRef`.
+- Use [Crossplane Usages](https://docs.crossplane.io/latest/concepts/usages/) to ensure resources are deleted in the expected order.
+- If the Crossplane Composition requires conditional statements, use [Composition Functions](https://docs.crossplane.io/latest/concepts/composition-functions/). It is a known limitation that [Patch and Transforms](https://docs.crossplane.io/latest/concepts/patch-and-transform/) do not support conditions.
 
-If Terraform modules require modification they can be added to the [**templates/**](https://github.com/PHACDataHub/sci-portal/tree/main/templates) directory. The RAD Lab Data Science and Gen AI modules have been copied and modified there.
+If Terraform modules need to be modified, copy them to the [**templates/**](https://github.com/PHACDataHub/sci-portal/tree/main/templates) directory. The RAD Lab Data Science and Gen AI modules have been copied and modified there.
 
-To add or refactor infrastructure with confidence there are corresponding [`chainsaw`](https://kyverno.github.io/chainsaw/latest/quick-start/run-tests/) tests in the **[tests/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/tests/templates)** directory.
+Define infrastructure with confidence using tests. There are corresponding [`chainsaw`](https://kyverno.github.io/chainsaw/latest/quick-start/run-tests/) tests in the **[tests/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/tests/templates)** directory that can be used to apply manifests and assert the expected cluster resources are provisioned.
 
 ### Deploy Combinations of Templates
 
-We recommend a few changes to deploy multiple templates into one GCP Project
+We recommend a few changes to deploy multiple templates into one GCP Project:
 
-* Update the templates to prompt the user if they’d like to modify an existing GCP Project. We recommend using the [`OwnedEntityPicker`](https://backstage.io/docs/reference/plugin-scaffolder.ownedentitypickerfieldextension/) UI field to find entities.
-* Update the `data-science-portal:template:get-context` custom action to use an existing project ID.
-* Ensure the Crossplane resources will not conflict when more than one template is applied to the same project.
+- Update the templates to prompt the user if they want to create or modify a GCP Project.
+- Consider using the the [`OwnedEntityPicker`](https://backstage.io/docs/reference/plugin-scaffolder.ownedentitypickerfieldextension/) UI field to find Projects.
+- Update the `data-science-portal:template:get-context` custom action to use an existing project ID.
+- Ensure the Crossplane resources will not conflict when more than one template is applied to the same project.
 
 ### Multi-Cloud Support
 
 Backstage and Crossplane can be configured to support additional cloud providers.
 
-The following changes are necessary to support multi-cloud in the software templates and plugins in Backstage:
+The following changes are necessary to support multi-cloud in our Backstage code:
 
-- Update the custom [budget-usage plugin](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/plugins/budget-usage-backend) to handle the new cloud provider.
+- Update the [budget-usage-backend](https://github.com/PHACDataHub/sci-portal/tree/main/backstage/plugins/budget-usage-backend) to support other providers.
 - Modify the templates to choose a cloud provider.
 - Update the template actions to create a Pull Request that targets a specific cloud provider.
 
-The following changes are necessary to support selecting a cloud provider with Crossplane:
+The following changes are necessary to support multi-cloud in our Crossplane Compositions:
 
 - Add a label to indicate the provider in the `Composition`:
+
   ```yaml
   kind: Composition
   metadata:
@@ -114,6 +114,7 @@ The following changes are necessary to support selecting a cloud provider with C
   ```
 
 - Modify the `Claim` to select the provider using `compositionSelector.matchLabels`:
+
   ```yaml
   kind: <template>Claim
   # ...
@@ -138,34 +139,19 @@ Additional work is expected to set up a GitOps tool to provision infrastructure 
 
 Translations must be provided to the three distinct sources:
 
-- **App (Frontend)** can be use a [Translation Extension](https://backstage.io/docs/frontend-system/building-apps/migrating/#__experimentaltranslations).
-- **Plugins** have [experimental support](https://backstage.io/docs/plugins/internationalization/).
-- **Templates** does not have support but the underlying library `react-jsonschema-form` library provides a  [`translateString` function](https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/form-props/#translatestring) that could be used.
+- The Frontend App can use a [Translation Extension](https://backstage.io/docs/frontend-system/building-apps/migrating/#__experimentaltranslations).
+- The Plugins have [experimental support](https://backstage.io/docs/plugins/internationalization/).
+- Templates do not have support but the underlying library `react-jsonschema-form` provides a [`translateString` function](https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/form-props/#translatestring) that may work.
 
 ### Improving GitHub Discovery
 
-Backstage has been configured to discover new Catalog Entities from our repositories using scheduled polling. This pull-based model is periodic and inefficient. Performance can be improved by [following the documentation](https://backstage.io/docs/integrations/github/discovery/#events-supportEvents to reconfigure the GitHub provider to respond to GitHub Webhook messages.
+Backstage has been configured to discover new Catalog entities from our repositories using polling. This pull-based model is inefficient and can be improved on by [following the documentation](https://backstage.io/docs/integrations/github/discovery/#events-supportEvents) to configure Backstage to listen for events from a GitHub Webhook.
 
 ## Known Limitations
 
 ### Not Ready for Production
 
-This is a reference implementation of Backstage not intended for deployment in production. Some of the issues we've identified are [documented below](#preparing-for-production).
-
-### Deleting Components
-
-To follow the GitOps methodology we should delete Components from the Backstage UI and create a Pull Request in GitHub. However, Backstage cannot create a GitHub Pull Request that removes files, blocking us from implementing this feature. This limitation is tracked on GitHub at [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447).
-
-To implement this feature, we could add a [Custom Action](https://backstage.io/docs/features/software-catalog/catalog-customization/#customize-actions) to the Catalog entities created by a template. The new button would link to a new Software Template that removes a project. The new Software Template would take the Catalog Entity and a reason to remove the project as inputs. When submitted, the template would need to perform the following actions:
-
-* Fetch the **[DMIA-PHAC](https://github.com/PHACDataHub/sci-portal/tree/main/DMIA-PHAC)** directory
-* Remove the directory from the [Kustomization File](https://github.com/PHACDataHub/sci-portal-users/blob/main/DMIA-PHAC/kustomization.yaml)
-* Remove the project directory
-* Create a Pull Request
-
-
-- Extend the custom action defined in **[backstage/packages/backend/.../kustomization-file.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts)** to modify the Kustomization file.
-- If the [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447) has been resolved, update Backstage and use the new API to removes files. Otherwise, create a custom action that extends the built-in `publish:github:pull-request` action to accept a new input parameter for files to delete, and call the `octokit.createPullRequest` method directly.
+This is a reference implementation of Backstage not intended for deployment in production. An incomplete list of considerations to deploy in production are [documented below](#preparing-for-production).
 
 ### Vertex AI Deprecations
 
@@ -173,35 +159,48 @@ The RAD Lab Data Science and Gen AI modules will not be able to create notebooks
 
 As of June 2024, the team supporting the [RAD Lab modules](https://github.com/GoogleCloudPlatform/rad-lab/tree/main/modules) is aware of this issue but has not scheduled maintenance. The RAD Lab Terraform modules must be updated to migrate managed notebook instances to Vertex AI Workbench instances.
 
+### FinOps Reporting
+
+To ensure timely delivery of an extensible [Cost Dashboard](https://backstage.alpha.phac-aspc.gc.ca/cost-dashboard), a Looker Studio report has been embedded instead a custom developed dashboard. This provides a flexible starting point that allows more of the team to help refine and build a meaningful FinOps report.
+
+### Deleting Components
+
+To follow the GitOps methodology we should delete Components from the Backstage UI and create a Pull Request in GitHub. However, Backstage cannot create a GitHub Pull Request that removes files, blocking us from implementing this feature. This limitation is tracked on GitHub by [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447).
+
+To implement this feature, we could add a [Custom Catalog Action](https://backstage.io/docs/features/software-catalog/catalog-customization/#customize-actions) that would use a Software Template to remove a project. The new Software Template would take the Catalog Entity and a justification as inputs. When submitted, the template would need to perform the following actions:
+
+- Fetch the **[DMIA-PHAC](https://github.com/PHACDataHub/sci-portal/tree/main/DMIA-PHAC)** directory
+- Remove the directory from the [Kustomization File](https://github.com/PHACDataHub/sci-portal-users/blob/main/DMIA-PHAC/kustomization.yaml)
+- Remove the project directory
+- Create a Pull Request
+
+We already modify the Kustomization File in **[backstage/packages/backend/.../kustomization-file.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts)**. Add a new custom action to remove a directory/resource.
+
+If [backstage/backstage#23447](https://github.com/backstage/backstage/issues/23447) is resolved, update Backstage and use the new API to removes files. Otherwise, create a custom action that extends the built-in `publish:github:pull-request` action to accept a new input parameter for files to delete, and call the `octokit.createPullRequest` method directly.
+
 ### Development on Windows
 
-We discovered that the Backstage Software Templates fail to render templates on Windows. We have created two issues to track this limitation on GitHub: [PHACDataHub/sci-portal#309](https://github.com/PHACDataHub/sci-portal/issues/309), and [backstage/backstage#25056](https://github.com/backstage/backstage/issues/25056). To prevent this problem from affecting development on Windows, we skip the failing unit tests.
+We discovered that the Backstage Software Templates fail to render templates on Windows. We have created two issues to track this limitation on GitHub: [PHACDataHub/sci-portal#309](https://github.com/PHACDataHub/sci-portal/issues/309) and [backstage/backstage#25056](https://github.com/backstage/backstage/issues/25056). We skip the failing unit tests on Windows to prevent this problem from affecting development.
 
 ### Viewer Permissions
 
 In order to focus on higher priority UI features, the Viewers do not have additional permissions defined in Backstage or in the Templates. This is tracked by [PHACDataHub/sci-portal#464](https://github.com/PHACDataHub/sci-portal/issues/464).
 
-### FinOps Reporting
-
-To ensure timely delivery of an extensible [Cost Dashboard](https://backstage.alpha.phac-aspc.gc.ca/cost-dashboard), a Looker Studio report has been embedded instead a custom developed dashboard. This provides a flexible starting point that allows more of the team to help refine and build a meaningful FinOps report.
-
 ## Preparing for Production
 
-This is a reference implementation that is not ready for production. While we've listed a few areas for concern below there are certainly more things to consider:
+This is a reference implementation that is not ready for production. We've listed a few areas for concern below but there are certainly more things to consider:
 
 - Deploy in a hardened cluster
 - Improve secrets management
 - Harden the GitHub App integration
 - Harden the Backstage Backend auth
-- Monitor security vulnerabilities
 - Validate and sanitize all inputs
 - Refine the dataset used for the Cost Dashboard
+- Monitor security vulnerabilities
 
 ## Changes to the Project Scope
 
-A number of factors contributed to changes in scope including the required LDAP integration being unavailable, delays in accessing an email service, and a request to prioritize development in Backstage over infrastructure templates.
-
-This section documents how to continue working on the deprioritized features.
+A number of factors contributed to changes in scope including the required LDAP integration being unavailable, delays in accessing an email service, and a request to prioritize development in Backstage over infrastructure templates. This section documents how to continue working on the deprioritized features.
 
 ### RStudio and RShiny Cloud Workstation
 
@@ -223,7 +222,7 @@ A similar approach can be taken to restore a “parked” projects.
 
 By default, Backstage ships with no access controls. It is up to the development team to declare the rules that control how users interact with Backstage using the [Permissions framework](https://backstage.io/docs/permissions/overview). We recommend reviewing the [Permission Concepts](https://backstage.io/docs/permissions/concepts) documentation to get started.
 
-We have written a permission policy in backstage/packages/backend/src/plugins/permissions/ that declares the following rules:
+We have written a permission policy in **[backstage/packages/backend/src/plugins/permissions/](https://github.com/PHACDataHub/sci-portal/tree/report/backstage/packages/backend/src/plugins/permissions)** that declares the following rules:
 
 - Users can only see the Components and Resources they own in the Catalog.
 - Members of the Platform Team can view all resources.
