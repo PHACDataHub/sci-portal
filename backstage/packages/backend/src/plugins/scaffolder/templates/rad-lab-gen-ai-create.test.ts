@@ -141,6 +141,25 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
               "<project-id>": {
                 "catalog-info.yaml": "---
         apiVersion: backstage.io/v1alpha1
+        kind: Resource
+        metadata:
+          name: <project-id>
+          title: <project-name>
+          annotations:
+            backstage.io/source-location: https://github.com/PHACDevHub/sci-portal-users/DMIA-PHAC/SciencePlatform/<project-id>/
+            backstage.io/source-template: template:default/rad-lab-gen-ai-create
+            cloud.google.com/project-id: <project-id>
+            cloud.google.com/project-name: <project-name>
+            data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: jane.doe@gcp.hc-sc.gc.ca,samantha.jones@phac-aspc.gc.ca,alex.mcdonald@phac-aspc.gc.ca
+          links:
+            - title: View Project on Google Cloud
+              url: https://console.cloud.google.com/welcome?project=<project-id>
+        spec:
+          type: project
+          owner: group:default/<project-id>-editors
+
+        ---
+        apiVersion: backstage.io/v1alpha1
         kind: Component
         metadata:
           name: <project-id>
@@ -158,6 +177,8 @@ describe('rad-lab-gen-ai-create: fetch:template', () => {
           type: rad-lab-module
           owner: group:default/<project-id>-editors
           lifecycle: experimental
+          dependsOn:
+            - resource:default/<project-id>
 
         ---
         apiVersion: backstage.io/v1alpha1

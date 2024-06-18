@@ -10,6 +10,9 @@ metadata:
     cloud.google.com/project-id: ${{values.projectId}}
     cloud.google.com/project-name: ${{values.projectName}}
     data-science-portal.phac-aspc.gc.ca/budget-alert-recipients: ${{values.budgetAlertEmailRecipients | join(',')}}
+  links:
+    - title: View Project on Google Cloud
+      url: https://console.cloud.google.com/welcome?project=${{values.projectId}}
 spec:
   type: project
   owner: ${{values.catalogEntityOwner}}

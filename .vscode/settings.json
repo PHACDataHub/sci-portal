@@ -15,8 +15,10 @@
         "DMIA",
         "gcloud",
         "GitOps",
+        "kustomization",
         "northamerica-northeast1",
         "PHAC",
+        "scaffolder",
         "secretmanager"
     ]
 }
