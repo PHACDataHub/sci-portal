@@ -1,0 +1,40 @@
+---
+# This workflow is used for Continuous Integration for the budget-alerts/ directory.
+
+name: CI for budget-alerts/
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "budget-alerts/**"
+
+jobs:
+  test-linux:
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    name: Node.js v${{ matrix.node-version }} on Linux
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./budget-alerts
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "budget-alerts/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
