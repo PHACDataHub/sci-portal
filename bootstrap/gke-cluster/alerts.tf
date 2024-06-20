@@ -1,16 +1,15 @@
 resource "google_storage_bucket" "budget_alert_cloud_function_package" {
   name                        = "budget_alert_cloud_function_package"
-  location                    = "northamerica-northeast2"
+  location                    = "northamerica-northeast1"
+  project                     = var.project_id
   storage_class               = "STANDARD"
   force_destroy               = true
   uniform_bucket_level_access = true
 }
 
-
 resource "google_pubsub_topic" "science_portal_budget_alert" {
   name = "science_portal_budget_alert"
 }
-
 
 data "archive_file" "function_zip" {
   type        = "zip"
@@ -18,13 +17,11 @@ data "archive_file" "function_zip" {
   output_path = "./budget_alerts.zip"
 }
 
-
 resource "google_storage_bucket_object" "budget_alerts_zip_object" {
   name   = "budget_alerts.zip"
   bucket = google_storage_bucket.budget_alert_cloud_function_package.name
   source = data.archive_file.function_zip.output_path
 }
-
 
 resource "google_cloudfunctions_function" "science_portal_budget_alert_function" {
   name        = "science_portal_budget_alert_function"
@@ -42,7 +39,6 @@ resource "google_cloudfunctions_function" "science_portal_budget_alert_function"
     resource   = google_pubsub_topic.science_portal_budget_alert.name
   }
 
-
   environment_variables = {
     GC_NOTIFY_API_KEY                   = var.gc_notify_api_key
     GC_NOTIFY_ALERT_TEMPLATE_ID         = var.gc_notify_alert_template_id
@@ -51,5 +47,22 @@ resource "google_cloudfunctions_function" "science_portal_budget_alert_function"
     GC_NOTIFY_URI                       = var.gc_notify_uri
     BACKSTAGE_URI                       = var.backstage_uri
   }
+}
 
+resource "google_storage_bucket" "budget_alert_cloud_function_event_log" {
+  name     = "budget_alert_cloud_function_event_log"
+  location = "northamerica-northeast1"
+  project  = var.project_id
+
+  # Use autoclass tiering of storage
+  autoclass {
+    enabled = true
+  }
+
+  # Disable public access
+  public_access_prevention = "enforced"
+
+  # Use uniform bucket-level access (i.e. all users in the GCP Project have the same access to the storage bucket)
+  uniform_bucket_level_access = true
+  force_destroy               = true
 }
