@@ -1,6 +1,6 @@
 ## root-sync
 
-This Module contains the Config Sync manifests to manage root-level resources in the Kubernetes cluster. Config Sync will install resources defined in this directory.
+This directory contains the Config Sync manifests to manage root-level resources in the Kubernetes cluster. Config Sync will install resources defined in this directory.
 
 ### Setup
 
