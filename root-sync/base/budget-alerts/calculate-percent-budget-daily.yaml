@@ -8,7 +8,6 @@ spec:
   # Calculate the percentage budget used at the start of the workday in the East (6 AM, Atlantic).
   timeZone: Canada/Atlantic
   schedule: "0 6 * * *"
-  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
