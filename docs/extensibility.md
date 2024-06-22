@@ -2,26 +2,42 @@
 
 ## Contents
 
-- [About this Document](#about-this-document)
-- [Extensibility](#extensibility)
-  - [Add A New Template](#add-a-new-template)
-  - [Deploy Combinations of Templates](#deploy-combinations-of-templates)
-  - [Multi-Cloud Support](#multi-cloud-support)
-  - [Translations](#translations)
-  - [Improving GitHub Discovery](#improving-github-discovery)
-- [Known Limitations](#known-limitations)
-  - [Not Ready for Production](#not-ready-for-production)
-  - [Vertex AI Deprecations](#vertex-ai-deprecations)
-  - [FinOps Reporting](#finops-reporting)
-  - [Deleting Components](#deleting-components)
-  - [Development on Windows](#development-on-windows)
-  - [Viewer Permissions](#viewer-permissions)
-- [Preparing for Production](#preparing-for-production)
-- [Changes to the Project Scope](#changes-to-the-project-scope)
-  - [RStudio and RShiny Cloud Workstation](#rstudio-and-rshiny-cloud-workstation)
-  - ["Parking" Over-Budget Projects](#parking-over-budget-projects)
-  - [Administrator Roles/Permissions](#administrator-rolespermissions)
-  - [Additional Templates for RAD Lab and GCP Services](#additional-templates-for-rad-lab-and-gcp-services)
+<!-- vscode-markdown-toc -->
+
+- [Contents](#Contents)
+- [About this Document](#AboutthisDocument)
+  - [Purpose](#Purpose)
+  - [Intended Audience](#IntendedAudience)
+  - [Background](#Background)
+- [Extensibility](#Extensibility)
+  - [Add A New Template](#AddANewTemplate)
+  - [Deploy Combinations of Templates](#DeployCombinationsofTemplates)
+  - [Multi-Cloud Support](#Multi-CloudSupport)
+  - [Translations](#Translations)
+  - [Improving GitHub Discovery](#ImprovingGitHubDiscovery)
+- [Known Limitations](#KnownLimitations)
+  - [Not Ready for Production](#NotReadyforProduction)
+  - [User Management](#UserManagement)
+  - [Vertex AI Deprecations](#VertexAIDeprecations)
+  - [FinOps Reporting](#FinOpsReporting)
+  - [Deleting Components](#DeletingComponents)
+  - [Development on Windows](#DevelopmentonWindows)
+  - [Viewer Permissions](#ViewerPermissions)
+  - [Budget Alerts](#BudgetAlerts)
+- [Changes to the Project Scope](#ChangestotheProjectScope)
+  - [RStudio and RShiny Cloud Workstation](#RStudioandRShinyCloudWorkstation)
+  - ["Parking" Over-Budget Projects](#ParkingOver-BudgetProjects)
+  - [Administrator Roles/Permissions](#AdministratorRolesPermissions)
+  - [Additional Templates for RAD Lab and GCP Services](#AdditionalTemplatesforRADLabandGCPServices)
+  - [Deployment Status](#DeploymentStatus)
+  - [Security Vulnerabilities](#SecurityVulnerabilities)
+- [Preparing for Production](#PreparingforProduction)
+
+<!-- vscode-markdown-toc-config
+	numbering=false
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
 ## About this Document
 
@@ -69,19 +85,7 @@ Changes may be required to validate or modify the input parameters. This is hand
 
 The Pull Request creates a Crossplane `Claim` to provision new infrastructure. The corresponding `CompositeResourceDefinition` and `Composition` are declared in **[root-sync/base/crossplane/](https://github.com/PHACDataHub/sci-portal/tree/main/root-sync/base/crossplane)**. Be mindful to update the Kustomization Files to configure Config Sync to reconcile the manifests.
 
-Define infrastructure using Crossplane following these principles:
-
-- Define infrastructure exclusively using [Config Connector resources](https://cloud.google.com/config-connector/docs/reference/overview), when possible.  
-  The [`config-connector` CLI tool](https://cloud.google.com/config-connector/docs/how-to/import-export/overview) may be helpful to export resources.
-- When infrastructure cannot be defined using exclusively Config Connector resources, use Terraform.
-- Do not mix tools (Config Connector, Terraform, or others).
-- Isolate the Terraform state for each GCP Project (or equivalent). Create a `ProviderConfig` that configures the state file `backend` for each Project. Configure the `Workspace` to use the `ProviderConfig` using the `providerConfigRef`.
-- Use [Crossplane Usages](https://docs.crossplane.io/latest/concepts/usages/) to ensure resources are deleted in the expected order.
-- If the Crossplane Composition requires conditional statements, use [Composition Functions](https://docs.crossplane.io/latest/concepts/composition-functions/). It is a known limitation that [Patch and Transforms](https://docs.crossplane.io/latest/concepts/patch-and-transform/) do not support conditions.
-
-If Terraform modules need to be modified, copy them to the [**templates/**](https://github.com/PHACDataHub/sci-portal/tree/main/templates) directory. The RAD Lab Data Science and Gen AI modules have been copied and modified there.
-
-Define infrastructure with confidence using tests. There are corresponding [`chainsaw`](https://kyverno.github.io/chainsaw/latest/quick-start/run-tests/) tests in the **[tests/templates/](https://github.com/PHACDataHub/sci-portal/tree/main/tests/templates)** directory that can be used to apply manifests and assert the expected cluster resources are provisioned.
+Follow the guidelines in the [README](../README.md#guidelines) to define infrastructure using Crossplane.
 
 ### Deploy Combinations of Templates
 
@@ -154,6 +158,10 @@ Backstage has been configured to discover new Catalog entities in our repositori
 
 This is a reference implementation that is not intended for deployment in production. An incomplete list of considerations to deploy in production are [documented below](#preparing-for-production).
 
+### User Management
+
+As a principle, the Backstage Catalog should be populated from an external source of truth. The ideal solution for the reference implementation is populating `Users` using an LDAP integration. However, the Google Secure LDAP Service was unavailable. Without an LDAP integration, we must manually manage users in the [PHACDataHub/sci-portal-users](https://github.com/PHACDataHub/sci-portal-users) repository. Backstage is configured to populate `User`s from the repo using the [GitHub Discovery](https://backstage.io/docs/integrations/github/discovery) integration.
+
 ### Vertex AI Deprecations
 
 The RAD Lab Data Science and Gen AI modules will not be able to create notebooks after January 30, 2025 when [support for Vertex AI Workbench managed notebooks is shutdown](https://cloud.google.com/vertex-ai/docs/deprecations). Existing managed notebooks will continue to work but will not be patched.
@@ -175,7 +183,7 @@ To implement this feature, add a [Custom Catalog Action](https://backstage.io/do
 - Remove the project directory
 - Create a Pull Request
 
-Extend the module that modifies the  Kustomization File in **[backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts)**.
+Extend the module that modifies the Kustomization File in **[backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts](https://github.com/PHACDataHub/sci-portal/blob/main/backstage/packages/backend/src/plugins/scaffolder/actions/kustomization-file.ts)**.
 
 If [the GitHub Issue](https://github.com/backstage/backstage/issues/23447) is resolved, update Backstage and use the new API to removes files. Otherwise, create a custom action that extends the built-in `publish:github:pull-request` action to accept a new input parameter for files to delete, and call the `octokit.createPullRequest` method directly.
 
@@ -189,18 +197,11 @@ The failing unit tests are skipped to prevent this problem from affecting local 
 
 In order to focus on higher priority UI features Viewers do not have additional permissions defined in Backstage or in the Templates. This is tracked by [PHACDataHub/sci-portal#464](https://github.com/PHACDataHub/sci-portal/issues/464).
 
-## Preparing for Production
+### Budget Alerts
 
-This is a reference implementation that is not ready for production. We've listed a few areas for concern below but there are certainly more things to consider:
+As the usage of the Data Science Portal scales, consider replacing the minimum viable solution used to send email notifications. The current solution is documented in the [**budget-alerts/README.md**](https://github.com/PHACDataHub/sci-portal/blob/main/budget-alerts/README.md).
 
-- Deploy in a hardened cluster
-- Improve cluster secrets management
-- Harden the Backstage Backend auth
-- Harden the GitHub App integration
-- Validate and sanitize all inputs
-- Restrict the dataset used for the Cost Dashboard
-- Consider using [Universal Crossplane](https://www.upbound.io/product/universal-crossplane) which has upstream security updates
-- Remove excessive IAM Permissions
+The team may also consider configuring a Cloud Build pipeline for Continuous Deployment.
 
 ## Changes to the Project Scope
 
@@ -241,3 +242,28 @@ Follow the documentation above to [Add A New Template](#add-a-new-template).
 ### Deployment Status
 
 As documented in [PHACDataHub/sci-portal#38](https://github.com/PHACDataHub/sci-portal/issues/38) Vedant and Rajan have made great progress on surfacing the status of managed resources up to the top-level Crossplane claim.
+
+### Security Vulnerabilities
+
+We did not prioritize surfacing vulnerabilities in Backstage to focus on other features. Our initial research did not find a Backstage plugin that provides this functionality, so both frontend and backend development in Backstage would be required.
+
+We recommend the following requirements to help users achieve their goals:
+
+- Only show epidemiologists vulnerabilities found in their own source code. Differentiate between vulnerabilities in code managed by the platform team, and vulnerabilities in an epidemiologist's code.
+
+- Write Software Templates that store an epidemiologist's code where it is easily accessible for vulnerability scanning and management tools. For example, keep source code in repositories on GitHub or Secure Source Manager instead of storage buckets.
+
+Implementing these recommendations will improve our ability to detect and fix vulnerabilities.
+
+## Preparing for Production
+
+This is a reference implementation that is not ready for production. We've listed a few areas for concern below but there are certainly more things to consider:
+
+- Deploy in a hardened cluster
+- Improve cluster secrets management
+- Harden the Backstage Backend auth
+- Harden the GitHub App integration
+- Validate and sanitize all inputs
+- Restrict the dataset used for the Cost Dashboard
+- Consider using [Universal Crossplane](https://www.upbound.io/product/universal-crossplane) which has upstream security updates
+- Remove excessive IAM Permissions
