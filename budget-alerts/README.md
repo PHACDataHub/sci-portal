@@ -103,7 +103,7 @@ flowchart TD
 
     I -- No --------> Done
 
-    %% Edge Caes
+    %% Edge Case
     B -- No ----> E
     G -- No ----> I
     E -- No --> I

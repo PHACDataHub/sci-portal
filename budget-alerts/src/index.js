@@ -228,9 +228,7 @@ const getQueuedBudgetAlertEmails = (events) => {
           status: 'QUEUED',
         });
       }
-    }
-
-    else if (event.type === 'SENDING_BUDGET_ALERT_EMAIL_EVENT') {
+    } else if (event.type === 'SENDING_BUDGET_ALERT_EMAIL_EVENT') {
       for (let i = 0; i < emails.length; i += 1) {
         if (
           emails[i].projectId === event.projectId &&
@@ -241,9 +239,7 @@ const getQueuedBudgetAlertEmails = (events) => {
           emails[i].status = 'SENDING';
         }
       }
-    }
-
-    else if (event.type === 'SENT_BUDGET_ALERT_EMAIL') {
+    } else if (event.type === 'SENT_BUDGET_ALERT_EMAIL') {
       for (let i = 0; i < emails.length; i += 1) {
         if (
           emails[i].projectId === event.projectId &&
@@ -254,9 +250,7 @@ const getQueuedBudgetAlertEmails = (events) => {
           emails[i].status = 'SENT';
         }
       }
-    }
-
-    else if (event.type === 'SEND_BUDGET_ALERT_EMAIL_FAILED') {
+    } else if (event.type === 'SEND_BUDGET_ALERT_EMAIL_FAILED') {
       for (let i = 0; i < emails.length; i += 1) {
         if (
           emails[i].projectId === event.projectId &&
