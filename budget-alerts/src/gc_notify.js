@@ -29,8 +29,16 @@ const sendEmail = async (templateId, emailAddress, options = {}) => {
       message: `An email has been sent to ${emailAddress}. Inspect the notification at ${response?.data?.uri}.`,
     });
     return response;
-  } catch (err) {
-    throw new Error(`Unable to send email to ${emailAddress}`, { cause: err });
+  } catch (error) {
+    // The error is most likely an AxiosError.
+    logger.error({
+      message: `An error occurred sending an email to ${emailAddress}.`,
+      component: {
+        error,
+        body: error?.response?.data,
+      }
+    });
+    throw new Error(`Unable to send email to ${emailAddress}`, { cause: error });
   }
 };
 

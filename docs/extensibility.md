@@ -2,7 +2,6 @@
 
 ## Contents
 
-- [Contents](#contents)
 - [About this Document](#about-this-document)
   - [Purpose](#purpose)
   - [Intended Audience](#intended-audience)
@@ -195,6 +194,8 @@ The failing unit tests are skipped to prevent this problem from affecting local 
 In order to focus on higher priority UI features Viewers do not have additional permissions defined in Backstage or in the Templates. This is tracked by [PHACDataHub/sci-portal#464](https://github.com/PHACDataHub/sci-portal/issues/464).
 
 ### Budget Alerts
+
+Budget alert email are sent using [GC Notify](https://documentation.notification.canada.ca/en/send.html#sending-an-email). When sending an email fails the error is logged and not retried again. The system could be made more robust if the team decides how to handle each [error code](https://docs.notifications.service.gov.uk/node.html#send-an-email-error-codes).
 
 As the usage of the Data Science Portal scales, consider replacing the minimum viable solution used to send email notifications. The current solution is documented in the [**budget-alerts/README.md**](https://github.com/PHACDataHub/sci-portal/blob/main/budget-alerts/README.md).
 
