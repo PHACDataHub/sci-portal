@@ -1,6 +1,5 @@
 /**
  * This type is based on the documentation at https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format.
- *
  * @typedef {Object} BudgetAlertNotification
  *
  * @property {string} billingAccountId
@@ -12,24 +11,32 @@
  * @property {string} costIntervalStart
  * @property {number} budgetAmount
  * @property {"SPECIFIED_AMOUNT" | "LAST_MONTH_COST" | "LAST_PERIODS_COST"} budgetAmountType
- * @property {number} alertThresholdExceeded
- * @property {number} forecastThresholdExceeded
+ * @property {number | undefined} alertThresholdExceeded
+ * @property {number | undefined} forecastThresholdExceeded
  * @property {string} currencyCode
+ *
+ * @property {string} projectId
  */
 
 /**
- * Parses a CloudEvent message and returns the parsed JSON object.
- *
- * @param {Object} cloudEvent
+ * Returns decoded BudgetAlertNotification, or undefined.
+ * @param {any} cloudEvent
  * @return {BudgetAlertNotification | undefined}
  */
-function parseMessage(cloudEvent) {
-  const encodedMessage = cloudEvent.data.message.data;
+const toBudgetAlertNotification = (cloudEvent) => {
+  const encodedMessage = cloudEvent?.data?.message.data;
   if (!encodedMessage) {
     return undefined;
   }
 
-  return JSON.parse(Buffer.from(encodedMessage, 'base64').toString());
-}
+  return {
+    ...JSON.parse(Buffer.from(encodedMessage, 'base64').toString()),
 
-module.exports = { parseMessage };
+    /** Returns the project ID from the Budget Alert Notification. */
+    get projectId() {
+      return this.budgetDisplayName; // By convention the project ID is the budget display name.
+    },
+  };
+};
+
+module.exports = { toBudgetAlertNotification };

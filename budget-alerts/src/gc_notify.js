@@ -1,47 +1,38 @@
-const NotifyClient = require('notifications-node-client').NotifyClient;
+const { NotifyClient } = require('notifications-node-client');
+const logger = require('./logger');
 
 /** @type {import('notifications-node-client').NotifyClient | undefined} */
 let client;
 
 /**
- * Sends an email to a list of recipients using the specified template and data.
- *
  * @param {string} templateId
- * @param {string[]} recipients
- * @param {Object} personalisation - An object containing personalization values to be used in the notification template.
- *
- * @return {Promise<Array<undefined | Error>} A Promise that resolves to an array of results from sending the notifications.
+ * @param {string} emailAddress
+ * @param {import('notifications-node-client').SendEmailOptions} options
  */
-async function sendEmail(templateId, recipients, personalisation) {
-  if (!client) {
-    const { GC_NOTIFY_API_KEY, GC_NOTIFY_URI } = process.env;
-    client = new NotifyClient(GC_NOTIFY_URI, GC_NOTIFY_API_KEY);
-    if (!GC_NOTIFY_API_KEY) {
-      console.error('GC_NOTIFY_API_KEY has not been set');
-    }
-    if (!GC_NOTIFY_URI) {
-      console.error('GC_NOTIFY_URI has not been set');
-    }
+const sendEmail = async (templateId, emailAddress, options = {}) => {
+  // We cannot instantiate NotifyClient with undefined values. It throws.
+  if (!process.env.GC_NOTIFY_API_KEY) {
+    throw new Error('The GC_NOTIFY_API_KEY environment variable has not been defined');
+  }
+  if (!process.env.GC_NOTIFY_URI) {
+    throw new Error('The GC_NOTIFY_URI environment variable has not been defined');
   }
 
-  const sendPromises = recipients.map(async recipient => {
-    try {
-      const response = await client.sendEmail(templateId, recipient, { personalisation });
-      console.log(JSON.stringify({
-        severity: 'INFO',
-        message: `An email has been sent to ${recipient}. Inspect the notification at ${response?.uri}.`,
-        component: response, // Uncomment to debug.
-      }));
-    } catch (error) {
-      throw new Error(
-        `Unable to send email to ${recipient}`,
-        error.response.data,
-      );
-    }
-  });
+  // Instantiate a singleton client.
+  if (!client) {
+    client = new NotifyClient(process.env.GC_NOTIFY_URI, process.env.GC_NOTIFY_API_KEY);
+  }
 
-  return Promise.allSettled(sendPromises);
-}
+  try {
+    const response = await client.sendEmail(templateId, emailAddress, options);
+    logger.info({
+      message: `An email has been sent to ${emailAddress}. Inspect the notification at ${response?.data?.uri}.`,
+    });
+    return response;
+  } catch (err) {
+    throw new Error(`Unable to send email to ${emailAddress}`, { cause: err });
+  }
+};
 
 module.exports = {
   sendEmail,

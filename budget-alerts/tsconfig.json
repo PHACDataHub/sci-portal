@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // Use Node v20.x.
+    // See https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping.
+    "lib": ["ES2023"],
+    "module": "node16",
+    "target": "ES2022",
+
+    // Do not check node_modules
+    "skipLibCheck": true,
+
+    // Do not output files
+    "noEmit": true,
+
+    // Check JavaScript
+    "checkJs": true,
+
+    // Identify unused code
+    "allowUnusedLabels": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // Use the "strict" family
+    "alwaysStrict": true,
+    "noImplicitAny": true
+  },
+
+  "include": ["src", "types"]
+}

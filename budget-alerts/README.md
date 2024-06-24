@@ -60,6 +60,18 @@ To ensure the Cloud Function works as expected, it’s important to run tests bo
 - **Unable to send email notifications**: Verify the GC Notify API key and template IDs are correct.
 - **Pub/Sub emulator issues**: Ensure the emulator is running and the topic and subscription are correctly registered.
 
+## Deployment
+
+Deployment has not been automated yet. Follow [the documentation](https://cloud.google.com/functions/docs/deploy#from-local-machine) to deploy from your local machine:
+
+```
+gcloud functions deploy science_portal_budget_alert_function \
+  --region=northamerica-northeast1 \
+  --runtime=nodejs20 \
+  --source=./ \
+  --trigger-topic=science_portal_budget_alert
+```
+
 ## Design
 
 Google Cloud's built-in [budget alerts](https://cloud.google.com/billing/docs/how-to/budgets) don't meet the project requirements. These requirements demand a different approach:
@@ -74,10 +86,9 @@ The following flow chart demonstrates how the event log is used to determine wha
 
 ```mermaid
 flowchart TD
-    %% The Happy Path
+    %% Happy Path
     A[Receive Pub/Sub Message]
-    --> B{Does the message include<br>an alert threshold exceeded?}
-    -- Yes --> C{Is it a new threshold exceeded?}
+    --> B{Does the message include<br>a new threshold exceeded}
     -- Yes --> D[Record <code>THRESHOLD_EXCEEDED</code> event]
     --> E{Do any <code>THRESHOLD_EXCEEDED</code><br>events need emails alerts queued?}
     -- Yes --> F[Request recipients from Backstage]
@@ -88,20 +99,18 @@ flowchart TD
     --> L{Try recording <code>SENDING_BUDGET_ALERT_EMAIL</code> event.<br>Is this the only Cloud Function modifying state?}
     -- Yes --> M[Send email with GC Notify]
     --> N{Request successful?}
-    -- Yes --> O[Record <code>SENT_BUDGET_ALERT_EMAIL</code> event]
+    -- Yes ---> O[Record <code>SENT_BUDGET_ALERT_EMAIL</code> event]
 
-    Done
+    I -- No --------> Done
 
-    %% Nope
-    B -- No --> E
-    C -- No --> E
+    %% Edge Case
+    B -- No ----> E
+    G -- No ----> I
     E -- No --> I
-    G -- No --> I
     L -- No --> I
-    I -- No --> Done
     O --> I
 
-    N -- No --> P[Record <code>SEND_BUDGET_ALERT_EMAIL_FAILED</code> event] --> I
+    N -- No ---> P[Record <code>SEND_BUDGET_ALERT_EMAIL_FAILED</code> event] --> I
 ```
 
 ### Dependencies
