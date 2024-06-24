@@ -1,67 +1,73 @@
-const { describe, expect, test } = require('@jest/globals');
-const axios = require('axios');
-const MockAdapter = require('axios-mock-adapter');
-
+const { NotifyClient } = require('notifications-node-client');
 const { sendEmail } = require('../gc_notify');
+const logger = require('../logger');
+
+jest.mock('notifications-node-client');
+jest.mock('../logger');
 
 describe('sendEmail', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     process.env.GC_NOTIFY_API_KEY = 'api-key';
     process.env.GC_NOTIFY_URI = 'https://api.notification.canada.ca';
   });
 
-  test('should mock send notifications to all recipients', async () => {
-    const recipients = ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'];
-    const templateId = 'template-id';
-    const personalisation = { data: 'data' };
+  test('When the GC_NOTIFY_API_KEY environment variable has not been set it should log an error', async () => {
+    const templateId = '';
+    const emailAddress = '';
 
-    const mock = new MockAdapter(axios);
+    delete process.env.GC_NOTIFY_API_KEY;
 
-    mock
-      .onPost('https://api.notification.canada.ca/v2/notifications/email')
-      .reply(200, {
-        status: 200,
-      });
-
-    const result = await sendEmail(
-      templateId,
-      recipients,
-      personalisation,
+    await expect(sendEmail(templateId, emailAddress)).rejects.toThrow(
+      'The GC_NOTIFY_API_KEY environment variable has not been defined',
     );
-
-    expect(result).toEqual([
-      { status: 'fulfilled', value: undefined },
-      { status: 'fulfilled', value: undefined },
-    ]);
   });
 
-  test('should mock send notifications to recipients and throw error if any fail', async () => {
-    const recipients = ['jane.doe@gcp.hc-sc.gc.ca', 'john.doe@gcp.hc-sc.gc.ca'];
-    const templateId = 'template-id';
-    const personalisation = { data: 'data' };
+  test('When the GC_NOTIFY_URI environment variable has not been set it should log an error', async () => {
+    const templateId = '';
+    const emailAddress = '';
 
-    const mock = new MockAdapter(axios);
-    mock
-      .onPost('https://api.notification.canada.ca/v2/notifications/email')
-      .reply(500, {
-        status: 500,
-      });
+    delete process.env.GC_NOTIFY_URI;
 
-    const result = await sendEmail(
-      templateId,
-      recipients,
-      personalisation,
+    await expect(sendEmail(templateId, emailAddress)).rejects.toThrow(
+      'The GC_NOTIFY_URI environment variable has not been defined',
     );
-
-    expect(result).toEqual([
-      {
-        reason: new Error('Unable to send email to jane.doe@gcp.hc-sc.gc.ca'),
-        status: 'rejected',
-      },
-      {
-        reason: new Error('Unable to send email to john.doe@gcp.hc-sc.gc.ca'),
-        status: 'rejected',
-      },
-    ]);
   });
+
+  test('should send an email using the GC Notify API and log the response', async () => {
+    const templateId = '<template-id>';
+    const emailAddress = '<email-address>';
+    const options = {
+      personalisation: { projectId: '<project-id>' },
+    };
+
+    const sendEmailSpy = jest.spyOn(NotifyClient.prototype, 'sendEmail');
+    sendEmailSpy.mockResolvedValueOnce({ data: { uri: '<notification-uri>' } });
+
+    await sendEmail(templateId, emailAddress, options);
+
+    expect(sendEmailSpy).toBeCalledTimes(1);
+    expect(sendEmailSpy).toHaveBeenCalledWith(templateId, emailAddress, options);
+    expect(logger.info).toHaveBeenCalledWith({
+      message: 'An email has been sent to <email-address>. Inspect the notification at <notification-uri>.',
+    });
+  });
+
+  test('When the GC notify API returns a non-200 HTTP Status Code it should throw an error', async () => {
+    const templateId = '<template-id>';
+    const emailAddress = '<email-address>';
+    const options = {
+      personalisation: { projectId: '<project-id>' },
+    };
+
+    const sendEmailSpy = jest.spyOn(NotifyClient.prototype, 'sendEmail');
+    sendEmailSpy.mockRejectedValueOnce();
+
+    await expect(sendEmail(templateId, emailAddress, options)).rejects.toThrowError(
+      'Unable to send email to <email-address>',
+    );
+  });
+
+  // Additional specifications:
+  // - When the email is requested with GC Notify, the response is HTTP 201 Created.
+  // - When the GC Notify account is a trial only members of the team can receive email. Otherwise they get a HTTP400.
 });

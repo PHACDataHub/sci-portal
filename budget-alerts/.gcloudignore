@@ -1,0 +1,14 @@
+.gcloudignore
+.git
+.gitignore
+.nvmrc
+.prettierrc.js
+jest.*.js
+node_modules/
+README.md
+src/__tests__/
+src/__testUtils__/
+tsconfig.json
+types/
+
+**/.DS_Store

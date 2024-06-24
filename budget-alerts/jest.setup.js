@@ -1,5 +1,4 @@
-const { beforeAll, afterEach, afterAll } = require('@jest/globals');
-const { server } = require('./mocks/node');
+const { server } = require('./src/__testUtils__/msw');
 
 beforeAll(() => {
   server.listen();

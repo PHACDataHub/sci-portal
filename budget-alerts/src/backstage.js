@@ -1,60 +1,53 @@
-const BUDGET_ALERT_RECIPIENTS_ANNOTATION =
-  'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients';
+const logger = require('./logger');
+
+const ANNOTATION = 'data-science-portal.phac-aspc.gc.ca/budget-alert-recipients';
 
 /**
- * Fetches project data for a given project ID from the backstage API and returns a list of email recipients for a given project.
- *
- * @param {string} projectId - The ID of the project to fetch data for.
- * @return {string[]} List of email recipients for the project.
+ * Returns the budget alert recipients for a given project ID from Backstage.
+ * @param {string} projectId
  * @throws {Error} If the API request fails or returns a non-2xx status code.
  */
 async function getBudgetAlertRecipients(projectId) {
-  const { BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN, BACKSTAGE_URI } = process.env;
-
+  const baseUrl = process.env.BACKSTAGE_URI;
   const params = new URLSearchParams({
-    filter: `metadata.annotations.cloud.google.com/project=${projectId}`,
-    fields: `kind,metadata.annotations.${BUDGET_ALERT_RECIPIENTS_ANNOTATION}`,
+    filter: `metadata.annotations.cloud.google.com/project-id=${projectId}`,
+    fields: `kind,metadata.annotations.${ANNOTATION}`,
   });
-  const url = `${BACKSTAGE_URI}/api/catalog/entities/by-query?${params}`;
+  const url = `${baseUrl}/api/catalog/entities/by-query?${params}`;
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN}`,
+    Authorization: `Bearer ${process.env.BACKSTAGE_BUDGET_ALERT_EVENTS_TOKEN}`,
   };
-
   const response = await fetch(url, { method: 'GET', headers });
-  let body;
-  let err;
-  try {
-    body = await response.json();
-  }
-  catch (err) {
-    err = err;
-  }
-  console.log(JSON.stringify({ 
-    severity: 'INFO',
-    message: `HTTP${response.status} ${response.statusText} - GET ${url}`,
-    component: { body, err }, // Uncomment to debug.
-  }));
-
+  logger.debug({
+    message: `HTTP ${response.status} ${response.statusText} - GET ${url}`,
+  });
   if (!response.ok) {
     throw new Error(
-      `HTTP${response.status} ${response.statusText}: Failed to fetch data from Backstage for project ID ${projectId}`,
+      `Failed to fetch budget alert recipients for ${projectId} from Backstage (HTTP ${response.status} ${response.statusText})`,
     );
   }
 
-  const uniqueRecipients = new Set();
+  let body;
+  try {
+    body = await response.json();
+    if (!(typeof body === 'object' && 'items' in body && Array.isArray(body.items))) {
+      throw new Error(`Unexpected response from Backstage for ${projectId}`);
+    }
+  } catch (err) {
+    throw new Error(`Failed to parse the response from Backstage for ${projectId}`);
+  }
+
+  const recipients = new Set();
   for (const item of body.items) {
-    if (item.kind === 'Group') {
+    if (!item?.metadata?.annotations[ANNOTATION]) {
       continue;
     }
-
-    const recipients =
-      item.metadata.annotations[BUDGET_ALERT_RECIPIENTS_ANNOTATION].split(',');
-    for (const recipient of recipients) {
-      uniqueRecipients.add(recipient.trim());
+    for (const recipient of item.metadata.annotations[ANNOTATION].split(',')) {
+      recipients.add(recipient.trim());
     }
   }
-  return Array.from(uniqueRecipients);
+  return Array.from(recipients);
 }
 
 module.exports = {

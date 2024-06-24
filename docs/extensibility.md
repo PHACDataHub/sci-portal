@@ -2,42 +2,35 @@
 
 ## Contents
 
-<!-- vscode-markdown-toc -->
-
-- [Contents](#Contents)
-- [About this Document](#AboutthisDocument)
-  - [Purpose](#Purpose)
-  - [Intended Audience](#IntendedAudience)
-  - [Background](#Background)
-- [Extensibility](#Extensibility)
-  - [Add A New Template](#AddANewTemplate)
-  - [Deploy Combinations of Templates](#DeployCombinationsofTemplates)
-  - [Multi-Cloud Support](#Multi-CloudSupport)
-  - [Translations](#Translations)
-  - [Improving GitHub Discovery](#ImprovingGitHubDiscovery)
-- [Known Limitations](#KnownLimitations)
-  - [Not Ready for Production](#NotReadyforProduction)
-  - [User Management](#UserManagement)
-  - [Vertex AI Deprecations](#VertexAIDeprecations)
-  - [FinOps Reporting](#FinOpsReporting)
-  - [Deleting Components](#DeletingComponents)
-  - [Development on Windows](#DevelopmentonWindows)
-  - [Viewer Permissions](#ViewerPermissions)
-  - [Budget Alerts](#BudgetAlerts)
-- [Changes to the Project Scope](#ChangestotheProjectScope)
-  - [RStudio and RShiny Cloud Workstation](#RStudioandRShinyCloudWorkstation)
-  - ["Parking" Over-Budget Projects](#ParkingOver-BudgetProjects)
-  - [Administrator Roles/Permissions](#AdministratorRolesPermissions)
-  - [Additional Templates for RAD Lab and GCP Services](#AdditionalTemplatesforRADLabandGCPServices)
-  - [Deployment Status](#DeploymentStatus)
-  - [Security Vulnerabilities](#SecurityVulnerabilities)
-- [Preparing for Production](#PreparingforProduction)
-
-<!-- vscode-markdown-toc-config
-	numbering=false
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
+* [Contents](#contents)
+* [About this Document](#about-this-document)
+  + [Purpose](#purpose)
+  + [Intended Audience](#intended-audience)
+  + [Background](#background)
+* [Extensibility](#extensibility)
+  + [Add A New Template](#add-a-new-template)
+  + [Deploy Combinations of Templates](#deploy-combinations-of-templates)
+  + [Multi-Cloud Support](#multi-cloud-support)
+  + [Translations](#translations)
+  + [Improving GitHub Discovery](#improving-github-discovery)
+  + [Populate Templates Using An Entity Provider](#populate-templates-using-an-entity-provider)
+* [Known Limitations](#known-limitations)
+  + [Not Ready for Production](#not-ready-for-production)
+  + [User Management](#user-management)
+  + [Vertex AI Deprecations](#vertex-ai-deprecations)
+  + [FinOps Reporting](#finops-reporting)
+  + [Deleting Components](#deleting-components)
+  + [Development on Windows](#development-on-windows)
+  + [Viewer Permissions](#viewer-permissions)
+  + [Budget Alerts](#budget-alerts)
+* [Changes to the Project Scope](#changes-to-the-project-scope)
+  + [RStudio and RShiny Cloud Workstation](#rstudio-and-rshiny-cloud-workstation)
+  + ["Parking" Over-Budget Projects](#parking-over-budget-projects)
+  + [Administrator Roles/Permissions](#administrator-rolespermissions)
+  + [Additional Templates for RAD Lab and GCP Services](#additional-templates-for-rad-lab-and-gcp-services)
+  + [Deployment Status](#deployment-status)
+  + [Security Vulnerabilities](#security-vulnerabilities)
+* [Preparing for Production](#preparing-for-production)
 
 ## About this Document
 
@@ -151,6 +144,10 @@ Translations must be defined for each Backstage components:
 ### Improving GitHub Discovery
 
 Backstage has been configured to discover new Catalog entities in our repositories using polling. The pull-based model is inefficient and does not scale well as the number of size of the repositories grows. [Following the documentation](https://backstage.io/docs/integrations/github/discovery/#events-supportEvents) to configure Backstage to listen for events from a GitHub Webhook to improve the performance.
+
+### Populate Templates Using An Entity Provider
+
+As the number of templates grows it may be desirable to populate templates using an [custom entity provider](https://backstage.io/docs/features/software-catalog/external-integrations) that reads the Crossplane `CompositeResourceDefinitions` defined in the cluster and transforms them into a `Template` entity. This should be possible since the `CompositeResourceDefinitions` declare the inputs using an OpenAPI schema. At the time of writing this is not available as an open source plug-in for Crossplane.
 
 ## Known Limitations
 
