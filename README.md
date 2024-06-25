@@ -9,33 +9,42 @@ The reference implementation is split between two repositories:
 
 ## Contents
 
-<!-- vscode-markdown-toc -->
-
-- [Contents](#Contents)
-- [Features](#Features)
-  - [Authentication](#Authentication)
-  - [User Self-Service](#UserSelf-Service)
-  - [GitOps Approach](#GitOpsApproach)
-  - [Deployment Status](#DeploymentStatus)
-  - [Deployment Isolation](#DeploymentIsolation)
-  - [Cost Visibility](#CostVisibility)
-  - [Budget Management](#BudgetManagement)
-  - [Budget Reporting](#BudgetReporting)
-  - [Extensibility](#Extensibility)
-- [Contributing](#Contributing)
-  - [Directories](#Directories)
-  - [Environments](#Environments)
-  - [Initial Setup (Bootstrapping)](#InitialSetupBootstrapping)
-  - [Prerequisites](#Prerequisites)
-  - [Guidelines](#Guidelines)
-  - [Keeping Tools Updated](#KeepingToolsUpdated)
-  - [Troubleshooting](#Troubleshooting)
-
-<!-- vscode-markdown-toc-config
-	numbering=false
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
+- [Features](#features)
+  - [Authentication](#authentication)
+  - [User Self-Service](#user-self-service)
+  - [GitOps Approach](#gitops-approach)
+  - [Deployment Status](#deployment-status)
+  - [Deployment Isolation](#deployment-isolation)
+  - [Cost Visibility](#cost-visibility)
+  - [Budget Management](#budget-management)
+  - [Budget Reporting](#budget-reporting)
+  - [Extensibility](#extensibility)
+- [Contributing](#contributing)
+  - [Directories](#directories)
+  - [Environments](#environments)
+  - [Initial Setup (Bootstrapping)](#initial-setup-bootstrapping)
+  - [Prerequisites](#prerequisites)
+    - [Taskfile](#taskfile)
+    - [Node.js](#nodejs)
+    - [Yarn v1 (Classic)](#yarn-v1-classic)
+  - [Guidelines](#guidelines)
+    - [Regions](#regions)
+    - [Crossplane Providers](#crossplane-providers)
+    - [Versioning](#versioning)
+    - [Test The Infrastructure](#test-the-infrastructure)
+  - [Keeping Tools Updated](#keeping-tools-updated)
+    - [Backstage](#backstage)
+    - [Config Sync](#config-sync)
+    - [Crossplane](#crossplane)
+    - [Crossplane Provider for Kubernetes](#crossplane-provider-for-kubernetes)
+    - [Crossplane Provider for Terraform](#crossplane-provider-for-terraform)
+    - [`gcloud`](#gcloud)
+    - [Config Connector](#config-connector)
+  - [Troubleshooting](#troubleshooting)
+    - [Config Sync](#config-sync-1)
+    - [Crossplane](#crossplane-1)
+    - [Terraform Provider for Crossplane](#terraform-provider-for-crossplane)
+    - [Kubernetes Provider for Crossplane](#kubernetes-provider-for-crossplane)
 
 ## Features
 

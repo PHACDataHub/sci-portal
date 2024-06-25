@@ -1,25 +1,25 @@
 {
-    "search.exclude": {
-        "**/.terraform": true,
-        "**/node_modules": true,
-        
-        "backstage/dist-types": true
-    },
+  "search.exclude": {
+    "**/.terraform": true,
+    "**/node_modules": true,
 
-    "cSpell.words": [
-        ".tfvars",
-        "artifactregistry",
-        "cloudbuild",
-        "Crossplane",
-        "Devbox",
-        "DMIA",
-        "gcloud",
-        "GitOps",
-        "kustomization",
-        "northamerica-northeast1",
-        "personalisation",
-        "PHAC",
-        "scaffolder",
-        "secretmanager"
-    ]
+    "backstage/dist-types": true
+  },
+
+  "cSpell.words": [
+    ".tfvars",
+    "artifactregistry",
+    "cloudbuild",
+    "Crossplane",
+    "Devbox",
+    "DMIA",
+    "gcloud",
+    "GitOps",
+    "kustomization",
+    "northamerica-northeast1",
+    "personalisation",
+    "PHAC",
+    "scaffolder",
+    "secretmanager"
+  ]
 }
