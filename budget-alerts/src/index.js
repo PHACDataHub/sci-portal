@@ -266,10 +266,14 @@ const getQueuedBudgetAlertEmails = (events) => {
 
   const result = [];
   for (let i = 0; i < emails.length; i += 1) {
-    if (emails[i].status === 'QUEUED' || emails[i].status === 'FAILED') {
+    // An email that was queued but not tried should be sent.
+    if (emails[i].status === 'QUEUED') {
       delete emails[i].status;
       result.push(emails[i]);
     }
+
+    // An email that failed to send could be retried but the team should decide on system design
+    // with consideration for why the email failed (e.g.: invalid account), and not flooding the system.
   }
   return result;
 };
