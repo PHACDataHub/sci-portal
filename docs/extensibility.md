@@ -260,7 +260,7 @@ This is a reference implementation that is not ready for production. We've liste
 - Deploy in a hardened cluster
 - Improve cluster secrets management
 - Harden the Backstage Backend auth
-- Harden the GitHub App integration
+- Harden the GitHub App integration following [best practices](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/best-practices-for-creating-a-github-app) and managing the [allowed IP addresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
 - Validate and sanitize all inputs
 - Restrict the dataset used for the Cost Dashboard
 - Consider using [Universal Crossplane](https://www.upbound.io/product/universal-crossplane) which has upstream security updates
